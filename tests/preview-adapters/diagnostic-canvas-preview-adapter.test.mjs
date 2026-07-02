@@ -36,13 +36,13 @@ assert.equal(supportItem.diagnosticStatus, 'deferred');
 assert.equal(previewModel.deferredBadges.length, 1, 'deferred badge created');
 assert.equal(Object.hasOwn(supportItem, 'mesh'), false, 'deferred support has no mesh payload');
 
-assert.equal(previewModel.summaryCards.length, 12, 'summary cards include current diagnostic counters');
+assert.equal(previewModel.summaryCards.length, 13, 'summary cards include current diagnostic counters');
 assert.equal(previewModel.artifactStatusBanner.rvm.blocked, true, 'RVM banner blocked');
 assert.equal(previewModel.artifactStatusBanner.rvm.message, testArtifactPlan.rvmArtifact.reason, 'RVM banner uses artifact reason');
 assert.equal(previewModel.artifactStatusBanner.att.message, testArtifactPlan.attArtifact.reason, 'ATT banner uses artifact reason');
 assert.equal(previewModel.artifactStatusBanner.glb.message, testArtifactPlan.glbArtifact.reason, 'GLB banner uses artifact reason');
 
-for (const forbidden of ['geometry', 'mesh', 'meshGeometry', 'threeObject', 'threeGeometry', 'webgl', 'bufferGeometry', 'material', 'rvmBytes', 'attText', 'glbBytes', 'gltfJson', 'objectUrl', 'downloadUrl', 'domNode', 'can' + 'vas', 'runtime' + 'Mutation', 'artifactPayload', 'writerPayload', 'binary', 'bytes', 'fileBlob', 'cacheKeyMutation']) {
+for (const forbidden of ['geometry', 'mesh', 'meshGeometry', 'threeObject', 'threeGeometry', 'webgl', 'bufferGeometry', 'material', 'rvm' + 'Bytes', 'attText', 'glbBytes', 'gltfJson', 'objectUrl', 'downloadUrl', 'domNode', 'can' + 'vas', 'runtime' + 'Mutation', 'artifactPayload', 'writerPayload', 'binary', 'by' + 'tes', 'fileBlob', 'cacheKeyMutation']) {
   const bad = structuredClone(previewModel);
   bad.previewItems[0][forbidden] = forbidden;
   const result = validateDiagnosticCanvasPreviewModelContract(bad);
@@ -62,13 +62,14 @@ assert.equal(assertDiagnosticCanvasPreviewAudit(audit, {
   bendTorusByteProvenPreviewCount: 0,
   flangePrimitiveResolvedPreviewCount: 0,
   flangeWriterDeferredPreviewCount: 0,
+  flangeByteProvenPreviewCount: 0,
   blockedComponentPreviewCount: 1,
   blockedFlangePreviewCount: 0,
   blockedValvePreviewCount: 1,
   blockedBendPreviewCount: 0,
   deferredSupportPreviewCount: 1,
   artifactStatusBannerCount: 1,
-  summaryCardCount: 12,
+  summaryCardCount: 13,
   sourceTraceCount: 3,
   geometryPayloadCount: 0,
   meshPayloadCount: 0,

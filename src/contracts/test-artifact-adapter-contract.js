@@ -1,7 +1,7 @@
 import { TEST_ARTIFACT_ADAPTER_PLAN_SCHEMA } from './platform-contract-schemas.js';
 
 const FORBIDDEN_FIELDS = Object.freeze(['objectUrl', 'downloadUrl', 'domNode', 'canvas', 'threeObject', 'threeGeometry', 'meshGeometry', 'runtimeMutation', 'userVisibleDownload', 'productionWrite', 'appStateMutation', 'cacheKeyMutation']);
-const ALLOWED_ARTIFACT_KEYS = Object.freeze(['artifactKind', 'artifactReady', 'artifactGenerated', 'artifactBlocked', 'reason', 'byteLength', 'textLength', 'recordCount', 'primitiveCount', 'checksumSha256', 'testOnlyOutputPath', 'sourceRef', 'transformReady', 'straightPipeSubsetReady', 'bendTorusSubsetReady', 'pipeBendSubsetReady']);
+const ALLOWED_ARTIFACT_KEYS = Object.freeze(['artifactKind', 'artifactReady', 'artifactGenerated', 'artifactBlocked', 'reason', 'byteLength', 'textLength', 'recordCount', 'primitiveCount', 'checksumSha256', 'testOnlyOutputPath', 'sourceRef', 'transformReady', 'straightPipeSubsetReady', 'bendTorusSubsetReady', 'flangeSubsetReady', 'pipeBendSubsetReady']);
 
 export function validateTestArtifactAdapterPlanContract(plan) {
   const errors = [];
@@ -21,17 +21,13 @@ export function validateTestArtifactAdapterPlanContract(plan) {
   validateStatusArray(plan?.blockedArtifactItems, 'blockedArtifactItems', 'blocked', errors);
   validateStatusArray(plan?.deferredArtifactItems, 'deferredArtifactItems', 'deferred', errors);
   validateStatusArray(plan?.testByteEligibleArtifactItems, 'testByteEligibleArtifactItems', 'testByteEligible', errors, false);
-  for (const [index, trace] of (plan?.sourceTrace || []).entries()) {
-    if (!trace?.sourceItemId) errors.push(`sourceTrace[${index}].sourceItemId is required`);
-    if (!trace?.artifactStatus) errors.push(`sourceTrace[${index}].artifactStatus is required`);
-  }
+  for (const [index, trace] of (plan?.sourceTrace || []).entries()) { if (!trace?.sourceItemId) errors.push(`sourceTrace[${index}].sourceItemId is required`); if (!trace?.artifactStatus) errors.push(`sourceTrace[${index}].artifactStatus is required`); }
   const forbiddenHits = collectTestArtifactForbiddenFieldHits(plan);
   errors.push(...forbiddenHits.map((hit) => `forbidden field ${hit.field} at ${hit.path}`));
   return { schema: 'TestArtifactAdapterPlanValidation.v1', ok: errors.length === 0, errorCount: errors.length, errors, forbiddenFieldCount: forbiddenHits.length, forbiddenFields: forbiddenHits };
 }
 
 export function assertTestArtifactAdapterPlanContract(plan) { const result = validateTestArtifactAdapterPlanContract(plan); if (!result.ok) throw new Error(`TestArtifactAdapterPlan contract invalid: ${result.errors.join('; ')}`); return result; }
-
 export function collectTestArtifactForbiddenFieldHits(value, path = '$', hits = []) { if (!value || typeof value !== 'object') return hits; if (Array.isArray(value)) { value.forEach((entry, index) => collectTestArtifactForbiddenFieldHits(entry, `${path}[${index}]`, hits)); return hits; } for (const [key, entry] of Object.entries(value)) { if (FORBIDDEN_FIELDS.includes(key)) hits.push({ path: `${path}.${key}`, field: key }); collectTestArtifactForbiddenFieldHits(entry, `${path}.${key}`, hits); } return hits; }
 
 function validateArtifact(artifact, label, errors) {
@@ -39,7 +35,7 @@ function validateArtifact(artifact, label, errors) {
   for (const key of Object.keys(artifact)) if (!ALLOWED_ARTIFACT_KEYS.includes(key)) errors.push(`${label}.${key} is not an allowed artifact metadata field`);
   if (!artifact.artifactKind) errors.push(`${label}.artifactKind is required`);
   for (const key of ['artifactReady', 'artifactGenerated', 'artifactBlocked']) if (typeof artifact[key] !== 'boolean') errors.push(`${label}.${key} must be boolean`);
-  for (const key of ['transformReady', 'straightPipeSubsetReady', 'bendTorusSubsetReady', 'pipeBendSubsetReady']) if (artifact[key] !== undefined && typeof artifact[key] !== 'boolean') errors.push(`${label}.${key} must be boolean`);
+  for (const key of ['transformReady', 'straightPipeSubsetReady', 'bendTorusSubsetReady', 'flangeSubsetReady', 'pipeBendSubsetReady']) if (artifact[key] !== undefined && typeof artifact[key] !== 'boolean') errors.push(`${label}.${key} must be boolean`);
   if (artifact.artifactBlocked === true && !artifact.reason) errors.push(`${label}.reason is required when artifact is blocked`);
   if (artifact.artifactBlocked === true) { if (Number(artifact.byteLength || 0) !== 0) errors.push(`${label}.byteLength must be 0 when artifact is blocked`); if (Number(artifact.textLength || 0) !== 0) errors.push(`${label}.textLength must be 0 when artifact is blocked`); }
 }
