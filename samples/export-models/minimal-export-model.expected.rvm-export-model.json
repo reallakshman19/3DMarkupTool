@@ -29,6 +29,7 @@
     }
   ],
   "testByteEligiblePrimitives": [],
+  "flangeTestByteEligiblePrimitives": [],
   "blockedExports": [
     {
       "sourceItemId": "VALVE-1",
