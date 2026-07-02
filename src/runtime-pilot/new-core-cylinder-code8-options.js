@@ -10,9 +10,7 @@ export function normalizeCylinderRuntimePilotOptions(options = {}) {
 
 export function validCylinderRuntimePilotOptions(options = {}, purpose = 'plan') {
   const normalized = normalizeCylinderRuntimePilotOptions(options);
-  const errors = [...normalized.errors];
-  if (purpose === 'write' && normalized.writeArtifact !== true) errors.push('writeArtifact must be true when writing bytes');
-  return { ...normalized, ok: errors.length === 0, errors, errorCount: errors.length };
+  return { ...normalized, purpose, ok: normalized.errors.length === 0, errors: [...normalized.errors], errorCount: normalized.errors.length };
 }
 
 function optionErrors(options) {
@@ -21,6 +19,7 @@ function optionErrors(options) {
   if (options.mode !== REQUIRED_MODE) errors.push(`mode must be ${REQUIRED_MODE}`);
   if (options.scope !== REQUIRED_SCOPE) errors.push(`scope must be ${REQUIRED_SCOPE}`);
   if (options.allowPartialModel !== true) errors.push('allowPartialModel must be true');
+  if (options.writeArtifact !== true) errors.push('writeArtifact must be true');
   for (const key of FORBIDDEN_TRUE_OPTIONS) if (options[key] === true) errors.push(`${key} option is forbidden for runtime pilot`);
   return errors;
 }
