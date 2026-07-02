@@ -77,6 +77,7 @@ export function installManagedStageJsonUi() {
   modelFileInput.addEventListener('change', onUnifiedModelFileChange, true);
 
   installManagedStageButtonInterceptors(modelFileInput);
+  installBrowserCylinderCode8PilotPanel();
   const api = {
     schema: CONTROLLER_SCHEMA,
     loadText: loadManagedStageText,
@@ -84,6 +85,8 @@ export function installManagedStageJsonUi() {
     getActiveArtifact: () => managedStageUiState.artifact,
     getActiveSourceText: () => managedStageUiState.sourceText,
     getActiveSourceName: () => managedStageUiState.sourceName,
+    getPilotActionModel: getBrowserCylinderCode8PilotActionModel,
+    generateCylinderCode8PilotExport: () => runBrowserCylinderCode8PilotExport(true),
     clear: clearManagedStagePreview
   };
   window.__3D_MARKUP_MANAGED_STAGE_JSON_UI__ = api;
@@ -314,6 +317,43 @@ function installManagedStageButtonInterceptors(modelFileInput) {
     });
   }, true);
 }
+
+function installBrowserCylinderCode8PilotPanel() {
+  if (document.getElementById('newCorePilotExportPanel')) return;
+  const host = document.querySelector('.input-card') || document.querySelector('.input-primary-actions') || document.body;
+  const panel = document.createElement('section');
+  panel.id = 'newCorePilotExportPanel';
+  panel.className = 'advanced-pilot-export-panel';
+  panel.innerHTML = `<h3>New-Core Pilot Export</h3><p>Pilot export only:<br>- straight pipe CYLINDER/code8 subset<br>- bends excluded<br>- flanges excluded<br>- valves blocked<br>- supports deferred<br>- old production export unchanged</p><button id="generateCylinderCode8PilotRvmBtn" type="button">Generate CYLINDER/code8 Pilot RVM</button><div id="newCorePilotExportStatus" aria-live="polite">Pilot export idle.</div>`;
+  host.appendChild(panel);
+  panel.querySelector('#generateCylinderCode8PilotRvmBtn')?.addEventListener('click', () => runBrowserCylinderCode8PilotExport(true));
+}
+
+async function runBrowserCylinderCode8PilotExport(userGestureConfirmed = false) {
+  const status = document.getElementById('newCorePilotExportStatus');
+  if (!userGestureConfirmed) return setPilotStatus(status, 'New-Core Pilot Export blocked: user gesture missing');
+  if (!managedStageUiState.artifact && !managedStageUiState.sourceText) return setPilotStatus(status, 'New-Core Pilot Export blocked: no managed-stage/new-core input loaded');
+  try {
+    const [{ generateBrowserCylinderCode8PilotExport }, ui] = await Promise.all([
+      import('./runtime-pilot/browser-cylinder-code8-pilot-export.js?v=bust-cache-4'),
+      import('./runtime-pilot/browser-cylinder-code8-pilot-ui.js?v=bust-cache-4')
+    ]);
+    const result = await ui.executeBrowserCylinderCode8PilotAction(activePilotState(), { generateBrowserCylinderCode8PilotExport, downloadHost: window });
+    setPilotStatus(status, result.statusMessage);
+    log(result.statusMessage);
+    return result;
+  } catch (error) {
+    return setPilotStatus(status, `New-Core Pilot Export blocked: ${error?.message || error}`);
+  }
+}
+
+async function getBrowserCylinderCode8PilotActionModel() {
+  const ui = await import('./runtime-pilot/browser-cylinder-code8-pilot-ui.js?v=bust-cache-4');
+  return ui.createCylinderCode8PilotActionModel();
+}
+
+function activePilotState() { return { sourceText: managedStageUiState.sourceText, sourceName: managedStageUiState.sourceName, basename: managedStageUiState.basename, artifact: managedStageUiState.artifact }; }
+function setPilotStatus(element, message) { if (element) element.textContent = message; return { schema: 'BrowserCylinderCode8PilotUiResult.v1', ok: false, statusMessage: message, downloadCount: 0, downloads: [] }; }
 
 async function loadBundledManagedStageSample() {
   resetSupportBasisToInputXml('bm-cii-bundled-sample');
