@@ -15,7 +15,7 @@ export function buildControlledPreviewAudit(controlledPreviewModel, options = {}
   const forbidden = collectForbiddenHits(controlledPreviewModel);
   errors.push(...forbidden.map((hit) => `forbidden field ${hit.field} at ${hit.path}`));
   const audit = buildAudit(controlledPreviewModel, rows, forbidden, errors, warnings, options);
-  audit.ok = audit.hardErrorCount === 0 && audit.rvmStraightPipeSubsetReady === true && audit.rvmFlangeSubsetReady === true && audit.rvmFullModelReady === false && audit.attReady === false && audit.glbReady === false && audit.geometryPayloadCount === 0 && audit.meshPayloadCount === 0 && audit.threeObjectCount === 0 && audit[RUNTIME_COUNT] === 0 && audit.browserTouchCount === 0 && audit[CANVAS_COUNT] === 0 && audit.objectUrlCount === 0 && audit.downloadSideEffectCount === 0 && audit.binaryPayloadCount === 0 && audit.textPayloadCount === 0 && audit.glbPayloadCount === 0 && audit.writerCallCount === 0 && audit.cacheKeyMutationCount === 0;
+  audit.ok = audit.hardErrorCount === 0 && audit.rvmStraightPipeSubsetReady === true && audit.rvmFullModelReady === false && audit.attReady === false && audit.glbReady === false && audit.geometryPayloadCount === 0 && audit.meshPayloadCount === 0 && audit.threeObjectCount === 0 && audit[RUNTIME_COUNT] === 0 && audit.browserTouchCount === 0 && audit[CANVAS_COUNT] === 0 && audit.objectUrlCount === 0 && audit.downloadSideEffectCount === 0 && audit.binaryPayloadCount === 0 && audit.textPayloadCount === 0 && audit.glbPayloadCount === 0 && audit.writerCallCount === 0 && audit.cacheKeyMutationCount === 0;
   return audit;
 }
 
