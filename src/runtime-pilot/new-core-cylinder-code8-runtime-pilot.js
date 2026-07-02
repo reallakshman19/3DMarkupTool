@@ -1,3 +1,4 @@
+import { validateRvmExportModelContract } from '../contracts/index.js';
 import { validCylinderRuntimePilotOptions } from './new-core-cylinder-code8-options.js';
 
 const PLAN_SCHEMA = 'NewCoreCylinderCode8RuntimePilotPlan.v1';
@@ -38,9 +39,11 @@ function basePlan(rvm, optionResult) {
 
 function validateRvmInput(rvm) {
   const errors = [];
-  if (!rvm || rvm.schema !== 'RvmExportModel.v1') errors.push('RvmExportModel.v1 is required');
-  if (rvm?.transformApplied !== true) errors.push('RvmExportModel must have transformApplied true');
-  if (rvm?.transformPolicy !== FINAL_REVIEW_TRANSFORM_POLICY) errors.push('RvmExportModel must use final-review-transform.v1');
+  if (!rvm || rvm.schema !== 'RvmExportModel.v1') return ['RvmExportModel.v1 is required'];
+  const contract = validateRvmExportModelContract(rvm);
+  if (!contract.ok) errors.push(...contract.errors.map((entry) => `RvmExportModel contract: ${entry}`));
+  if (rvm.transformApplied !== true) errors.push('RvmExportModel must have transformApplied true');
+  if (rvm.transformPolicy !== FINAL_REVIEW_TRANSFORM_POLICY) errors.push('RvmExportModel must use final-review-transform.v1');
   return errors;
 }
 
