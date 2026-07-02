@@ -69,11 +69,14 @@ jobs:
       - name: Phase 02 writer runtime readiness
         run: npm run test:writer-runtime-readiness
 
-      - name: Phase 12 CYLINDER/code8 runtime pilot
+      - name: Phase 12 CYLINDER code8 runtime pilot
         run: npm run test:cylinder-code8-runtime-pilot
 
-      - name: Phase 13 CYLINDER/code8 pilot UI export
+      - name: Phase 13 CYLINDER code8 pilot UI export
         run: npm run test:browser-cylinder-code8-pilot-export
 
-      - name: Phase 14 pipe+bend runtime pilot
+      - name: Phase 14 pipe bend runtime pilot
         run: npm run test:phase14-pipe-bend-runtime-pilot-gate
+
+      - name: Phase 15 pipe bend flange runtime pilot package
+        run: npm run test:phase15-pipe-bend-flange-runtime-pilot-gate
