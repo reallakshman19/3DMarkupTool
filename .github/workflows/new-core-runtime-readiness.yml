@@ -71,3 +71,6 @@ jobs:
 
       - name: Phase 12 CYLINDER/code8 runtime pilot
         run: npm run test:cylinder-code8-runtime-pilot
+
+      - name: Phase 13 CYLINDER/code8 pilot UI export
+        run: npm run test:browser-cylinder-code8-pilot-export
