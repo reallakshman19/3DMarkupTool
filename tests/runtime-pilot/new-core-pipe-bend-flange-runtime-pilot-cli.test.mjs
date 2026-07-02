@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
+import { mkdtemp, readFile, stat, rm } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import { promisify } from 'node:util';
+import { countPipeBendFlangePilotAttRows } from '../../src/runtime-pilot/new-core-pipe-bend-flange-att-writer.js';
+import { assertNewCorePipeBendFlangeRuntimePilotAudit } from '../../src/runtime-pilot/new-core-pipe-bend-flange-runtime-audit.js';
+
+const execFileAsync = promisify(execFile);
+const outdir = await mkdtemp(join(tmpdir(), 'pbf-cli-'));
+const script = 'scripts/generate-new-core-pipe-bend-flange-runtime-pilot-artifact.mjs';
+const { stdout } = await execFileAsync(process.execPath, [script, '--fixture=bm-cii', `--outdir=${outdir}`], { cwd: process.cwd() });
+const rvmPath = join(outdir, 'BM_CII_pipe_bend_flange_runtime_pilot.rvm');
+const attPath = join(outdir, 'BM_CII_pipe_bend_flange_runtime_pilot.att');
+const auditPath = join(outdir, 'BM_CII_pipe_bend_flange_runtime_pilot.audit.json');
+const audit = JSON.parse(await readFile(auditPath, 'utf8'));
+const checksum = stdout.match(/checksum=([0-9a-f]{64})/)?.[1] || '';
+
+assert.ok(stdout.includes('auditOk=true'), 'CLI reports audit ok');
+assert.equal((await stat(rvmPath)).isFile(), true, '.rvm file exists');
+assert.equal((await stat(attPath)).isFile(), true, '.att file exists');
+assert.equal((await stat(auditPath)).isFile(), true, '.audit.json file exists');
+assert.equal(assertNewCorePipeBendFlangeRuntimePilotAudit(audit, { ok: true, plannedCylinderCount: 19, plannedTorusCount: 7, plannedFlangeCylinderCount: 8, decodedPrimitiveCount: 34, attRowCount: 34, fullModelReady: false, subsetReady: true }).ok, true);
+assert.ok(audit.rvmArtifactByteLength > 0, 'RVM byte length > 0');
+assert.ok(audit.attArtifactByteLength > 0, 'ATT byte length > 0');
+assert.match(checksum, /^[0-9a-f]{64}$/);
+assert.equal(countPipeBendFlangePilotAttRows(await readFile(attPath, 'utf8')), 34);
+assert.equal(resolve(audit.rvmArtifactPath).startsWith(resolve(outdir)), true, 'RVM under temp outdir');
+assert.equal(resolve(audit.attArtifactPath).startsWith(resolve(outdir)), true, 'ATT under temp outdir');
+await rm(outdir, { recursive: true, force: true });
+console.log('new-core pipe+bend+flange runtime pilot CLI test passed');
