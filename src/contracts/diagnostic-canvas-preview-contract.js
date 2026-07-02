@@ -1,6 +1,6 @@
 import { DIAGNOSTIC_CANVAS_PREVIEW_MODEL_SCHEMA } from './platform-contract-schemas.js';
 const MODE = 'diagnosticOnly';
-const DIAGNOSTIC_KINDS = Object.freeze(['straightPipeWriterPlan', 'straightPipeByteProven', 'blockedComponent', 'deferredSupport', 'bendTorusWriterDeferred', 'bendTorusByteProven', 'flangeWriterDeferred', 'artifactStatus', 'pipelineSummary']);
+const DIAGNOSTIC_KINDS = Object.freeze(['straightPipeWriterPlan', 'straightPipeByteProven', 'blockedComponent', 'deferredSupport', 'bendTorusWriterDeferred', 'bendTorusByteProven', 'flangeWriterDeferred', 'flangeByteProven', 'artifactStatus', 'pipelineSummary']);
 const DIAGNOSTIC_STATUSES = Object.freeze(['writerPlannedArtifactBlocked', 'byteProven', 'blockedUnresolved', 'deferred', 'primitiveResolvedWriterDeferred', 'primitiveResolvedByteProven', 'artifactBlocked', 'summary']);
 const SEVERITIES = Object.freeze(['info', 'warning', 'blocked']);
 const FORBIDDEN_FIELDS = Object.freeze(['geometry', 'mesh', 'meshGeometry', 'threeObject', 'threeGeometry', 'webgl', 'bufferGeometry', 'material', 'rvmBytes', 'attText', 'glbBytes', 'gltfJson', 'objectUrl', 'downloadUrl', 'domNode', 'canvas', 'runtimeMutation', 'artifactPayload', 'writerPayload', 'binary', 'bytes', 'fileBlob', 'cacheKeyMutation']);
