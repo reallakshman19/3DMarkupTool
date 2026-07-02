@@ -13,13 +13,14 @@ const { stdout } = await execFileAsync(process.execPath, [script, '--fixture=bm-
 const artifactPath = join(outdir, 'BM_CII_cylinder_code8_runtime_pilot.rvm');
 const auditPath = join(outdir, 'BM_CII_cylinder_code8_runtime_pilot.audit.json');
 const audit = JSON.parse(await readFile(auditPath, 'utf8'));
+const checksum = stdout.match(/checksum=([0-9a-f]{64})/)?.[1] || '';
 
 assert.ok(stdout.includes('auditOk=true'), 'CLI reports audit ok');
 assert.equal((await stat(artifactPath)).isFile(), true, '.rvm file exists');
 assert.equal((await stat(auditPath)).isFile(), true, '.audit.json file exists');
 assert.equal(assertNewCoreCylinderRuntimePilotAudit(audit, { ok: true, plannedCylinderCount: 19, decodedCylinderCount: 19, decodedPrimitiveCount: 19, fullModelReady: false, subsetReady: true }).ok, true);
 assert.ok(audit.artifactByteLength > 0, 'byte length > 0');
-assert.match(audit.checksumPresent ? audit.errors.join('') || '0000000000000000000000000000000000000000000000000000000000000000' : '', /^[0-9a-f]{64}$/);
+assert.match(checksum, /^[0-9a-f]{64}$/);
 assert.match(audit.artifactPath, /BM_CII_cylinder_code8_runtime_pilot\.rvm$/);
 assert.equal(resolve(audit.artifactPath).startsWith(resolve(outdir)), true, 'artifact under temp outdir');
 assert.equal(resolve(audit.auditPath).startsWith(resolve(outdir)), true, 'audit under temp outdir');
