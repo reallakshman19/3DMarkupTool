@@ -151,3 +151,7 @@ No fallback cube, box, sphere, pyramid, valve placeholder, or support placeholde
 The flange subset can be `flangeSubsetTestByteReady: true` only as isolated test-byte proof readiness.
 
 Full RVM readiness remains false because valves are blocked and supports are deferred. ATT and GLB remain separate blocked/deferred boundaries for this phase.
+
+## Verification note
+
+The Phase 11C-B checks must pass on the latest PR head before merge. A stale or failed workflow result is not sufficient for approval.
