@@ -36,13 +36,18 @@ const REQUIRED_STATEMENTS = Object.freeze([
 ]);
 
 const FORBIDDEN_WORK_STATEMENTS = Object.freeze([
+  'no full runtime switch',
   'no runtime switch',
+  'no default feature flag enablement',
   'no writer rewrite',
   'no converter reroute',
   'no UI/canvas authoring',
   'no fallback cubes',
   'no support placeholder downgrade',
-  'no valve placeholder downgrade'
+  'no valve placeholder downgrade',
+  'no support/valve placeholder downgrade',
+  'no GLB-as-authority behavior',
+  'no ATT collapse into RVM-only output'
 ]);
 
 export function readStatusDocument(path = DOC_PATH) {
