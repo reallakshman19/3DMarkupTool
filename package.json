@@ -36,6 +36,7 @@
     "test:cylinder-code8-runtime-pilot": "node tests/runtime-pilot/new-core-cylinder-code8-runtime-pilot.test.mjs && node tests/runtime-pilot/bm-cii-new-core-cylinder-runtime-pilot.test.mjs && node tests/runtime-pilot/new-core-cylinder-runtime-pilot-cli.test.mjs",
     "artifact:new-core-cylinder-runtime-pilot": "node scripts/generate-new-core-cylinder-runtime-pilot-artifact.mjs",
     "test:phase12-runtime-pilot-gate": "npm run test:cylinder-code8-runtime-pilot && npm run test:cylinder-code8-parity && npm run test:writer-runtime-readiness && npm run test:current-new-core-status && npm run test:element-rvm-ledger && npm run test:platform-contracts",
+    "test:browser-cylinder-code8-pilot-export": "node tests/runtime-pilot/browser-cylinder-code8-pilot-export.test.mjs && node tests/runtime-pilot/browser-cylinder-code8-pilot-ui.test.mjs",
     "test:runtime-switch-proposal": "node tests/migration/new-core-runtime-switch-proposal-doc.test.mjs",
     "test:cylinder-code8-parity": "node tests/diagnostics/cylinder-code8-production-parity-audit.test.mjs",
     "test:current-new-core-status": "node tests/migration/current-new-core-status-doc.test.mjs",
