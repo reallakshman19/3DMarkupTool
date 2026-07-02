@@ -86,7 +86,9 @@ export function installManagedStageJsonUi() {
     getActiveSourceText: () => managedStageUiState.sourceText,
     getActiveSourceName: () => managedStageUiState.sourceName,
     getPilotActionModel: getBrowserCylinderCode8PilotActionModel,
+    getPipeBendPilotActionModel: getBrowserPipeBendPilotActionModel,
     generateCylinderCode8PilotExport: () => runBrowserCylinderCode8PilotExport(true),
+    generatePipeBendPilotExport: () => runBrowserPipeBendPilotExport(true),
     clear: clearManagedStagePreview
   };
   window.__3D_MARKUP_MANAGED_STAGE_JSON_UI__ = api;
@@ -324,9 +326,10 @@ function installBrowserCylinderCode8PilotPanel() {
   const panel = document.createElement('section');
   panel.id = 'newCorePilotExportPanel';
   panel.className = 'advanced-pilot-export-panel';
-  panel.innerHTML = `<h3>New-Core Pilot Export</h3><p>Pilot export only:<br>- straight pipe CYLINDER/code8 subset<br>- bends excluded<br>- flanges excluded<br>- valves blocked<br>- supports deferred<br>- old production export unchanged</p><button id="generateCylinderCode8PilotRvmBtn" type="button">Generate CYLINDER/code8 Pilot RVM</button><div id="newCorePilotExportStatus" aria-live="polite">Pilot export idle.</div>`;
+  panel.innerHTML = `<h3>New-Core Pilot Export</h3><p>Pilot export only:<br>- straight pipe CYLINDER/code8 included<br>- bend TORUS/code4 included for Pipe+Bend pilot<br>- flanges excluded<br>- valves blocked<br>- supports deferred<br>- old production export unchanged</p><button id="generateCylinderCode8PilotRvmBtn" type="button">Generate CYLINDER/code8 Pilot RVM</button><button id="generatePipeBendPilotRvmBtn" type="button">Generate Pipe+Bend Pilot RVM</button><div id="newCorePilotExportStatus" aria-live="polite">Pilot export idle.</div>`;
   host.appendChild(panel);
   panel.querySelector('#generateCylinderCode8PilotRvmBtn')?.addEventListener('click', () => runBrowserCylinderCode8PilotExport(true));
+  panel.querySelector('#generatePipeBendPilotRvmBtn')?.addEventListener('click', () => runBrowserPipeBendPilotExport(true));
 }
 
 async function runBrowserCylinderCode8PilotExport(userGestureConfirmed = false) {
@@ -347,13 +350,36 @@ async function runBrowserCylinderCode8PilotExport(userGestureConfirmed = false) 
   }
 }
 
+async function runBrowserPipeBendPilotExport(userGestureConfirmed = false) {
+  const status = document.getElementById('newCorePilotExportStatus');
+  if (!userGestureConfirmed) return setPilotStatus(status, 'New-Core Pipe+Bend Pilot Export blocked: user gesture missing');
+  if (!managedStageUiState.artifact && !managedStageUiState.sourceText) return setPilotStatus(status, 'New-Core Pipe+Bend Pilot Export blocked: no managed-stage/new-core input loaded');
+  try {
+    const [{ generateBrowserPipeBendPilotExport }, ui] = await Promise.all([
+      import('./runtime-pilot/browser-pipe-bend-pilot-export.js?v=bust-cache-4'),
+      import('./runtime-pilot/browser-pipe-bend-pilot-ui.js?v=bust-cache-4')
+    ]);
+    const result = await ui.executeBrowserPipeBendPilotAction(activePilotState(), { generateBrowserPipeBendPilotExport, downloadHost: window });
+    setPilotStatus(status, result.statusMessage);
+    log(result.statusMessage);
+    return result;
+  } catch (error) {
+    return setPilotStatus(status, `New-Core Pipe+Bend Pilot Export blocked: ${error?.message || error}`);
+  }
+}
+
 async function getBrowserCylinderCode8PilotActionModel() {
   const ui = await import('./runtime-pilot/browser-cylinder-code8-pilot-ui.js?v=bust-cache-4');
   return ui.createCylinderCode8PilotActionModel();
 }
 
+async function getBrowserPipeBendPilotActionModel() {
+  const ui = await import('./runtime-pilot/browser-pipe-bend-pilot-ui.js?v=bust-cache-4');
+  return ui.createPipeBendPilotActionModel();
+}
+
 function activePilotState() { return { sourceText: managedStageUiState.sourceText, sourceName: managedStageUiState.sourceName, basename: managedStageUiState.basename, artifact: managedStageUiState.artifact }; }
-function setPilotStatus(element, message) { if (element) element.textContent = message; return { schema: 'BrowserCylinderCode8PilotUiResult.v1', ok: false, statusMessage: message, downloadCount: 0, downloads: [] }; }
+function setPilotStatus(element, message) { if (element) element.textContent = message; return { schema: 'BrowserPilotUiResult.v1', ok: false, statusMessage: message, downloadCount: 0, downloads: [] }; }
 
 async function loadBundledManagedStageSample() {
   resetSupportBasisToInputXml('bm-cii-bundled-sample');
