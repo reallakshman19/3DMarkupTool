@@ -35,7 +35,7 @@ for (const bad of [rvmWith([], { testByteEligiblePrimitives: [torus()] }), rvmWi
 await rm(join(tmpdir(), 'ncc8-invalid-nonexistent'), { recursive: true, force: true });
 console.log('new-core CYLINDER/code8 runtime pilot unit test passed');
 
-function rvmWith(primitives, extra = {}) { return { schema: 'RvmExportModel.v1', graphId: 'unit-runtime-pilot', units: 'mm', transformPolicy: 'final-review-transform.v1', transformApplied: true, primitives, testByteEligiblePrimitives: [], flangeTestByteEligiblePrimitives: [], blockedExports: [], deferredExports: [], sourceRefs: [], ...extra }; }
+function rvmWith(primitives, extra = {}) { return { schema: 'RvmExportModel.v1', graphId: 'unit-runtime-pilot', units: 'mm', sourceAxisBasis: { authoring: 'canvas-current', rvmExport: 'navis-review' }, exportAxisBasis: { review: 'navis-review' }, transformPolicy: 'final-review-transform.v1', transformApplied: true, transformWarnings: [], primitives, testByteEligiblePrimitives: [], flangeTestByteEligiblePrimitives: [], blockedExports: [], deferredExports: [], sourceRefs: [], ...extra }; }
 function cylinder(overrides = {}) { return { exportPrimitiveId: 'RVM-PIPE-1', sourcePrimitiveId: 'PRIM-PIPE-1', sourceItemId: 'PIPE-1', primitiveKind: 'CYLINDER', primitiveCode: 8, center: [0, 0, 0], axis: [0, 1, 0], lengthMm: 1000, radiusMm: 57.15, basis: 'navis-review', transformPolicy: 'final-review-transform.v1', sourceRef: 'unit/PIPE-1', ...overrides }; }
 function torus() { return { sourceItemId: 'BEND-1', primitiveKind: 'TORUS', primitiveCode: 4, family: 'elbow' }; }
 function flange() { return { sourceItemId: 'FLANGE-1', primitiveKind: 'FLANGE_CYLINDER', primitiveCode: 8, family: 'flange' }; }
