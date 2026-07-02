@@ -67,8 +67,8 @@ export function buildCylinderCode8ProductionParityAudit(input = {}, options = {}
     const isCylinderCode8 = kind === CYLINDER_KIND && code === 8;
     const isTorusCode4 = kind === TORUS_KIND && code === 4;
     const isFlangeCode8 = kind === FLANGE_KIND && code === 8;
-    const isValve = isValvePrimitive(primitive);
-    const isSupport = isSupportPrimitive(primitive);
+    const isValve = isValvePrimitive(primitive, kind);
+    const isSupport = isSupportPrimitive(primitive, kind);
 
     if (isCylinderCode8) cylinderCount += 1;
     else nonCylinderCount += 1;
@@ -86,7 +86,7 @@ export function buildCylinderCode8ProductionParityAudit(input = {}, options = {}
     if (isValve && isCandidate) valveReadyCount += 1;
     if (isSupport && isCandidate) supportReadyCount += 1;
     if (isCandidate && !isCylinderCode8) unsupportedPrimitiveCount += 1;
-    if (isCylinderCode8 && isCandidate && !hasCompleteSourceTrace(primitive, graphId)) incompleteSourceTraceCount += 1;
+    if (isCylinderCode8 && isCandidate && !hasCompleteSourceTrace(primitive)) incompleteSourceTraceCount += 1;
   }
 
   if (productionRuntimeChanged) errors.push('production runtime files changed; CYLINDER/code8 parity proof must fail closed');
@@ -158,15 +158,29 @@ function collectPrimitives(input, model) {
     input.resolvedPrimitiveModel?.primitives,
     input.primitiveModel?.primitives,
     model?.primitives,
+    model?.testByteEligiblePrimitives,
+    model?.flangeTestByteEligiblePrimitives,
+    model?.deferredExports,
+    model?.blockedExports,
+    model?.blockedArtifactItems,
+    model?.deferredArtifactItems,
     model?.items,
     model?.elements,
     model?.entries,
     model?.rvmPrimitives
   ];
+  const seenObjects = new WeakSet();
+  const primitives = [];
   for (const candidate of candidates) {
-    if (Array.isArray(candidate)) return candidate;
+    if (!Array.isArray(candidate)) continue;
+    for (const entry of candidate) {
+      if (!entry || typeof entry !== 'object') continue;
+      if (seenObjects.has(entry)) continue;
+      seenObjects.add(entry);
+      primitives.push(entry);
+    }
   }
-  return [];
+  return primitives;
 }
 function normalizeChangedFiles(files) {
   return Array.isArray(files) ? files.map((file) => String(file).replace(/^\.\//, '')) : [];
@@ -179,29 +193,30 @@ function normalizeCode(primitive) {
   return Number.isFinite(Number(value)) ? Number(value) : null;
 }
 function normalizeStatus(primitive) {
-  return String(primitive?.candidateStatus || primitive?.rvmElementUnitStatus || primitive?.readinessStatus || primitive?.status || '').trim();
+  return String(primitive?.candidateStatus || primitive?.rvmElementUnitStatus || primitive?.readinessStatus || primitive?.exportStatus || primitive?.artifactStatus || primitive?.writerStatus || primitive?.status || '').trim();
 }
 function isCandidatePrimitive(primitive, status) {
   return primitive?.candidateReady === true || primitive?.productionCandidate === true || CANDIDATE_STATUSES.has(status);
 }
-function isValvePrimitive(primitive) {
+function isValvePrimitive(primitive, kind = normalizeKind(primitive)) {
   const family = String(primitive?.family || primitive?.normalizedFamily || primitive?.sourceElementType || primitive?.type || '').toUpperCase();
-  return family === 'VALV' || family === 'VALVE';
+  return family === 'VALV' || family === 'VALVE' || kind.includes('VALVE');
 }
-function isSupportPrimitive(primitive) {
+function isSupportPrimitive(primitive, kind = normalizeKind(primitive)) {
   const family = String(primitive?.family || primitive?.normalizedFamily || primitive?.sourceElementType || primitive?.type || '').toUpperCase();
-  return family === 'ATTA' || family === 'SUPPORT' || family === 'RESTRAINT';
+  return family === 'ATTA' || family === 'SUPPORT' || family === 'RESTRAINT' || kind === 'SUPPORT_INTENT' || kind.includes('SUPPORT');
 }
 function isFallbackSubstitution(primitive, kind) {
   return primitive?.fallback === true || primitive?.fallbackKind || primitive?.substitutionReason || ['BOX', 'SPHERE', 'PYRAMID'].includes(kind);
 }
-function hasCompleteSourceTrace(primitive, graphId) {
+function hasCompleteSourceTrace(primitive) {
   const sourceId = primitive?.sourceItemId || primitive?.sourceRef || primitive?.sourceElementId;
   const trace = primitive?.sourceTrace || primitive?.trace || primitive?.evidence;
   if (!sourceId || !trace || typeof trace !== 'object' || Array.isArray(trace)) return false;
   const traceSourceOfTruth = trace.sourceOfTruth || trace.sourceModel;
   const traceGraphId = trace.graphId || trace.plantGraphId;
-  return traceSourceOfTruth === SOURCE_OF_TRUTH && Boolean(traceGraphId || graphId);
+  const traceSourceId = trace.sourceItemId || trace.sourceRef || trace.sourceElementId;
+  return traceSourceOfTruth === SOURCE_OF_TRUTH && hasMeaningfulValue(traceGraphId) && traceSourceId === sourceId;
 }
 function hasMeaningfulValue(value) {
   if (value === null || value === undefined) return false;
