@@ -1,6 +1,7 @@
 const RVM_WRITER_ADAPTER_SCHEMA = 'RvmWriterAdapterPlan.v1';
 const FINAL_REVIEW_TRANSFORM_POLICY = 'final-review-transform.v1';
 const TRANSFORM_BLOCK_WARNING = 'RVM writer artifact readiness blocked until final review transform policy is implemented.';
+const PIPE_ONLY_READY_WARNING = 'RVM writer dry-run ready for transformed straight-pipe cylinder subset only';
 const SUBSET_READY_WARNING = 'RVM writer dry-run ready for pipe+bend and flange test-byte subsets; production flange writer remains disabled';
 const AXIS_EPSILON = 1e-6;
 
@@ -19,7 +20,7 @@ export function adaptRvmExportModelForWriter(rvmExportModel, exportAudit, option
   const writerReady = canPlan && plannedChunks.length > 0 && finalTransformReady;
   const pipeBendSubsetTestByteReady = writerReady && counts.testByteEligibleTorusCount > 0;
   const flangeSubsetTestByteReady = writerReady && counts.flangeTestByteEligibleCount > 0;
-  if (writerReady) warnings.push(SUBSET_READY_WARNING);
+  if (writerReady) warnings.push(pipeBendSubsetTestByteReady || flangeSubsetTestByteReady ? SUBSET_READY_WARNING : PIPE_ONLY_READY_WARNING);
   return buildAdapter(rvmExportModel, options, mode, writerReady, pipeBendSubsetTestByteReady, flangeSubsetTestByteReady, plannedChunks, testByteEligibleItems, blockedItems, deferredItems, counts, warnings);
 }
 
