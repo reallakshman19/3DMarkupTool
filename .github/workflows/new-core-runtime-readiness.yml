@@ -68,3 +68,6 @@ jobs:
 
       - name: Phase 02 writer runtime readiness
         run: npm run test:writer-runtime-readiness
+
+      - name: Phase 12 CYLINDER/code8 runtime pilot
+        run: npm run test:cylinder-code8-runtime-pilot
