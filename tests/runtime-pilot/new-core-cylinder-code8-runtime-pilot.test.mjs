@@ -9,7 +9,7 @@ import { writeNewCoreCylinderRuntimePilotArtifact } from '../../src/runtime-pilo
 const validOptions = { enabled: true, mode: 'explicit-runtime-pilot', scope: 'cylinder-code8-subset', allowPartialModel: true, writeArtifact: true };
 
 assert.equal(normalizeCylinderRuntimePilotOptions().ok, false, 'disabled by default');
-for (const options of [{ ...validOptions, enabled: false }, { ...validOptions, mode: 'bad' }, { ...validOptions, scope: 'bad' }, { ...validOptions, allowPartialModel: false }, { ...validOptions, browser: true }, { ...validOptions, canvas: true }, { ...validOptions, download: true }, { ...validOptions, objectUrl: true }]) {
+for (const options of [{ ...validOptions, enabled: false }, { ...validOptions, mode: 'bad' }, { ...validOptions, scope: 'bad' }, { ...validOptions, allowPartialModel: false }, { ...validOptions, writeArtifact: false }, { ...validOptions, browser: true }, { ...validOptions, canvas: true }, { ...validOptions, download: true }, { ...validOptions, objectUrl: true }]) {
   assert.equal(normalizeCylinderRuntimePilotOptions(options).ok, false, 'invalid options fail closed');
   const plan = buildNewCoreCylinderRuntimePilotPlan(rvmWith([cylinder()]), options);
   assert.equal(plan.subsetReady, false, 'invalid options cannot build ready plan');
