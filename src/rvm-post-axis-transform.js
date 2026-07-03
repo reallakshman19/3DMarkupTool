@@ -138,7 +138,7 @@ function transformPrimitive(primitive, config, stats, path) {
   stats.primitiveCount += 1;
   const out = { ...primitive };
   const beforeCenter = Array.isArray(primitive.center) ? primitive.center : null;
-  for (const key of ['center', 'startMm', 'endMm', 'parentStartMm', 'parentEndMm', 'startTangent', 'endTangent', 'direction']) {
+  for (const key of ['center', 'startMm', 'endMm', 'parentStartMm', 'parentEndMm', 'startTangent', 'endTangent', 'direction', 'normal', 'axis']) {
     if (Array.isArray(out[key]) && out[key].length === 3) out[key] = transformPoint(out[key], config);
   }
   if (primitive.basis && typeof primitive.basis === 'object') {
