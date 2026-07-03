@@ -17,6 +17,7 @@
     "test:managed-stage-rich-contract": "node tests/managed-stage-rich-topology-contract.test.mjs",
     "test:managed-stage-rich-support-mapping": "node tests/managed-stage-rich-support-mapping.test.mjs",
     "test:managed-stage-preview-export-parity": "node tests/managed-stage-preview-export-parity-audit.test.mjs",
+    "test:managed-stage-rich-artifact-package": "node tests/managed-stage-rich-artifact-package.test.mjs",
     "test:plant-graph-topology-audit": "node tests/audit/plant-graph-topology-audit.test.mjs",
     "test:catalogue-registry": "node tests/catalogue/catalogue-registry-loader.test.mjs",
     "test:catalogue-binding": "node tests/catalogue/catalogue-binder.test.mjs && node tests/catalogue/bm-cii-catalogue-binding-audit.test.mjs",
