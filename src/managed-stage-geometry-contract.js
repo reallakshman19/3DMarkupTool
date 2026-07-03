@@ -10,6 +10,12 @@ const DTXR_ALIASES = new Map([
   ['VALV', 'VALVE'], ['BV', 'VALVE'], ['BALL', 'VALVE'], ['BALLVALVE', 'VALVE'], ['BALL_VALVE', 'VALVE'],
   ['FLANGEDVALVE', 'FLANGED_VALVE'], ['FLANGED_VALVE', 'FLANGED_VALVE'], ['FLANGEDBALLVALVE', 'FLANGED_VALVE'], ['FLANGED_BALL_VALVE', 'FLANGED_VALVE']
 ]);
+const DIAMETER_FIELDS = ['DIAMETER_MM', 'OUTSIDE_DIAMETER_MM', 'OUTSIDE_DIAMETER', 'OD_MM', 'OD', 'PIPE_OD_MM', 'PIPE_OUTSIDE_DIAMETER_MM', 'BORE_MM', 'DIAMETER', 'BORE', 'ABORE', 'ABORE_MM', 'LBORE', 'LBORE_MM', 'START_DIAMETER', 'START_DIAMETER_MM', 'START_OUTSIDE_DIAMETER_MM', 'END_DIAMETER', 'END_DIAMETER_MM', 'END_OUTSIDE_DIAMETER_MM'];
+const START_DIAMETER_FIELDS = ['START_DIAMETER', 'START_DIAMETER_MM', 'START_OUTSIDE_DIAMETER_MM', 'ABORE', 'ABORE_MM'];
+const END_DIAMETER_FIELDS = ['END_DIAMETER', 'END_DIAMETER_MM', 'END_OUTSIDE_DIAMETER_MM', 'LBORE', 'LBORE_MM'];
+const BEND_RADIUS_FIELDS = ['BEND_RADIUS_MM', 'BEND_RADIUS', 'RADIUS_MM', 'ELBOW_RADIUS_MM'];
+const BEND_ANGLE_FIELDS = ['BEND_ANGLE_DEG', 'BEND_ANGLE', 'ANGLE_DEG', 'ELBOW_ANGLE_DEG'];
+const BEND_ELEMENT_LENGTH_FIELDS = ['BEND_ELEMENT_LENGTH_MM', 'ELEMENT_LENGTH_MM'];
 
 export function buildManagedStageGeometryContractSet(profileOrRecords, options = {}) {
   const geometryRecords = Array.isArray(profileOrRecords) ? profileOrRecords : profileOrRecords.geometryRecords || [];
@@ -63,10 +69,8 @@ export function createManagedStageGeometryContract(record, elementIndex = 0, opt
   const lengthMm = distance(start, end);
   if (!(lengthMm > 0)) throw new Error(`Zero-length managed-stage geometry contract: ${record.name || a.NAME || 'UNNAMED'}`);
 
-  const startDiameterMm = parseOptionalMm(a.ABORE || a.START_DIAMETER || a.START_BORE);
-  const endDiameterMm = parseOptionalMm(a.LBORE || a.END_DIAMETER || a.END_BORE);
-  const diameterMm = parseMm(a.DIAMETER || a.BORE || startDiameterMm || endDiameterMm);
-  if (!(diameterMm > 0)) throw new Error(`Missing/invalid diameter for ${record.name || a.NAME || 'UNNAMED'}`);
+  const diameter = resolveDiameterEvidence(a);
+  if (!(diameter.diameterMm > 0)) throw new Error(`Missing/invalid diameter for ${record.name || a.NAME || 'UNNAMED'}`);
 
   const axis = normalize(vsub(end, start));
   const contract = {
@@ -90,44 +94,30 @@ export function createManagedStageGeometryContract(record, elementIndex = 0, opt
     centerMm: midpoint(start, end),
     axis,
     lengthMm,
-    diameterMm,
-    radiusMm: diameterMm / 2,
-    startDiameterMm: startDiameterMm || diameterMm,
-    endDiameterMm: endDiameterMm || diameterMm,
-    startRadiusMm: (startDiameterMm || diameterMm) / 2,
-    endRadiusMm: (endDiameterMm || diameterMm) / 2,
+    diameterMm: diameter.diameterMm,
+    radiusMm: diameter.diameterMm / 2,
+    startDiameterMm: diameter.startDiameterMm,
+    endDiameterMm: diameter.endDiameterMm,
+    startRadiusMm: diameter.startDiameterMm / 2,
+    endRadiusMm: diameter.endDiameterMm / 2,
     reducerOffsetXMm: parseOptionalNumber(a.REDUCER_OFFSET_X || a.ECC_OFFSET_X || a.OFFSET_X || a.XOFFSET) || 0,
     reducerOffsetYMm: parseOptionalNumber(a.REDUCER_OFFSET_Y || a.ECC_OFFSET_Y || a.OFFSET_Y || a.YOFFSET) || 0,
     material: a.MATERIAL || '',
     wallThickMm: parseOptionalMm(a.WALL_THICK),
     sourceFormat: a.SOURCE_FORMAT || '',
     sourceElementId: a.SOURCE_ELEMENT_ID || '',
+    richGeometryEvidence: {
+      diameterField: diameter.diameterField,
+      startDiameterField: diameter.startDiameterField,
+      endDiameterField: diameter.endDiameterField,
+      bendRadiusField: '',
+      bendAngleField: '',
+      bendAngleDerivedFromElementLength: false
+    },
     nonBlockingGeometryWarnings: warnings
   };
 
-  if (contract.centerlineKind === 'arc') {
-    const bendRadiusMm = parseOptionalMm(a.BEND_RADIUS);
-    const bendAngleDeg = parseOptionalNumber(a.BEND_ANGLE);
-    const bendIssues = [];
-    if (!(bendRadiusMm > 0)) bendIssues.push(`Missing/invalid bend radius for ${contract.name}`);
-    if (!(bendAngleDeg > 0)) bendIssues.push(`Missing/invalid bend angle for ${contract.name}`);
-    if (bendIssues.length) {
-      if (!warningOnly(options)) throw new Error(bendIssues[0]);
-      for (const issue of bendIssues) warnings.push(geometryWarning('bend-arc-degraded-to-source-route', contract.name, issue));
-      contract.centerlineKind = 'line';
-      contract.excludeCode4Bend = true;
-      contract.degradedBendToSourceRouteCylinder = true;
-      contract.bendArcDegradationReason = bendIssues.join('; ');
-    } else {
-      contract.arc = {
-        bendRadiusMm,
-        tubeRadiusMm: contract.radiusMm,
-        bendAngleDeg,
-        sweepAngleRad: (bendAngleDeg * Math.PI) / 180,
-        solverState: 'endpoint-contract-only'
-      };
-    }
-  }
+  if (contract.centerlineKind === 'arc') applyBendArcEvidence(contract, a, options, warnings);
   return contract;
 }
 
@@ -206,10 +196,70 @@ export function componentClassForDtxr(dtxr) {
   return 'UNKNOWN';
 }
 
+function resolveDiameterEvidence(attrs) {
+  const diameter = firstMm(attrs, DIAMETER_FIELDS);
+  const start = firstMm(attrs, START_DIAMETER_FIELDS);
+  const end = firstMm(attrs, END_DIAMETER_FIELDS);
+  const fallback = diameter.value ?? start.value ?? end.value;
+  return {
+    diameterMm: fallback,
+    startDiameterMm: start.value ?? fallback,
+    endDiameterMm: end.value ?? fallback,
+    diameterField: diameter.field || start.field || end.field || '',
+    startDiameterField: start.field || diameter.field || end.field || '',
+    endDiameterField: end.field || diameter.field || start.field || ''
+  };
+}
+
+function applyBendArcEvidence(contract, attrs, options, warnings) {
+  const radius = firstMm(attrs, BEND_RADIUS_FIELDS);
+  const directAngle = firstNumber(attrs, BEND_ANGLE_FIELDS);
+  const elementLength = firstMm(attrs, BEND_ELEMENT_LENGTH_FIELDS);
+  const derivedAngle = deriveBendAngleDeg(elementLength.value, radius.value);
+  const bendAngleDeg = directAngle.value ?? derivedAngle.value;
+  contract.richGeometryEvidence.bendRadiusField = radius.field;
+  contract.richGeometryEvidence.bendAngleField = directAngle.field || derivedAngle.field;
+  contract.richGeometryEvidence.bendAngleDerivedFromElementLength = derivedAngle.derived;
+  const bendIssues = [];
+  if (!(radius.value > 0)) bendIssues.push(`Missing/invalid bend radius for ${contract.name}`);
+  if (!(bendAngleDeg > 0)) bendIssues.push(`Missing/invalid bend angle for ${contract.name}`);
+  if (bendIssues.length) return degradeBend(contract, bendIssues, options, warnings);
+  contract.arc = { bendRadiusMm: radius.value, tubeRadiusMm: contract.radiusMm, bendAngleDeg, sweepAngleRad: (bendAngleDeg * Math.PI) / 180, solverState: 'endpoint-contract-only' };
+}
+
+function deriveBendAngleDeg(elementLengthMm, bendRadiusMm) {
+  if (!(elementLengthMm > 0) || !(bendRadiusMm > 0)) return { value: null, field: '', derived: false };
+  return { value: (elementLengthMm / bendRadiusMm) * 180 / Math.PI, field: 'BEND_ELEMENT_LENGTH_MM', derived: true };
+}
+
+function degradeBend(contract, bendIssues, options, warnings) {
+  if (!warningOnly(options)) throw new Error(bendIssues[0]);
+  for (const issue of bendIssues) warnings.push(geometryWarning('bend-arc-degraded-to-source-route', contract.name, issue));
+  contract.centerlineKind = 'line';
+  contract.excludeCode4Bend = true;
+  contract.degradedBendToSourceRouteCylinder = true;
+  contract.bendArcDegradationReason = bendIssues.join('; ');
+}
+
+function firstMm(attrs, keys) {
+  for (const field of keys) {
+    const value = parseOptionalMm(attrs[field]);
+    if (value != null) return { field, value };
+  }
+  return { field: '', value: null };
+}
+
+function firstNumber(attrs, keys) {
+  for (const field of keys) {
+    const value = parseOptionalNumber(attrs[field]);
+    if (value != null) return { field, value };
+  }
+  return { field: '', value: null };
+}
+
 function normalizeDtxrToken(value) { return String(value || 'UNKNOWN').trim().toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'UNKNOWN'; }
 function warningOnly(options = {}) { return options.nonBlockingGeometryGates === true || options.warningOnlyManagedStageGates === true; }
 function geometryWarning(code, elementName, message) { return { code, severity: 'warning', elementName, message }; }
-function parseMm(value) { const parsed = parseOptionalMm(value); return parsed > 0 ? parsed : NaN; }
 function parseOptionalMm(value) { if (value === undefined || value === null || value === '') return null; const match = String(value).match(/-?\d+(?:\.\d+)?/); return match ? Number(match[0]) : null; }
 function parseOptionalNumber(value) { if (value === undefined || value === null || value === '') return null; const number = Number(String(value).replace(/[^0-9.+-]/g, '')); return Number.isFinite(number) ? number : null; }
 function normalize(vector) { const length = Math.hypot(vector[0], vector[1], vector[2]); if (!(length > 0)) throw new Error('Cannot normalize zero-length vector'); return vector.map((entry) => entry / length); }
