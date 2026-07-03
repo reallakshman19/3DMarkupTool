@@ -213,6 +213,8 @@ function buildContractSnoutPrimitive(contract, options = {}) {
     direction: contract.axis,
     radiusBottom,
     radiusTop,
+    radiusBottomMm: radiusBottom,
+    radiusTopMm: radiusTop,
     height,
     offsetX,
     offsetY,
