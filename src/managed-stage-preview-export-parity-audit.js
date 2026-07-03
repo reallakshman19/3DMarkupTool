@@ -27,7 +27,7 @@ export function buildManagedStagePreviewExportParityAudit(exportModel, previewSc
 
 export function collectExportModelPrimitiveEvidence(exportModel) {
   const primitives = [];
-  collectExportNode(exportModel?.root || exportModel, primitives, { index: 0, node: null });
+  collectExportNode(exportModel?.root || exportModel, primitives);
   for (const primitive of exportModel?.primitives || []) addExportPrimitive(primitives, primitive, null);
   return primitives;
 }
@@ -60,10 +60,10 @@ export function assertManagedStagePreviewExportParity(exportModel, previewScene,
   return audit;
 }
 
-function collectExportNode(node, out, state) {
+function collectExportNode(node, out) {
   if (!node || typeof node !== 'object') return;
   for (const primitive of node.primitives || []) addExportPrimitive(out, primitive, node);
-  for (const child of node.children || []) collectExportNode(child, out, state);
+  for (const child of node.children || []) collectExportNode(child, out);
 }
 
 function addExportPrimitive(out, primitive, node) {
@@ -97,21 +97,21 @@ function previewRecord(node, userData, index, context) {
 function compareEvidence(exportEvidence, previewEvidence) {
   const previewMap = keyCount(previewEvidence);
   const exportMap = keyCount(exportEvidence);
-  const missing = diffKeys(exportMap, previewMap);
-  const extra = diffKeys(previewMap, exportMap);
-  return { missing, extra };
+  return { missing: diffKeys(exportMap, previewMap), extra: diffKeys(previewMap, exportMap) };
 }
 
 function buildCounts(exportEvidence, previewEvidence, comparison) {
+  const exportGeometry = exportEvidence.filter((item) => !item.supportMarker);
+  const previewGeometry = previewEvidence.filter((item) => !item.supportMarker);
   return {
     exportPrimitiveCount: exportEvidence.length,
     previewPrimitiveCount: previewEvidence.length,
     exportSupportMarkerCount: exportEvidence.filter((item) => item.supportMarker).length,
     previewSupportMarkerCount: previewEvidence.filter((item) => item.supportMarker).length,
-    exportCode4Count: exportEvidence.filter((item) => item.code === 4).length,
-    exportCode8Count: exportEvidence.filter((item) => item.code === 8).length,
-    previewCode4Count: previewEvidence.filter((item) => item.code === 4).length,
-    previewCode8Count: previewEvidence.filter((item) => item.code === 8).length,
+    exportCode4Count: exportGeometry.filter((item) => item.code === 4).length,
+    exportCode8Count: exportGeometry.filter((item) => item.code === 8).length,
+    previewCode4Count: previewGeometry.filter((item) => item.code === 4).length,
+    previewCode8Count: previewGeometry.filter((item) => item.code === 8).length,
     missingPreviewPrimitiveCount: comparison.missing.length,
     extraPreviewPrimitiveCount: comparison.extra.length,
     familyMismatchCount: codeFamilyMismatchCount(exportEvidence, previewEvidence)
@@ -140,7 +140,7 @@ function record(id, sourceElementId, family, kind, code, supportMarker) {
 }
 
 function primitiveId(primitive, index) {
-  return stringValue(primitive?.id || primitive?.primitiveId || primitive?.name) || `${sourceElementIdOf(primitive)}:${index + 1}` || `EXPORT_PRIM_${index + 1}`;
+  return stringValue(primitive?.id || primitive?.primitiveId || primitive?.name) || (sourceElementIdOf(primitive) ? `${sourceElementIdOf(primitive)}:${index + 1}` : `EXPORT_PRIM_${index + 1}`);
 }
 
 function sourceElementIdOf(value) {
@@ -209,10 +209,7 @@ function readinessFor(counts, errors, warnings) {
   return { previewRepresentsExportModel: errors.length === 0, supportPreviewRepresentsExportSupportMarkers: counts.exportSupportMarkerCount === counts.previewSupportMarkerCount, fatalIssueCount: errors.length, warningCount: warnings.length };
 }
 
-function previewObjectCount(previewEvidence) {
-  return (previewEvidence || []).length;
-}
-
+function previewObjectCount(previewEvidence) { return (previewEvidence || []).length; }
 function normalize(value) { return String(value || '').trim().toUpperCase().replace(/[\s\-]+/g, '_'); }
 function stringValue(value) { return typeof value === 'string' ? value : ''; }
 function unique(values) { return [...new Set(values.filter(Boolean))]; }
