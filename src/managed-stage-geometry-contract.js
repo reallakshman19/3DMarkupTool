@@ -215,7 +215,7 @@ function applyBendArcEvidence(contract, attrs, options, warnings) {
   const radius = firstMm(attrs, BEND_RADIUS_FIELDS);
   const directAngle = firstNumber(attrs, BEND_ANGLE_FIELDS);
   const elementLength = firstMm(attrs, BEND_ELEMENT_LENGTH_FIELDS);
-  const derivedAngle = deriveBendAngleDeg(elementLength.value, radius.value);
+  const derivedAngle = deriveBendAngleDeg(elementLength.value, radius.value, elementLength.field);
   const bendAngleDeg = directAngle.value ?? derivedAngle.value;
   contract.richGeometryEvidence.bendRadiusField = radius.field;
   contract.richGeometryEvidence.bendAngleField = directAngle.field || derivedAngle.field;
@@ -227,9 +227,9 @@ function applyBendArcEvidence(contract, attrs, options, warnings) {
   contract.arc = { bendRadiusMm: radius.value, tubeRadiusMm: contract.radiusMm, bendAngleDeg, sweepAngleRad: (bendAngleDeg * Math.PI) / 180, solverState: 'endpoint-contract-only' };
 }
 
-function deriveBendAngleDeg(elementLengthMm, bendRadiusMm) {
+function deriveBendAngleDeg(elementLengthMm, bendRadiusMm, field) {
   if (!(elementLengthMm > 0) || !(bendRadiusMm > 0)) return { value: null, field: '', derived: false };
-  return { value: (elementLengthMm / bendRadiusMm) * 180 / Math.PI, field: 'BEND_ELEMENT_LENGTH_MM', derived: true };
+  return { value: (elementLengthMm / bendRadiusMm) * 180 / Math.PI, field: field || 'BEND_ELEMENT_LENGTH_MM', derived: true };
 }
 
 function degradeBend(contract, bendIssues, options, warnings) {
