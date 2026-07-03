@@ -13,6 +13,7 @@
     "test:platform-contracts": "node tests/platform-contracts.test.mjs",
     "test:managed-stage-importer": "node tests/importers/managed-stage-to-plant-graph.test.mjs",
     "test:managed-stage-rich-intake": "node tests/managed-stage-rich-topology-intake.test.mjs",
+    "test:managed-stage-rich-inventory": "node tests/managed-stage-rich-topology-inventory.test.mjs",
     "test:plant-graph-topology-audit": "node tests/audit/plant-graph-topology-audit.test.mjs",
     "test:catalogue-registry": "node tests/catalogue/catalogue-registry-loader.test.mjs",
     "test:catalogue-binding": "node tests/catalogue/catalogue-binder.test.mjs && node tests/catalogue/bm-cii-catalogue-binding-audit.test.mjs",
