@@ -1,3 +1,8 @@
+import {
+  assertRichTopologyManagedStageJson,
+  looksLikeRichTopologyManagedStageJson
+} from './managed-stage-rich-topology-intake.js?v=bust-cache-4';
+
 const CONTROLLER_SCHEMA = 'ManagedStageJsonUiController.v5';
 const MANAGED_STAGE_SCHEMA = 'inputxml-managed-stage/v1';
 const MANAGED_STAGE_PROFILE = 'AVEVA_JSON_FOR_3D_RVM_VIEWER';
@@ -113,9 +118,10 @@ function onUnifiedModelFileChange(event) {
   loadManagedStageFile(file).catch((error) => { log(`ERROR managed-stage JSON load failed: ${error.message}`); setStatus('Managed-stage JSON load failed'); });
 }
 
-async function loadManagedStageFile(file) { resetSupportBasisToInputXml('managed-stage-file-load'); const sourceText = await file.text(); if (!looksLikeManagedStageJson(sourceText, file.name)) throw new Error(`${file.name} is JSON, but not ${MANAGED_STAGE_SCHEMA} / ${MANAGED_STAGE_PROFILE}`); return loadManagedStageText(sourceText, file.name); }
+async function loadManagedStageFile(file) { resetSupportBasisToInputXml('managed-stage-file-load'); const sourceText = await file.text(); if (!looksLikeManagedStageJson(sourceText, file.name)) assertRichTopologyManagedStageJson(sourceText, file.name); return loadManagedStageText(sourceText, file.name); }
 
 async function loadManagedStageText(sourceText, sourceName = 'BM_CII_INPUT_managed_stage.json') {
+  assertRichTopologyManagedStageJson(sourceText, sourceName);
   managedStageUiState.sourceText = sourceText;
   managedStageUiState.sourceName = sourceName;
   managedStageUiState.basename = basenameWithoutExtension(sourceName);
@@ -194,7 +200,7 @@ async function loadBundledManagedStageSample() { resetSupportBasisToInputXml('bm
 async function fetchManagedStageSampleText() { const candidates = ['./src/BM_CII_INPUT_managed_stage.json', './BM_CII_INPUT_managed_stage.json', './samples/BM_CII_INPUT_managed_stage.json']; const failures = []; for (const url of candidates) { try { const response = await fetch(url); if (response.ok) { log(`Loaded BM_CII stagedJson sample from ${url}`); return response.text(); } failures.push(`${url}: HTTP ${response.status}`); } catch (error) { failures.push(`${url}: ${error?.message || error}`); } } throw new Error(`Unable to load BM_CII_INPUT_managed_stage.json from bundled data or fallback URLs. ${failures.join(' | ')}`); }
 function resetSupportBasisToInputXml(reason = 'managed-stage-load') { const select = document.getElementById('supportMode'); if (select) { ensureSupportModeOption(select, 'stagedJson', 'InputXML Basis — use staged InputXML supports'); if (select.value !== 'stagedJson') { select.value = 'stagedJson'; select.dispatchEvent(new Event('change', { bubbles: true })); } } const supportUi = window.__3D_MARKUP_SUPPORT_SOURCE_UI__; if (supportUi && typeof supportUi === 'object') { supportUi.sourceMode = 'stagedJson'; supportUi.activeBasis = 'InputXML Basis'; supportUi.lastBasisResetReason = reason; } window.dispatchEvent(new CustomEvent('viewer:support-basis-reset', { detail: { reason, sourceMode: 'stagedJson', activeBasis: 'InputXML Basis' } })); }
 function ensureSupportModeOption(select, value, label) { if (Array.from(select.options || []).some((option) => option.value === value)) return; const option = document.createElement('option'); option.value = value; option.textContent = label || value; select.appendChild(option); }
-function looksLikeManagedStageJson(sourceText, sourceName = '') { if (!isJsonFileName(sourceName)) return false; try { const parsed = JSON.parse(sourceText); return parsed?.schema === MANAGED_STAGE_SCHEMA && parsed?.profile === MANAGED_STAGE_PROFILE; } catch (_) { return false; } }
+function looksLikeManagedStageJson(sourceText, sourceName = '') { return isJsonFileName(sourceName) && looksLikeRichTopologyManagedStageJson(sourceText, sourceName); }
 function isJsonFileName(name = '') { return /\.json$|\.jscon$/i.test(String(name)); }
 function basenameWithoutExtension(name = '') { return String(name || 'managed-stage').replace(/\.[^.]+$/, '') || 'managed-stage'; }
 function bmCiiLikeSourceName(name = '') { return /BM_CII/i.test(String(name)); }
