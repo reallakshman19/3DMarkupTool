@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
+import { mkdtemp, readFile, readdir, rm, stat } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import { promisify } from 'node:util';
+import { countValvePilotAttRows } from '../../src/runtime-pilot/new-core-valve-att-writer.js';
+import { assertNewCoreValveRuntimePilotAudit } from '../../src/runtime-pilot/new-core-valve-runtime-audit.js';
+
+const execFileAsync = promisify(execFile);
+const outdir = await mkdtemp(join(tmpdir(), 'pbfv-cli-'));
+const script = 'scripts/generate-new-core-valve-runtime-pilot-artifact.mjs';
+const { stdout } = await execFileAsync(process.execPath, [script, '--fixture=bm-cii', `--outdir=${outdir}`], { cwd: process.cwd() });
+const rvmPath = join(outdir, 'BM_CII_pipe_bend_flange_valve_runtime_pilot.rvm');
+const attPath = join(outdir, 'BM_CII_pipe_bend_flange_valve_runtime_pilot.att');
+const auditPath = join(outdir, 'BM_CII_pipe_bend_flange_valve_runtime_pilot.audit.json');
+const audit = JSON.parse(await readFile(auditPath, 'utf8'));
+const checksum = stdout.match(/checksum=([0-9a-f]{64})/)?.[1] || '';
+
+assert.ok(stdout.includes('auditOk=true'), 'CLI reports audit ok');
+assert.equal((await stat(rvmPath)).isFile(), true, '.rvm file exists');
+assert.equal((await stat(attPath)).isFile(), true, '.att file exists');
+assert.equal((await stat(auditPath)).isFile(), true, '.audit.json file exists');
+assert.equal(assertNewCoreValveRuntimePilotAudit(audit, { ok: true, plannedCylinderCount: 19, plannedTorusCount: 7, plannedFlangeCylinderCount: 8, decodedPrimitiveCount: audit.plannedRvmPrimitiveCount, attRowCount: audit.plannedRvmPrimitiveCount, fullModelReady: false, subsetReady: true }).ok, true);
+assert.ok(audit.rvmArtifactByteLength > 0, 'RVM byte length > 0');
+assert.ok(audit.attArtifactByteLength > 0, 'ATT byte length > 0');
+assert.equal(countValvePilotAttRows(await readFile(attPath, 'utf8')), audit.plannedRvmPrimitiveCount);
+assert.match(checksum, /^[0-9a-f]{64}$/);
+assert.equal(resolve(audit.rvmArtifactPath).startsWith(resolve(outdir)), true, 'RVM under temp outdir');
+assert.equal(resolve(audit.attArtifactPath).startsWith(resolve(outdir)), true, 'ATT under temp outdir');
+assert.deepEqual((await readdir('artifacts', { withFileTypes: true }).catch(() => [])).filter((entry) => entry.name === 'new-core-valve-runtime-pilot'), [], 'no generated artifact directory is committed by this test');
+await rm(outdir, { recursive: true, force: true });
+console.log('new-core valve runtime pilot CLI test passed');

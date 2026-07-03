@@ -1,0 +1,158 @@
+import { validateElementRvmLedgerContract } from '../contracts/index.js';
+
+const AUDIT_SCHEMA = 'ElementRvmLedgerAudit.v1';
+const ELEMENT_SCHEMA = 'ElementRvmLedger.v1';
+const SOURCE_EVIDENCE = 'staged-json-child';
+const SOURCE_OF_TRUTH = 'PlantModelGraph.v1';
+const TYPE_KEYS = Object.freeze(['BRANCH', 'PIPE', 'BEND', 'FLAN', 'VALV', 'ATTA']);
+const COMPONENT_TYPES = Object.freeze(['PIPE', 'BEND', 'FLAN', 'VALV']);
+
+export function buildElementRvmLedgerAudit(ledger, options = {}) {
+  const validation = validateElementRvmLedgerContract(ledger);
+  const entries = Array.isArray(ledger?.entries) ? ledger.entries : [];
+  const errors = collectAuditErrors(ledger, entries, validation.errors, options);
+  const audit = {
+    schema: AUDIT_SCHEMA,
+    ledgerSchema: ledger?.schema || '<missing-ledger-schema>',
+    graphId: ledger?.graphId || options.graphId || '<unknown-graph>',
+    sourceSchema: ledger?.sourceSchema || '<missing-source-schema>',
+    sourceProfile: ledger?.sourceProfile || '<missing-source-profile>',
+    sourceOfTruth: SOURCE_OF_TRUTH,
+    ...buildAuditCounts(ledger, entries),
+    hardErrorCount: errors.length,
+    warningCount: Array.isArray(ledger?.warnings) ? ledger.warnings.length : 0,
+    ok: false,
+    errors,
+    warnings: Array.isArray(ledger?.warnings) ? [...ledger.warnings] : []
+  };
+  audit.ok = auditIsOk(audit, validation.ok);
+  return audit;
+}
+
+export function assertElementRvmLedgerAudit(audit, expectations = {}) {
+  const errors = [];
+  validateAuditHeader(audit, errors);
+  validateAuditIntegerFields(audit, errors);
+  validateAuditBooleanFields(audit, errors);
+  validateAuditExpectations(audit, expectations, errors);
+  if (errors.length) throw new Error(`ElementRvmLedgerAudit invalid: ${errors.join('; ')}`);
+  return { schema: 'ElementRvmLedgerAuditAssertion.v1', ok: true, errorCount: 0, errors: [] };
+}
+
+function collectAuditErrors(ledger, entries, validationErrors, options) {
+  const errors = [...validationErrors];
+  const duplicateIds = duplicateValues(entries.map((entry) => entry.sourceElementId));
+  const droppedExpectedCount = Number.isInteger(Number(options.expectedSourceChildCount)) && Number(options.expectedSourceChildCount) !== entries.length;
+  if (droppedExpectedCount) errors.push(`expected source child count ${options.expectedSourceChildCount} does not match ledger entries ${entries.length}`);
+  if (duplicateIds.length) errors.push(`duplicate sourceElementId values: ${duplicateIds.join(', ')}`);
+  for (const entry of entries) collectEntryAuditErrors(entry, errors);
+  if (ledger?.generationReadiness?.fullRvmReady !== false) errors.push('fullRvmReady must be false in Phase E1');
+  return errors;
+}
+
+function collectEntryAuditErrors(entry, errors) {
+  const label = entry.sourceElementId || '<unknown>';
+  if (!entry.sourceTrace || typeof entry.sourceTrace !== 'object') errors.push(`${label} missing sourceTrace`);
+  if (entry.sourceTrace?.sourceEvidence !== SOURCE_EVIDENCE) errors.push(`${label} sourceEvidence must be ${SOURCE_EVIDENCE}`);
+  if (entry.sourceTrace?.sourceOfTruth !== SOURCE_OF_TRUTH) errors.push(`${label} sourceOfTruth must be ${SOURCE_OF_TRUTH}`);
+  if (Object.hasOwn(entry.sourceTrace || {}, 'masterSource')) errors.push(`${label} sourceTrace.masterSource is forbidden`);
+  if (entry.rvmByteStatus !== 'notStarted') errors.push(`${label} rvmByteStatus must be notStarted`);
+  if (entry.stitchStatus !== 'notStarted') errors.push(`${label} stitchStatus must be notStarted`);
+  if (entry.rvmElementUnitStatus === 'candidate' && entry.geometryStatus !== 'primitiveResolved') errors.push(`${label} candidate requires primitiveResolved geometryStatus`);
+}
+
+function buildAuditCounts(ledger, entries) {
+  const sourceIds = entries.map((entry) => entry.sourceElementId);
+  return {
+    totalElementCount: entries.length,
+    componentElementCount: entries.filter((entry) => COMPONENT_TYPES.includes(entry.sourceElementType)).length,
+    supportElementCount: entries.filter((entry) => entry.sourceElementType === 'ATTA').length,
+    branchCount: Number(ledger?.branchCount || 0),
+    typeCounts: countTypes(entries, ledger?.branchCount || 0),
+    ...buildSourceCounts(entries, sourceIds),
+    ...buildReadinessCounts(ledger, entries)
+  };
+}
+
+function buildSourceCounts(entries, sourceIds) {
+  return {
+    sourceElementIdCount: new Set(sourceIds).size,
+    duplicateSourceElementIdCount: sourceIds.length - new Set(sourceIds).size,
+    missingSourceElementIdCount: entries.filter((entry) => !entry.sourceElementId).length,
+    missingSourceElementTypeCount: entries.filter((entry) => !entry.sourceElementType).length,
+    missingSequenceIndexCount: entries.filter((entry) => !Number.isInteger(Number(entry.sequenceIndex))).length,
+    sequenceIndexDeterministic: isContiguousSequence(entries.map((entry) => Number(entry.sequenceIndex))),
+    sourceTraceMissingCount: entries.filter((entry) => !entry.sourceTrace || typeof entry.sourceTrace !== 'object').length,
+    sourceEvidenceTraceCount: entries.filter((entry) => entry.sourceTrace?.sourceEvidence === SOURCE_EVIDENCE).length,
+    graphSourceOfTruthTraceCount: entries.filter((entry) => entry.sourceTrace?.sourceOfTruth === SOURCE_OF_TRUTH).length
+  };
+}
+
+function buildReadinessCounts(ledger, entries) {
+  return {
+    primitiveResolvedElementCount: entries.filter((entry) => entry.geometryStatus === 'primitiveResolved').length,
+    writableElementCount: entries.filter((entry) => entry.rvmElementUnitStatus === 'candidate').length,
+    blockedElementCount: entries.filter((entry) => entry.rvmElementUnitStatus === 'blocked').length,
+    deferredElementCount: entries.filter((entry) => entry.rvmElementUnitStatus === 'deferred').length,
+    blockedValveCount: entries.filter((entry) => entry.sourceElementType === 'VALV' && entry.rvmElementUnitStatus === 'blocked').length,
+    deferredSupportCount: entries.filter((entry) => entry.sourceElementType === 'ATTA' && entry.rvmElementUnitStatus === 'deferred').length,
+    primitiveOnlyOrphanCount: entries.filter(isPrimitiveOnlyOrphan).length,
+    rvmByteNotStartedCount: entries.filter((entry) => entry.rvmByteStatus === 'notStarted').length,
+    stitchNotStartedCount: entries.filter((entry) => entry.stitchStatus === 'notStarted').length,
+    fullRvmReady: ledger?.generationReadiness?.fullRvmReady === true
+  };
+}
+
+function auditIsOk(audit, validationOk) {
+  return validationOk && audit.hardErrorCount === 0 && audit.duplicateSourceElementIdCount === 0 && audit.missingSourceElementIdCount === 0 && audit.missingSourceElementTypeCount === 0 && audit.missingSequenceIndexCount === 0 && audit.sequenceIndexDeterministic === true && audit.sourceTraceMissingCount === 0 && audit.sourceEvidenceTraceCount === audit.totalElementCount && audit.graphSourceOfTruthTraceCount === audit.totalElementCount && audit.primitiveOnlyOrphanCount === 0 && audit.rvmByteNotStartedCount === audit.totalElementCount && audit.stitchNotStartedCount === audit.totalElementCount && audit.fullRvmReady === false;
+}
+
+function validateAuditHeader(audit, errors) {
+  if (!audit || typeof audit !== 'object') errors.push('audit must be an object');
+  if (audit?.schema !== AUDIT_SCHEMA) errors.push(`schema must be ${AUDIT_SCHEMA}`);
+  if (audit?.ledgerSchema !== ELEMENT_SCHEMA) errors.push(`ledgerSchema must be ${ELEMENT_SCHEMA}`);
+  if (!audit?.graphId) errors.push('graphId is required');
+  if (audit?.sourceOfTruth !== SOURCE_OF_TRUTH) errors.push(`sourceOfTruth must be ${SOURCE_OF_TRUTH}`);
+  if (!Array.isArray(audit?.errors)) errors.push('errors array is required');
+  if (!Array.isArray(audit?.warnings)) errors.push('warnings array is required');
+}
+
+function validateAuditIntegerFields(audit, errors) {
+  for (const key of integerAuditKeys()) if (!Number.isInteger(Number(audit?.[key]))) errors.push(`${key} must be integer-like`);
+  for (const key of TYPE_KEYS) if (!Number.isInteger(Number(audit?.typeCounts?.[key]))) errors.push(`typeCounts.${key} must be integer-like`);
+}
+
+function validateAuditBooleanFields(audit, errors) {
+  for (const key of ['sequenceIndexDeterministic', 'fullRvmReady', 'ok']) if (typeof audit?.[key] !== 'boolean') errors.push(`${key} must be boolean`);
+}
+
+function validateAuditExpectations(audit, expectations, errors) {
+  for (const [key, expected] of Object.entries(expectations)) {
+    const actual = key.startsWith('typeCounts.') ? audit?.typeCounts?.[key.slice('typeCounts.'.length)] : audit?.[key];
+    if (JSON.stringify(actual) !== JSON.stringify(expected)) errors.push(`${key} expectation failed`);
+  }
+}
+
+function integerAuditKeys() {
+  return ['totalElementCount', 'componentElementCount', 'supportElementCount', 'branchCount', 'sourceElementIdCount', 'duplicateSourceElementIdCount', 'missingSourceElementIdCount', 'missingSourceElementTypeCount', 'missingSequenceIndexCount', 'sourceTraceMissingCount', 'sourceEvidenceTraceCount', 'graphSourceOfTruthTraceCount', 'primitiveResolvedElementCount', 'writableElementCount', 'blockedElementCount', 'deferredElementCount', 'blockedValveCount', 'deferredSupportCount', 'primitiveOnlyOrphanCount', 'rvmByteNotStartedCount', 'stitchNotStartedCount', 'hardErrorCount', 'warningCount'];
+}
+
+function countTypes(entries, branchCount) {
+  const out = { BRANCH: Number(branchCount || 0), PIPE: 0, BEND: 0, FLAN: 0, VALV: 0, ATTA: 0 };
+  for (const entry of entries) if (Object.hasOwn(out, entry.sourceElementType)) out[entry.sourceElementType] += 1;
+  return out;
+}
+
+function duplicateValues(values) {
+  return [...new Set(values.filter((value, index) => values.indexOf(value) !== index))];
+}
+
+function isContiguousSequence(values) {
+  if (!values.length) return true;
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted.every((value, index) => value === index + 1);
+}
+
+function isPrimitiveOnlyOrphan(entry) {
+  return entry.sourceTrace?.sourceEvidence !== SOURCE_EVIDENCE || entry.sourceTrace?.sourceOfTruth !== SOURCE_OF_TRUTH || Object.hasOwn(entry.sourceTrace || {}, 'masterSource');
+}

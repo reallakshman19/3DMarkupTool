@@ -1,0 +1,82 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+
+const index = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const bootstrap = readFileSync(new URL('../src/safe-ui-bootstrap.js', import.meta.url), 'utf8');
+const perfCss = readFileSync(new URL('../src/static-shell-performance.css', import.meta.url), 'utf8');
+const appLoader = readFileSync(new URL('../src/app-loader.js', import.meta.url), 'utf8');
+const deferredAppLoader = readFileSync(new URL('../src/deferred-app-loader.js', import.meta.url), 'utf8');
+const clipHook = readFileSync(new URL('../src/clip-render-hook.js', import.meta.url), 'utf8');
+const prebridge = readFileSync(new URL('../src/render-context-prebridge.js', import.meta.url), 'utf8');
+const topbarLayout = readFileSync(new URL('../src/static-topbar-layout-controller.js', import.meta.url), 'utf8');
+const drawerSummary = readFileSync(new URL('../src/static-drawer-summary-controller.js', import.meta.url), 'utf8');
+const appBundleEntry = readFileSync(new URL('../src/app-bundle-entry.js', import.meta.url), 'utf8');
+const shellBundleEntry = readFileSync(new URL('../src/static-shell-bundle-entry.js', import.meta.url), 'utf8');
+const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+
+const moduleScriptCount = (index.match(/<script\s+type="module"/g) || []).length;
+const staticShellImports = (bootstrap.match(/\.js\?v=\$\{SAFE_UI_VERSION\}/g) || []).length;
+const startupScriptBlock = index.slice(index.indexOf('<script type="module"'));
+
+assert.ok(moduleScriptCount <= 3, `index.html should keep top-level module scripts bounded; found ${moduleScriptCount}.`);
+assert.match(index, /static-shell-performance\.css\?v=(input-persistent-root-card-20260629-c|input-root-owner-20260626|input-postbootstrap-reassert-20260626|input-load-controls-restored-20260626|workflow-input-expanded-load-controls-20260625|staged-json-review-ui-rvm-fix-20260625|app-boot-dialog-conversion-hotfix-20260623|support-ui-render-export-fix-20260623|tool-fixes-v2-20260620|perf-tdz-fix-20260620|perf-static-drawer-bundle-20260620|perf-idle-diagnostics-20260620|perf-static-shell-20260620)/);
+assert.match(index, /id="topReviewMenu"[\s\S]*review-top-menu-btn/);
+assert.match(index, /id="staticReviewRibbonGroup"/);
+assert.match(index, /id="workflowStatusInline"/);
+assert.match(index, /class="tool-group toolbar-group color-toolbar-group"[\s\S]*id="colorBySelect"/);
+assert.match(index, /class="tool-group toolbar-group navis-tag-tools tag-lite-host static-markup-tools"/);
+assert.match(index, /data-section="support-mapping"/);
+assert.match(index, /data-input-root="persistent"/);
+assert.doesNotMatch(index, /class="panel-section workflow-card[^"]*"[^>]*data-section="input"/);
+assert.match(index, /conversionOptionsCompatRoot/);
+assert.doesNotMatch(index, /data-collapsible="sideload"/);
+assert.match(startupScriptBlock, /app-loader/);
+assert.doesNotMatch(startupScriptBlock, /src="\.\/src\/app\.js|src="\.\/src\/fresh-clip-controller\.js|src="\.\/src\/clip-render-hook\.js/);
+
+assert.match(perfCss, /\.viewer-topbar\s*\{\s*grid-template-rows:\s*auto auto;/);
+assert.match(perfCss, /\.viewer-topbar \.markup-ribbon:has\(\.navis-tag-tools:empty\)[\s\S]*display:\s*none/);
+assert.match(perfCss, /#staticReviewRibbonGroup:empty[\s\S]*min-width:\s*116px/);
+assert.match(perfCss, /\.topbar-actions \.top-menu-wrap[\s\S]*min-width:\s*86px/);
+assert.match(perfCss, /#inputDrawer \.workflow-card[\s\S]*display:\s*grid/);
+assert.match(perfCss, /input-root-card\[data-section="input"\][\s\S]*display:\s*grid\s*!important/);
+assert.match(perfCss, /INPUT is not a collapsible workflow-card/);
+assert.match(perfCss, /conversion-options-compat-root\s*\{\s*display:\s*none\s*!important/);
+assert.match(perfCss, /support-workflow-card \.conversion-collapsible-content[\s\S]*display:\s*revert\s*!important/);
+
+assert.match(appLoader, /requestAnimationFrame/);
+assert.match(appLoader, /requestIdleCallback/);
+assert.match(appLoader, /import\(APP_MODULE_URL\)/);
+assert.match(appLoader, /APP_BUNDLE_URL/);
+assert.match(appLoader, /import\(APP_BUNDLE_URL\)/);
+assert.match(appLoader, /CLIP_HOOK_MODULE_URL/);
+assert.match(appLoader, /__3D_MARKUP_INSTALL_STARTUP_FREEZE_GUARD__/);
+assert.match(appLoader, /loadManagedStageDecorators/);
+assert.doesNotMatch(appLoader, /deferred-app-loader\.js/);
+assert.match(deferredAppLoader, /CLIP_HOOK_MODULE_URL/);
+assert.doesNotMatch(prebridge, /from ['"]three['"]|WebGLRenderer\?\.prototype/);
+assert.match(clipHook, /__3D_MARKUP_INSTALL_STARTUP_FREEZE_GUARD__\s*=\s*installStartupFreezeGuard/);
+assert.doesNotMatch(clipHook, /\ninstallStartupFreezeGuard\(\);/);
+
+assert.match(bootstrap, /const EARLY_MODULE_URLS = \[/);
+assert.match(bootstrap, /const DEFERRED_MODULE_URLS = \[/);
+assert.match(bootstrap, /const LATE_IDLE_MODULE_URLS = \[/);
+assert.match(bootstrap, /STATIC_SHELL_BUNDLE_URL/);
+assert.match(bootstrap, /import\(STATIC_SHELL_BUNDLE_URL\)/);
+assert.doesNotMatch(bootstrap, /early static shell source parity|static-drawer-summary-controller\.js\?v=\$\{SAFE_UI_VERSION\}/);
+assert.match(bootstrap, /static-browser-diagnostics-controller\.js\?v=\$\{SAFE_UI_VERSION\}/);
+assert.match(bootstrap, /scheduleAfterFirstPaint\(startDeferredShell\)/);
+assert.match(bootstrap, /requestAnimationFrame/);
+assert.match(bootstrap, /requestIdleCallback/);
+assert.match(bootstrap, /DEFERRED_IMPORT_BATCH_SIZE = 3/);
+assert.doesNotMatch(bootstrap, /CORE_MODULE_URLS\s*=\s*\[/);
+assert.ok(staticShellImports >= 25, `Bootstrap should still reference source-mode static shell controllers; found ${staticShellImports}.`);
+
+assert.doesNotMatch(drawerSummary, /new MutationObserver|document\.createElement\(['"]section['"]\)|appendChild\(style\)|createElement\(['"]style['"]\)/);
+assert.match(appBundleEntry, /await import\('\.\/app\.js'\)/);
+assert.match(appBundleEntry, /clip-render-hook\.js/);
+assert.match(shellBundleEntry, /static-tree-core-controller\.js/);
+assert.doesNotMatch(shellBundleEntry, /static-browser-diagnostics-controller\.js|static-drawer-summary-controller\.js/);
+assert.doesNotMatch(topbarLayout, /setInterval\(/);
+assert.match(topbarLayout, /shouldEnableFullTopbarLayout/);
+assert.match(pkg.scripts.test, /static-shell-performance-budget\.test\.mjs/);
+console.log('static shell performance budget gate passed');

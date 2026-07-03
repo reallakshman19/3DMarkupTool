@@ -1,0 +1,121 @@
+{
+  "schema": "PlantModelGraph.v1",
+  "id": "managed-stage-minimal",
+  "project": {
+    "name": "managed-stage-minimal",
+    "units": "mm",
+    "axisBasis": {
+      "authoring": "canvas-current",
+      "rvmExport": "navis-review"
+    }
+  },
+  "catalogues": [
+    {
+      "id": "base-piping",
+      "version": "0.1.0",
+      "source": "samples/contracts/base-piping.catalogue-registry.json"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "35",
+      "coord": [0, 0, 0],
+      "sourceRef": "PIPE-001.FROM_NODE"
+    },
+    {
+      "id": "130",
+      "coord": [2500, 0, 0],
+      "sourceRef": "PIPE-001.TO_NODE"
+    },
+    {
+      "id": "205",
+      "coord": [2500, 0, -1800],
+      "sourceRef": "PIPE-002.TO_NODE"
+    }
+  ],
+  "routes": [
+    {
+      "id": "R-35-130",
+      "lineNo": "4-P8810212-31441C4-PP",
+      "from": "35",
+      "to": "130",
+      "bore": "4in",
+      "schedule": "STD",
+      "material": "CS",
+      "sourceRef": "PIPE-001",
+      "topologyRole": "pipe-run-segment",
+      "componentClass": "PIPE"
+    },
+    {
+      "id": "R-130-205",
+      "lineNo": "4-P8810212-31441C4-PP",
+      "from": "130",
+      "to": "205",
+      "bore": "4in",
+      "schedule": "STD",
+      "material": "CS",
+      "sourceRef": "PIPE-002",
+      "topologyRole": "pipe-run-segment",
+      "componentClass": "PIPE"
+    }
+  ],
+  "items": [
+    {
+      "id": "PIPE-001",
+      "kind": "generated",
+      "generator": "straightPipe.v1",
+      "route": "R-35-130",
+      "sourceRef": "PIPE-001"
+    },
+    {
+      "id": "ELBOW-001",
+      "kind": "component",
+      "tagged": true,
+      "catalogueRef": {
+        "catalogue": "base-piping",
+        "family": "elbow",
+        "type": "90LR",
+        "nps": "4in",
+        "schedule": "STD"
+      },
+      "family": "elbow",
+      "type": "90LR",
+      "dimensions": {},
+      "placement": {
+        "node": "130",
+        "position": [2500, 0, 0],
+        "inRoute": "R-35-130",
+        "outRoute": "R-130-205"
+      },
+      "bendEvidence": {},
+      "sourceRef": "ELBOW-001"
+    },
+    {
+      "id": "PIPE-002",
+      "kind": "generated",
+      "generator": "straightPipe.v1",
+      "route": "R-130-205",
+      "sourceRef": "PIPE-002"
+    },
+    {
+      "id": "SUPPORT-001",
+      "kind": "support",
+      "tagged": false,
+      "node": "35",
+      "supportFamily": "REST",
+      "axis": "+Y",
+      "source": "InputXML",
+      "placement": {
+        "position": [0, 0, 0]
+      },
+      "sourceRef": "SUPPORT-001"
+    }
+  ],
+  "sourceRefs": [
+    {
+      "sourceType": "managed-stage-json",
+      "name": "managed-stage-minimal.input.json",
+      "phase": "Phase 2 shadow importer benchmark"
+    }
+  ]
+}
