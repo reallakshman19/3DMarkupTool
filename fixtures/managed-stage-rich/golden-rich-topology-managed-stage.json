@@ -67,7 +67,9 @@
             "APOS": { "x": 1000, "y": 500, "z": 0 },
             "LPOS": { "x": 1300, "y": 500, "z": 0 },
             "DIAMETER": "100mm",
-            "OUTSIDE_DIAMETER_MM": 100
+            "OUTSIDE_DIAMETER_MM": 100,
+            "FLANGE_FACE_OD_MM": 220,
+            "HUB_OD_MM": 130
           }
         },
         {
@@ -84,7 +86,10 @@
             "APOS": { "x": 1300, "y": 500, "z": 0 },
             "LPOS": { "x": 1700, "y": 500, "z": 0 },
             "DIAMETER": "100mm",
-            "OUTSIDE_DIAMETER_MM": 100
+            "OUTSIDE_DIAMETER_MM": 100,
+            "VALVE_BODY_OD_MM": 180,
+            "VALVE_SEAT_OD_MM": 120,
+            "VALVE_END_FLANGE_OD_MM": 220
           }
         },
         {
@@ -103,7 +108,9 @@
             "ABORE": "100mm",
             "ABORE_MM": 100,
             "LBORE": "50mm",
-            "LBORE_MM": 50
+            "LBORE_MM": 50,
+            "ECC_OFFSET_X": 12,
+            "ECC_OFFSET_Y": -6
           }
         },
         {
