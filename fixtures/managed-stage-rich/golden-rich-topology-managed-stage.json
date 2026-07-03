@@ -32,7 +32,6 @@
             "TO_NODE": "20",
             "APOS": { "x": 0, "y": 0, "z": 0 },
             "LPOS": { "x": 1000, "y": 0, "z": 0 },
-            "DIAMETER": "100mm",
             "OUTSIDE_DIAMETER_MM": 100
           }
         },
@@ -49,7 +48,7 @@
             "TO_NODE": "30",
             "APOS": { "x": 1000, "y": 0, "z": 0 },
             "LPOS": { "x": 1000, "y": 500, "z": 0 },
-            "DIAMETER": "100mm",
+            "DIAMETER_MM": 100,
             "BEND_RADIUS_MM": 150,
             "BEND_ANGLE_DEG": 90
           }
@@ -101,8 +100,10 @@
             "TO_NODE": "60",
             "APOS": { "x": 1700, "y": 500, "z": 0 },
             "LPOS": { "x": 2100, "y": 500, "z": 0 },
-            "DIAMETER": "100mm",
-            "OUTSIDE_DIAMETER_MM": 100
+            "ABORE": "100mm",
+            "ABORE_MM": 100,
+            "LBORE": "50mm",
+            "LBORE_MM": 50
           }
         },
         {
