@@ -5,6 +5,7 @@ export const MANAGED_STAGE_RICH_ARTIFACT_VALIDATION_SCHEMA = 'ManagedStageRichAr
 export function buildManagedStageRichArtifactPackage(parts, options = {}) {
   const files = buildManagedStageArtifactFiles(parts, options);
   const evidenceChain = buildEvidenceChain(parts);
+  const evidenceState = buildEvidenceState(parts);
   const counts = buildCounts(files, evidenceChain);
   const integrity = buildIntegrity(files);
   const draft = {
@@ -17,13 +18,13 @@ export function buildManagedStageRichArtifactPackage(parts, options = {}) {
     files,
     counts,
     evidenceChain,
-    readiness: readinessFor(files, evidenceChain, [], []),
+    readiness: readinessFor(files, evidenceChain, evidenceState, [], []),
     integrity,
     errors: [],
     warnings: []
   };
   const validation = validateManagedStageRichArtifactPackage(draft);
-  return { ...draft, ok: validation.ok, readiness: readinessFor(files, evidenceChain, validation.errors, validation.warnings), errors: validation.errors, warnings: validation.warnings };
+  return { ...draft, ok: validation.ok, readiness: readinessFor(files, evidenceChain, evidenceState, validation.errors, validation.warnings), errors: validation.errors, warnings: validation.warnings };
 }
 
 export function buildManagedStageArtifactFiles(parts, options = {}) {
@@ -44,7 +45,7 @@ export function validateManagedStageRichArtifactPackage(packageAudit) {
   if (files.length !== 3) errors.push('package file count is not 3');
   addArtifactErrors(byRole, errors);
   if (!evidenceComplete(packageAudit?.evidenceChain)) errors.push('required rich evidence block missing');
-  if (packageAudit?.evidenceChain?.previewExportParity && packageAudit?.readiness?.previewExportParityOk === false) warnings.push('preview/export parity failed');
+  if (packageAudit?.readiness?.previewExportParityOk === false) warnings.push('preview/export parity failed');
   if (packageAudit?.readiness?.supportMappingWarningCount > 0) warnings.push('support mapping warnings present');
   if (files.length === 3 && files.every((file) => file.present)) warnings.push('artifact hash is non-cryptographic');
   return { schema: MANAGED_STAGE_RICH_ARTIFACT_VALIDATION_SCHEMA, ok: errors.length === 0, errors: unique(errors), warnings: unique(warnings) };
@@ -112,26 +113,27 @@ function buildEvidenceChain(parts) {
   };
 }
 
-function buildIntegrity(files) {
+function buildEvidenceState(parts) {
   return {
-    algorithm: 'fnv1a-32',
-    rvmHash: hashForRole(files, 'rvm'),
-    attHash: hashForRole(files, 'att'),
-    auditHash: hashForRole(files, 'audit')
+    previewExportParityOk: parts?.richTopologyPreviewExportParity?.ok !== false,
+    supportMappingWarningCount: Array.isArray(parts?.richTopologySupportMapping?.warnings) ? parts.richTopologySupportMapping.warnings.length : 0
   };
 }
 
-function readinessFor(files, evidenceChain, errors, warnings) {
+function buildIntegrity(files) {
+  return { algorithm: 'fnv1a-32', rvmHash: hashForRole(files, 'rvm'), attHash: hashForRole(files, 'att'), auditHash: hashForRole(files, 'audit') };
+}
+
+function readinessFor(files, evidenceChain, evidenceState, errors, warnings) {
   const byRole = Object.fromEntries(files.map((file) => [file.role, file]));
-  const evidenceOk = evidenceComplete(evidenceChain);
   return {
     packageReady: errors.length === 0,
     rvmReady: Boolean(byRole.rvm?.present),
     attReady: Boolean(byRole.att?.present),
     auditReady: Boolean(byRole.audit?.present),
-    evidenceComplete: evidenceOk,
-    previewExportParityOk: evidenceChain.previewExportParity !== false,
-    supportMappingWarningCount: 0,
+    evidenceComplete: evidenceComplete(evidenceChain),
+    previewExportParityOk: evidenceState.previewExportParityOk,
+    supportMappingWarningCount: evidenceState.supportMappingWarningCount,
     fatalIssueCount: errors.length,
     warningCount: warnings.length
   };
@@ -158,17 +160,9 @@ function basenameFor(parts) {
   return stringValue(parts?.basename) || stringValue(parts?.sourceName).replace(/\.[^.]+$/, '') || 'managed-stage';
 }
 
-function bytesForRole(files, role) {
-  return files.find((file) => file.role === role)?.byteLength || 0;
-}
-
-function hashForRole(files, role) {
-  return files.find((file) => file.role === role)?.hash || '00000000';
-}
-
-function stableAuditJson(audit) {
-  return JSON.stringify(audit || {}, null, 2);
-}
+function bytesForRole(files, role) { return files.find((file) => file.role === role)?.byteLength || 0; }
+function hashForRole(files, role) { return files.find((file) => file.role === role)?.hash || '00000000'; }
+function stableAuditJson(audit) { return JSON.stringify(audit || {}, null, 2); }
 
 function bytesFor(content) {
   if (content == null) return [];
