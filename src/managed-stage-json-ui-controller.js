@@ -2,6 +2,7 @@ import {
   assertRichTopologyManagedStageJson,
   looksLikeRichTopologyManagedStageJson
 } from './managed-stage-rich-topology-intake.js?v=bust-cache-4';
+import { assertRichTopologySourceInventory } from './managed-stage-rich-topology-inventory.js?v=bust-cache-4';
 
 const CONTROLLER_SCHEMA = 'ManagedStageJsonUiController.v5';
 const MANAGED_STAGE_SCHEMA = 'inputxml-managed-stage/v1';
@@ -122,6 +123,7 @@ async function loadManagedStageFile(file) { resetSupportBasisToInputXml('managed
 
 async function loadManagedStageText(sourceText, sourceName = 'BM_CII_INPUT_managed_stage.json') {
   assertRichTopologyManagedStageJson(sourceText, sourceName);
+  const richTopologyInventory = assertRichTopologySourceInventory(sourceText, sourceName);
   managedStageUiState.sourceText = sourceText;
   managedStageUiState.sourceName = sourceName;
   managedStageUiState.basename = basenameWithoutExtension(sourceName);
@@ -131,23 +133,24 @@ async function loadManagedStageText(sourceText, sourceName = 'BM_CII_INPUT_manag
   const { convertManagedStageJsonToRvmAtt, createManagedStagePreviewScene, buildSupportMarkerGlbObject, createRvmPreviewScene } = await getManagedStageRuntimeModules();
   const options = bmCiiLikeSourceName(sourceName) ? { strictAuditExpectations: BM_CII_STAGED_JSON_EXPECTATIONS } : {};
   const result = convertManagedStageJsonToRvmAtt(sourceText, options);
+  const auditWithRichInventory = { ...result.audit, richTopologyInventory };
   let coordinateAuditScene = null;
   let previewAudit = null;
   try { coordinateAuditScene = createManagedStagePreviewScene(sourceText, { sourceName, exportModel: result.exportModel }); replaceManagedStagePreviewSupportMarkers(coordinateAuditScene, result.sourceContract?.supports || [], buildSupportMarkerGlbObject); previewAudit = coordinateAuditScene.userData?.managedStageCoordinateAudit || null; } catch (err) { log(`[managed-stage] Coordinate-preservation self-test skipped (non-blocking): ${err?.message || err}`); }
-  const visibleDiagnostics = buildManagedStageVisibleDiagnostics(result.audit, previewAudit);
+  const visibleDiagnostics = buildManagedStageVisibleDiagnostics(auditWithRichInventory, previewAudit);
   const previewScene = createRvmPreviewScene(result.exportModel, { recenter: false, sceneName: `${managedStageUiState.basename}_EXPORTED_RVM_PREVIEW` });
-  previewScene.userData = { ...(previewScene.userData || {}), TYPE: 'MANAGED_STAGE_EXPORTED_RVM_PREVIEW', SOURCE_FORMAT: MANAGED_STAGE_SCHEMA, sourceName, geometryComponents: result.audit?.inputCounts?.geometryComponents, primitiveCount: result.audit?.rvmPrimitivePayloadContract?.primitiveCount, previewPipeline: 'exported-rvm-export-model-geometry', coordinatePreservationPipeline: 'raw-managed-stage-json-coordinate-preserving-explicit-bend-topology-gated', managedStageCoordinateAudit: previewAudit, managedStageVisibleDiagnostics: visibleDiagnostics };
-  managedStageUiState.artifact = { sourceText, sourceName, basename: managedStageUiState.basename, rvm: result.rvm, att: result.att, audit: result.audit, exportModel: result.exportModel, profile: result.profile, sourceContract: result.sourceContract, previewScene, coordinateAuditScene, previewPipeline: 'exported-rvm-export-model-geometry', coordinatePreservationPipeline: 'raw-managed-stage-json-coordinate-preserving-explicit-bend-topology-gated', previewCoordinateAudit: previewAudit, visibleDiagnostics };
+  previewScene.userData = { ...(previewScene.userData || {}), TYPE: 'MANAGED_STAGE_EXPORTED_RVM_PREVIEW', SOURCE_FORMAT: MANAGED_STAGE_SCHEMA, sourceName, geometryComponents: auditWithRichInventory?.inputCounts?.geometryComponents, primitiveCount: auditWithRichInventory?.rvmPrimitivePayloadContract?.primitiveCount, previewPipeline: 'exported-rvm-export-model-geometry', coordinatePreservationPipeline: 'raw-managed-stage-json-coordinate-preserving-explicit-bend-topology-gated', managedStageCoordinateAudit: previewAudit, managedStageVisibleDiagnostics: visibleDiagnostics };
+  managedStageUiState.artifact = { sourceText, sourceName, basename: managedStageUiState.basename, rvm: result.rvm, att: result.att, audit: auditWithRichInventory, richTopologyInventory, exportModel: result.exportModel, profile: result.profile, sourceContract: result.sourceContract, previewScene, coordinateAuditScene, previewPipeline: 'exported-rvm-export-model-geometry', coordinatePreservationPipeline: 'raw-managed-stage-json-coordinate-preserving-explicit-bend-topology-gated', previewCoordinateAudit: previewAudit, visibleDiagnostics };
   showManagedStagePreview(previewScene);
   enableManagedStageDownloads();
   setStatus('Managed-stage RVM ready');
-  updateDrawerSummary(result.audit, previewAudit);
-  updateManagedStageDiagnosticsPanel(result.audit, previewAudit);
-  logManagedStageSummary(result.audit);
+  updateDrawerSummary(auditWithRichInventory, previewAudit);
+  updateManagedStageDiagnosticsPanel(auditWithRichInventory, previewAudit);
+  logManagedStageSummary(auditWithRichInventory);
   logManagedStagePreviewCoordinateAudit(previewAudit);
   logManagedStageVisibleDiagnostics(visibleDiagnostics);
-  showManagedStageAuditWarnings(result.audit?.managedStageStrictGate);
-  window.dispatchEvent(new CustomEvent('viewer:managed-stage-json-loaded', { detail: { sourceName, sourceText, audit: result.audit, sourceContract: result.sourceContract, supportSourceBasis: result.sourceContract?.supportSourceBasis || result.audit?.supportSourceBasis || null, previewCoordinateAudit: previewAudit, visibleDiagnostics, modelRoot: previewScene } }));
+  showManagedStageAuditWarnings(auditWithRichInventory?.managedStageStrictGate);
+  window.dispatchEvent(new CustomEvent('viewer:managed-stage-json-loaded', { detail: { sourceName, sourceText, audit: auditWithRichInventory, richTopologyInventory, sourceContract: result.sourceContract, supportSourceBasis: result.sourceContract?.supportSourceBasis || auditWithRichInventory?.supportSourceBasis || null, previewCoordinateAudit: previewAudit, visibleDiagnostics, modelRoot: previewScene } }));
   return managedStageUiState.artifact;
 }
 
@@ -209,10 +212,10 @@ function log(message) { const el = document.getElementById('log'); if (el) el.te
 function setStatus(message) { const el = document.getElementById('runtimeStatus'); if (el) el.textContent = message; }
 function updateInputStatus(message) { const el = document.getElementById('inputStatus'); if (el) el.textContent = message; }
 function downloadBlob(content, filename, mime) { if (!content) return; const blob = content instanceof Blob ? content : new Blob([content], { type: mime }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(url), 2500); }
-function buildManagedStageVisibleDiagnostics(audit = {}, previewAudit = null) { return { schema: 'ManagedStageVisibleDiagnostics.v1', source: audit.source || '', primitiveHistogram: audit.primitiveHistogram || {}, supportRvmExportAudit: audit.supportRvmExportAudit || null, previewAudit, warnings: audit.managedStageStrictGate?.nonBlockingAuditIssues || [] }; }
-function updateDrawerSummary(audit = {}, previewAudit = null) { const el = document.getElementById('drawerSummaryHint'); if (!el) return; const counts = audit.inputCounts || {}; el.textContent = `Managed-stage: ${counts.geometryComponents || 0} geometry components, ${counts.supportRecordsEmittedToRvm || 0} support markers, ${audit.rvmBytes || 0} RVM bytes.`; }
-function updateManagedStageDiagnosticsPanel(audit = {}, previewAudit = null) { const el = document.getElementById('conversionStatus'); if (el) el.textContent = `Managed-stage RVM ready — code8=${audit.primitiveHistogram?.[8] || 0}, supports=${audit.inputCounts?.supportRecordsEmittedToRvm || 0}.`; }
+function buildManagedStageVisibleDiagnostics(audit = {}, previewAudit = null) { const inventory = audit.richTopologyInventory || null; const inventoryWarnings = inventory?.warnings || []; return { schema: 'ManagedStageVisibleDiagnostics.v1', source: audit.source || '', primitiveHistogram: audit.primitiveHistogram || {}, supportRvmExportAudit: audit.supportRvmExportAudit || null, richTopologyInventory: inventory, previewAudit, warnings: [...(audit.managedStageStrictGate?.nonBlockingAuditIssues || []), ...inventoryWarnings] }; }
+function updateDrawerSummary(audit = {}, previewAudit = null) { const el = document.getElementById('drawerSummaryHint'); if (!el) return; const counts = audit.inputCounts || {}; const sourceRecords = audit.richTopologyInventory?.actualCounts?.sourceChildRecords || 0; el.textContent = `Managed-stage: ${counts.geometryComponents || 0} geometry components, ${counts.supportRecordsEmittedToRvm || 0} support markers, ${sourceRecords} source records, ${audit.rvmBytes || 0} RVM bytes.`; }
+function updateManagedStageDiagnosticsPanel(audit = {}, previewAudit = null) { const el = document.getElementById('conversionStatus'); if (!el) return; const inventory = audit.richTopologyInventory || {}; const sourceRecords = inventory.actualCounts?.sourceChildRecords || 0; const noDrop = inventory.noDrop?.pass ? 'PASS' : 'FAIL'; const warningText = inventory.warnings?.length ? `, warnings=${inventory.warnings.length}` : ''; el.textContent = `Managed-stage RVM ready — code8=${audit.primitiveHistogram?.[8] || 0}, supports=${audit.inputCounts?.supportRecordsEmittedToRvm || 0}, sourceRecords=${sourceRecords}, noDrop=${noDrop}${warningText}.`; }
 function logManagedStageSummary(audit = {}) { log(`Managed-stage RVM: components=${audit.inputCounts?.geometryComponents || 0}, supports=${audit.inputCounts?.supportRecordsEmittedToRvm || 0}, PRIM=${audit.rvmPrimitivePayloadContract?.primitiveCount || 0}`); }
 function logManagedStagePreviewCoordinateAudit(previewAudit = null) { if (!previewAudit) return; log(`Coordinate audit: components=${previewAudit.componentCount || 0}, supportMarkers=${previewAudit.supportMarkerCount || 0}`); }
-function logManagedStageVisibleDiagnostics(visibleDiagnostics = {}) { log(`Visible diagnostics: supportPrimitiveCount=${visibleDiagnostics.supportRvmExportAudit?.supportPrimitiveCount || 0}`); }
+function logManagedStageVisibleDiagnostics(visibleDiagnostics = {}) { log(`Visible diagnostics: supportPrimitiveCount=${visibleDiagnostics.supportRvmExportAudit?.supportPrimitiveCount || 0}, sourceRecords=${visibleDiagnostics.richTopologyInventory?.actualCounts?.sourceChildRecords || 0}`); }
 function showManagedStageAuditWarnings(gate = null) { for (const issue of gate?.nonBlockingAuditIssues || []) log(`AUDIT warning: ${issue}`); }
