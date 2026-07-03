@@ -54,8 +54,10 @@ const pass = buildManagedStagePreviewExportParityAudit(validExport, validScene, 
 assert.equal(pass.ok, true);
 assert.equal(pass.counts.exportPrimitiveCount, 4);
 assert.equal(pass.counts.previewPrimitiveCount, 4);
-assert.equal(pass.counts.exportCode8Count, 3);
+assert.equal(pass.counts.exportCode8Count, 2);
 assert.equal(pass.counts.exportCode4Count, 1);
+assert.equal(pass.counts.previewCode8Count, 2);
+assert.equal(pass.counts.previewCode4Count, 1);
 assert.equal(pass.counts.exportSupportMarkerCount, 1);
 assert.equal(pass.counts.previewSupportMarkerCount, 1);
 assert.equal(pass.readiness.previewRepresentsExportModel, true);
