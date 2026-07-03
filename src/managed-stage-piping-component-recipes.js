@@ -275,32 +275,152 @@ function buildContractSpherePrimitive(contract, options = {}) {
     parentEndMm: contract.endMm,
     startOffsetMm,
     endOffsetMm,
-    sphereSegmentSpanMm: options.sphereSegmentSpanMm,
-    sphereRecipeName: options.sphereRecipeName,
-    shapePrimitiveUpgrade: 'code9-sphere'
+    localBbox: [-diameter / 2, -diameter / 2, -diameter / 2, diameter / 2, diameter / 2, diameter / 2],
+    shapePrimitiveUpgrade: 'code9-sphere',
+    sphereSegmentSpanMm: options.sphereSegmentSpanMm || null,
+    sphereRecipeName: options.sphereRecipeName || '',
+    orientationAssumption: 'RVM code-9 Sphere is used only for the valve ball/body primitive; endpoint metadata preserves recipe continuity.'
   };
 }
 
-function segment(startDistanceMm, endDistanceMm, localName, radiusMm, material, extra = {}) {
-  return { startDistanceMm, endDistanceMm, localName, radiusMm, material, ...extra };
+function isPrimitiveSymbolRecipe(recipeName) {
+  return recipeName === 'weldneck-flange-contiguous-2part'
+    || recipeName === 'reducer-snout-full-span'
+    || recipeName === 'ball-valve-contiguous-5part'
+    || recipeName === 'flanged-ball-valve-contiguous-5part';
 }
+
+function primitiveBudgetLimit(recipeName) {
+  if (recipeName === 'weldneck-flange-contiguous-2part') return 2;
+  if (recipeName === 'reducer-snout-full-span') return 1;
+  if (recipeName === 'ball-valve-contiguous-5part') return 5;
+  if (recipeName === 'flanged-ball-valve-contiguous-5part') return 6;
+  return null;
+}
+
+function geometryPrimitivePolicy(recipeName) {
+  if (recipeName === 'weldneck-flange-contiguous-2part') {
+    return 'RVM export emits WeldNeck flange as code-7 snout weld-neck hub plus code-8 raised-face disk, covering full APOS/LPOS span.';
+  }
+  if (recipeName === 'reducer-snout-full-span') {
+    return 'RVM export emits reducer as one endpoint-locked code-7 snout; eccentric offsets are encoded in the snout payload when supplied.';
+  }
+  if (recipeName === 'ball-valve-contiguous-5part' || recipeName === 'flanged-ball-valve-contiguous-5part') {
+    return 'RVM export emits Ball valve as end flange + seat cylinders with central ball/body as code-9 sphere, covering full APOS/LPOS recipe span without stem/handwheel/box substitute.';
+  }
+  return 'RVM export emits source APOS/LPOS span as contiguous code-8 cylinder recipe.';
+}
+
 function effectiveRecipeSpan(contract) {
-  const startOffsetMm = nonNegativeNumber(contract.rvmTrimStartOffsetMm || 0, 'rvmTrimStartOffsetMm');
-  const endOffsetMm = nonNegativeNumber(contract.rvmTrimEndOffsetMm || 0, 'rvmTrimEndOffsetMm');
-  if (startOffsetMm + endOffsetMm >= contract.lengthMm - 1e-6) throw new Error(`Recipe trim offsets consume contract span for ${contract.name}`);
-  return { startOffsetMm, endOffsetMm, lengthMm: contract.lengthMm - startOffsetMm - endOffsetMm };
+  const startOffsetMm = nonNegativeNumber(contract.rvmTrimStartOffsetMm || 0, 'contract.rvmTrimStartOffsetMm');
+  const endOffsetMm = nonNegativeNumber(contract.rvmTrimEndOffsetMm || 0, 'contract.rvmTrimEndOffsetMm');
+  const lengthMm = contract.lengthMm - startOffsetMm - endOffsetMm;
+  if (!(lengthMm > 1e-6)) throw new Error(`InputXML bend trim consumes component span for ${contract.name}`);
+  return { startOffsetMm, endOffsetMm, lengthMm };
 }
-function assertContract(contract) { if (!contract || contract.schema !== 'ManagedStageGeometryContract.v1') throw new Error('Expected ManagedStageGeometryContract.v1'); }
-function assertLineLikeContract(contract) { assertContract(contract); if (!Array.isArray(contract.startMm) || !Array.isArray(contract.endMm) || !Array.isArray(contract.axis)) throw new Error(`Line-like contract missing geometry: ${contract.name || 'UNNAMED_CONTRACT'}`); }
-function validateSegments(span, recipeName, segments) { for (const entry of segments) { if (!(entry.endDistanceMm > entry.startDistanceMm)) throw new Error(`Invalid segment span in ${recipeName}: ${entry.localName}`); if (entry.startDistanceMm < -1e-6 || entry.endDistanceMm > span.lengthMm + 1e-6) throw new Error(`Segment outside contract span in ${recipeName}: ${entry.localName}`); } }
-function coveredLength(segments) { return segments.reduce((sum, entry) => sum + (entry.endDistanceMm - entry.startDistanceMm), 0); }
-function primitiveBudgetLimit(recipeName) { if (recipeName.includes('5part')) return 5; if (recipeName.includes('2part')) return 2; if (recipeName.includes('split')) return 2; return 1; }
-function isPrimitiveSymbolRecipe(recipeName = '') { return /flange|valve|reducer/i.test(recipeName); }
-function geometryPrimitivePolicy(recipeName = '') { return isPrimitiveSymbolRecipe(recipeName) ? 'endpoint-locked-component-symbol' : 'full-span-primary-cylinder'; }
-function positiveNumber(value, label) { const n = Number(value); if (!(n > 0)) throw new Error(`Expected positive ${label}`); return n; }
-function nonNegativeNumber(value, label) { const n = Number(value); if (!(n >= 0)) throw new Error(`Expected non-negative ${label}`); return n; }
-function finiteNumberOrDefault(value, fallback, label) { const n = Number(value); if (!Number.isFinite(n)) return fallback; return n; }
-function midpoint(a, b) { return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2]; }
-function vsub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
-function pointAlong(origin, direction, distanceMm) { return [origin[0] + direction[0] * distanceMm, origin[1] + direction[1] * distanceMm, origin[2] + direction[2] * distanceMm]; }
-function roleTagForLocalName(localName, kind) { return `${kind}:${localName}`; }
+
+function segment(startDistanceMm, endDistanceMm, localName, radiusMm, material, options = {}) {
+  return {
+    startDistanceMm: Number(startDistanceMm),
+    endDistanceMm: Number(endDistanceMm),
+    localName: String(localName),
+    radiusMm: positiveNumber(radiusMm, `${localName}.radiusMm`),
+    material,
+    primitiveRoleTag: options.primitiveRoleTag || roleTagForLocalName(localName, options.primitiveKind || 'cylinder'),
+    ...options
+  };
+}
+
+function roleTagForLocalName(localName, primitiveKind = 'cylinder') {
+  const name = String(localName || '');
+  if (name === 'weldNeckHub') return 'flangeHubSnout';
+  if (name === 'reducerSnout') return 'reducerSnout';
+  if (name === 'centralBallBody') return 'valveBodySphere';
+  if (name === 'leftSeat' || name === 'rightSeat') return 'valveSeatCylinder';
+  if (name === 'raisedFaceDisk') return 'raisedFaceCylinder';
+  if (name === 'leftEndFlange' || name === 'rightEndFlange') return 'valveEndFlangeCylinder';
+  if (name === 'flangeA' || name === 'flangeB') return 'flangePairCylinder';
+  if (name === 'body') return primitiveKind === 'cylinder' ? 'pipeBodyCylinder' : `${primitiveKind}Body`;
+  return name || String(primitiveKind || 'primitive');
+}
+
+function validateSegments(span, recipeName, segments) {
+  if (!Array.isArray(segments) || segments.length === 0) throw new Error(`Recipe ${recipeName} has no segments`);
+  let cursor = 0;
+  for (const entry of segments) {
+    if (!Number.isFinite(entry.startDistanceMm) || !Number.isFinite(entry.endDistanceMm)) throw new Error(`Recipe ${recipeName} contains non-finite span`);
+    if (Math.abs(entry.startDistanceMm - cursor) > 1e-6) {
+      throw new Error(`Recipe ${recipeName} is not contiguous at ${entry.localName}: expected start ${cursor}, got ${entry.startDistanceMm}`);
+    }
+    if (!(entry.endDistanceMm > entry.startDistanceMm)) throw new Error(`Recipe ${recipeName} has zero/negative segment ${entry.localName}`);
+    if (entry.endDistanceMm > span.lengthMm + 1e-6) throw new Error(`Recipe ${recipeName} exceeds effective contract span`);
+    cursor = entry.endDistanceMm;
+  }
+  if (Math.abs(cursor - span.lengthMm) > 1e-6) {
+    throw new Error(`Recipe ${recipeName} does not cover effective span: ${cursor} != ${span.lengthMm}`);
+  }
+}
+
+function coveredLength(segments) {
+  return segments.reduce((total, entry) => total + (entry.endDistanceMm - entry.startDistanceMm), 0);
+}
+
+function assertContract(contract) {
+  if (!contract || contract.schema !== 'ManagedStageGeometryContract.v1') throw new Error('Expected ManagedStageGeometryContract.v1');
+  positiveNumber(contract.lengthMm, 'contract.lengthMm');
+  positiveNumber(contract.radiusMm, 'contract.radiusMm');
+}
+
+function assertLineLikeContract(contract) {
+  if (!contract || contract.schema !== 'ManagedStageGeometryContract.v1') {
+    throw new Error('Expected ManagedStageGeometryContract.v1');
+  }
+  if (contract.endpointLocked !== true) throw new Error(`Contract is not endpoint locked: ${contract.name}`);
+  if (!['line', 'arc'].includes(contract.centerlineKind)) throw new Error(`Unsupported contract centerline kind: ${contract.centerlineKind}`);
+  positiveNumber(contract.lengthMm, 'contract.lengthMm');
+  vector3(contract.startMm, 'contract.startMm');
+  vector3(contract.endMm, 'contract.endMm');
+  vector3(contract.axis, 'contract.axis');
+}
+
+function pointAlong(start, axis, distanceMm) {
+  return [
+    start[0] + axis[0] * distanceMm,
+    start[1] + axis[1] * distanceMm,
+    start[2] + axis[2] * distanceMm
+  ];
+}
+
+function vector3(value, fieldName) {
+  if (!Array.isArray(value) || value.length !== 3) throw new Error(`Invalid ${fieldName}: expected [x, y, z]`);
+  const vector = value.map((entry) => Number(entry));
+  if (vector.some((entry) => !Number.isFinite(entry))) throw new Error(`Invalid ${fieldName}: contains non-finite value`);
+  return vector;
+}
+
+function midpoint(a, b) {
+  return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2];
+}
+
+function vsub(a, b) {
+  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+}
+
+function positiveNumber(value, fieldName) {
+  const number = Number(value);
+  if (!Number.isFinite(number) || number <= 0) throw new Error(`Invalid ${fieldName}: expected positive number`);
+  return number;
+}
+
+function nonNegativeNumber(value, fieldName) {
+  const number = Number(value);
+  if (!Number.isFinite(number) || number < 0) throw new Error(`Invalid ${fieldName}: expected non-negative number`);
+  return number;
+}
+
+function finiteNumberOrDefault(value, defaultValue, fieldName) {
+  if (value === undefined || value === null || value === '') return defaultValue;
+  const number = Number(value);
+  if (!Number.isFinite(number)) throw new Error(`Invalid ${fieldName}: expected finite number`);
+  return number;
+}
