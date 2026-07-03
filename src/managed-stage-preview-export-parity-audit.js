@@ -81,8 +81,17 @@ function walkPreview(node, inherited, out) {
   if (!node || typeof node !== 'object') return;
   const userData = node.userData || {};
   const context = previewContext(userData, inherited);
-  if (looksLikePreviewPrimitive(node, userData)) out.push(previewRecord(node, userData, out.length, context));
+  const isPrimitive = looksLikePreviewPrimitive(node, userData);
+  if (isPrimitive && !hasPreviewPrimitiveDescendant(node)) out.push(previewRecord(node, userData, out.length, context));
   for (const child of node.children || []) walkPreview(child, context, out);
+}
+
+function hasPreviewPrimitiveDescendant(node) {
+  for (const child of node?.children || []) {
+    if (looksLikePreviewPrimitive(child, child?.userData || {})) return true;
+    if (hasPreviewPrimitiveDescendant(child)) return true;
+  }
+  return false;
 }
 
 function previewRecord(node, userData, index, context) {
