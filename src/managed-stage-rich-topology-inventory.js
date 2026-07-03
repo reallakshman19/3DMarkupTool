@@ -136,7 +136,7 @@ function buildNoDrop(actualCounts, records, stats) {
   return {
     checked: true,
     pass: missingId + missingSpan + zeroLength + duplicateIds === 0 && stats.children === actualCounts.sourceChildRecords && stats.components === actualCounts.geometryRecords,
-    droppedSourceRecordCount: 0,
+    droppedSourceRecordCount: Math.max(0, numberValue(stats.children) - actualCounts.sourceChildRecords),
     duplicateSourceElementIdCount: duplicateIds,
     missingSourceElementIdCount: missingId,
     missingAposLposGeometryCount: missingSpan,
