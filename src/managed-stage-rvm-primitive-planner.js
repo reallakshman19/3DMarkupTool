@@ -1,4 +1,4 @@
-import { createManagedStageGeometryContract, normalizeManagedStageGeometryDtxr } from './managed-stage-geometry-contract.js?v=bust-cache-4';
+import { createManagedStageGeometryContract, normalizeManagedStageGeometryDtxr } from './managed-stage-geometry-contract.js?v=bust-cache-5-jump-override';
 import { buildEndpointLockedCylinderPrimitive } from './rvm-cylinder-primitive-builder.js?v=bust-cache-4';
 import { solveCode4ElbowGeometry } from './rvm-code4-elbow-geometry-solver.js?v=bust-cache-4';
 import { planManagedStagePipingComponentRecipe } from './managed-stage-piping-component-recipes.js?v=bust-cache-4';
@@ -341,6 +341,7 @@ function code4ElbowPrimitiveFromSolved(contract, pipeRadius, solved) {
     center: solved.centerMm,
     direction: solved.direction,
     basis: solved.basis,
+    normal: solved.basis.z,
     bendRadius: solved.bendRadiusMm,
     tubeRadius,
     sweepAngleRad: solved.sweepAngleRad,
