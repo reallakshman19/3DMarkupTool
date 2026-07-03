@@ -20,6 +20,7 @@
     "test:managed-stage-rich-artifact-package": "node tests/managed-stage-rich-artifact-package.test.mjs",
     "test:managed-stage-rich-regression": "node tests/managed-stage-rich-regression-gate.test.mjs",
     "test:managed-stage-rich-production-geometry": "node tests/managed-stage-rich-production-geometry-uplift.test.mjs",
+    "test:managed-stage-rich-component-recipes": "node tests/managed-stage-rich-component-recipe-uplift.test.mjs",
     "gate:managed-stage-rich-regression": "node src/managed-stage-rich-regression-gate.js",
     "test:plant-graph-topology-audit": "node tests/audit/plant-graph-topology-audit.test.mjs",
     "test:catalogue-registry": "node tests/catalogue/catalogue-registry-loader.test.mjs",
