@@ -42,14 +42,15 @@ export function valveRadius(pipeRadius) { return Math.max(positiveNumber(pipeRad
 
 function buildWeldNeckFlangeRecipe(contract, span, pipeRadius, materials) {
   const split = span.lengthMm * 0.46;
-  const hubRadius = Math.max(pipeRadius * 1.18, pipeRadius + 8);
+  const hubRadius = richRadius(contract.richComponentEvidence?.flangeHubDiameterMm, Math.max(pipeRadius * 1.18, pipeRadius + 8));
+  const faceRadius = richRadius(contract.richComponentEvidence?.flangeFaceDiameterMm ?? contract.richComponentEvidence?.flangeOutsideDiameterMm, flangeRadius(pipeRadius));
   return buildRecipe(contract, span, 'weldneck-flange-contiguous-2part', [
     segment(0, split, 'weldNeckHub', hubRadius, materials.FLANGE, {
       primitiveKind: 'snout',
       radiusBottomMm: pipeRadius,
       radiusTopMm: hubRadius
     }),
-    segment(split, span.lengthMm, 'raisedFaceDisk', flangeRadius(pipeRadius), materials.FLANGE)
+    segment(split, span.lengthMm, 'raisedFaceDisk', faceRadius, materials.FLANGE)
   ]);
 }
 
@@ -80,15 +81,18 @@ function buildBallValveRecipe(contract, span, pipeRadius, materials, recipeName)
   const cuts = proportionalCuts(length, [0.14, 0.16, 0.40, 0.16, 0.14]);
   const ballRadius = valveRadius(pipeRadius);
   const ballLength = cuts[3] - cuts[2];
+  const bodyDiameter = richDiameter(contract.richComponentEvidence?.valveBodyDiameterMm, Math.max(ballRadius * 2, ballLength));
+  const seatRadius = richRadius(contract.richComponentEvidence?.valveSeatDiameterMm, Math.max(pipeRadius * 1.04, pipeRadius + 2));
+  const endFlangeRadius = richRadius(contract.richComponentEvidence?.valveEndFlangeDiameterMm, flangeRadius(pipeRadius));
   return buildRecipe(contract, span, recipeName, [
-    segment(cuts[0], cuts[1], 'leftEndFlange', flangeRadius(pipeRadius), materials.FLANGE),
-    segment(cuts[1], cuts[2], 'leftSeat', Math.max(pipeRadius * 1.04, pipeRadius + 2), materials.VALVE),
-    segment(cuts[2], cuts[3], 'centralBallBody', ballRadius, materials.VALVE, {
+    segment(cuts[0], cuts[1], 'leftEndFlange', endFlangeRadius, materials.FLANGE),
+    segment(cuts[1], cuts[2], 'leftSeat', seatRadius, materials.VALVE),
+    segment(cuts[2], cuts[3], 'centralBallBody', bodyDiameter / 2, materials.VALVE, {
       primitiveKind: 'sphere',
-      diameterMm: Math.max(ballRadius * 2, ballLength)
+      diameterMm: bodyDiameter
     }),
-    segment(cuts[3], cuts[4], 'rightSeat', Math.max(pipeRadius * 1.04, pipeRadius + 2), materials.VALVE),
-    segment(cuts[4], cuts[5], 'rightEndFlange', flangeRadius(pipeRadius), materials.FLANGE)
+    segment(cuts[3], cuts[4], 'rightSeat', seatRadius, materials.VALVE),
+    segment(cuts[4], cuts[5], 'rightEndFlange', endFlangeRadius, materials.FLANGE)
   ]);
 }
 
@@ -309,6 +313,16 @@ function geometryPrimitivePolicy(recipeName) {
     return 'RVM export emits Ball valve as end flange + seat cylinders with central ball/body as code-9 sphere, covering full APOS/LPOS recipe span without stem/handwheel/box substitute.';
   }
   return 'RVM export emits source APOS/LPOS span as contiguous code-8 cylinder recipe.';
+}
+
+function richRadius(diameterMm, fallbackRadius) {
+  const diameter = Number(diameterMm);
+  return diameter > 0 ? diameter / 2 : positiveNumber(fallbackRadius, 'fallbackRadius');
+}
+
+function richDiameter(diameterMm, fallbackDiameter) {
+  const diameter = Number(diameterMm);
+  return diameter > 0 ? diameter : positiveNumber(fallbackDiameter, 'fallbackDiameter');
 }
 
 function effectiveRecipeSpan(contract) {

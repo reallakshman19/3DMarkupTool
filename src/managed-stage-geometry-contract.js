@@ -16,6 +16,14 @@ const END_DIAMETER_FIELDS = ['END_DIAMETER', 'END_DIAMETER_MM', 'END_OUTSIDE_DIA
 const BEND_RADIUS_FIELDS = ['BEND_RADIUS_MM', 'BEND_RADIUS', 'RADIUS_MM', 'ELBOW_RADIUS_MM'];
 const BEND_ANGLE_FIELDS = ['BEND_ANGLE_DEG', 'BEND_ANGLE', 'ANGLE_DEG', 'ELBOW_ANGLE_DEG'];
 const BEND_ELEMENT_LENGTH_FIELDS = ['BEND_ELEMENT_LENGTH_MM', 'ELEMENT_LENGTH_MM'];
+const FLANGE_OUTSIDE_DIAMETER_FIELDS = ['FLANGE_OD_MM', 'FLANGE_OUTSIDE_DIAMETER_MM', 'FLANGE_DIAMETER_MM'];
+const FLANGE_FACE_DIAMETER_FIELDS = ['FLANGE_FACE_OD_MM', 'FACE_OD_MM', 'RAISED_FACE_OD_MM', 'RF_OD_MM'];
+const FLANGE_HUB_DIAMETER_FIELDS = ['HUB_OD_MM', 'HUB_DIAMETER_MM', 'NECK_OD_MM', 'WELDNECK_HUB_OD_MM', 'WELD_NECK_HUB_OD_MM'];
+const VALVE_BODY_DIAMETER_FIELDS = ['VALVE_BODY_OD_MM', 'VALVE_BODY_DIAMETER_MM', 'BODY_OD_MM', 'BODY_DIAMETER_MM', 'VALVE_BALL_OD_MM', 'BALL_OD_MM'];
+const VALVE_SEAT_DIAMETER_FIELDS = ['VALVE_SEAT_OD_MM', 'SEAT_OD_MM'];
+const VALVE_END_FLANGE_DIAMETER_FIELDS = ['VALVE_END_FLANGE_OD_MM', 'VALVE_FLANGE_OD_MM', 'END_FLANGE_OD_MM'];
+const REDUCER_OFFSET_X_FIELDS = ['REDUCER_OFFSET_X', 'ECC_OFFSET_X', 'OFFSET_X', 'XOFFSET'];
+const REDUCER_OFFSET_Y_FIELDS = ['REDUCER_OFFSET_Y', 'ECC_OFFSET_Y', 'OFFSET_Y', 'YOFFSET'];
 
 export function buildManagedStageGeometryContractSet(profileOrRecords, options = {}) {
   const geometryRecords = Array.isArray(profileOrRecords) ? profileOrRecords : profileOrRecords.geometryRecords || [];
@@ -71,6 +79,7 @@ export function createManagedStageGeometryContract(record, elementIndex = 0, opt
 
   const diameter = resolveDiameterEvidence(a);
   if (!(diameter.diameterMm > 0)) throw new Error(`Missing/invalid diameter for ${record.name || a.NAME || 'UNNAMED'}`);
+  const offsets = resolveReducerOffsetEvidence(a);
 
   const axis = normalize(vsub(end, start));
   const contract = {
@@ -100,20 +109,14 @@ export function createManagedStageGeometryContract(record, elementIndex = 0, opt
     endDiameterMm: diameter.endDiameterMm,
     startRadiusMm: diameter.startDiameterMm / 2,
     endRadiusMm: diameter.endDiameterMm / 2,
-    reducerOffsetXMm: parseOptionalNumber(a.REDUCER_OFFSET_X || a.ECC_OFFSET_X || a.OFFSET_X || a.XOFFSET) || 0,
-    reducerOffsetYMm: parseOptionalNumber(a.REDUCER_OFFSET_Y || a.ECC_OFFSET_Y || a.OFFSET_Y || a.YOFFSET) || 0,
+    reducerOffsetXMm: offsets.x.value ?? 0,
+    reducerOffsetYMm: offsets.y.value ?? 0,
     material: a.MATERIAL || '',
     wallThickMm: parseOptionalMm(a.WALL_THICK),
     sourceFormat: a.SOURCE_FORMAT || '',
     sourceElementId: a.SOURCE_ELEMENT_ID || '',
-    richGeometryEvidence: {
-      diameterField: diameter.diameterField,
-      startDiameterField: diameter.startDiameterField,
-      endDiameterField: diameter.endDiameterField,
-      bendRadiusField: '',
-      bendAngleField: '',
-      bendAngleDerivedFromElementLength: false
-    },
+    richGeometryEvidence: richGeometryEvidence(diameter),
+    richComponentEvidence: richComponentEvidence(a, offsets),
     nonBlockingGeometryWarnings: warnings
   };
 
@@ -196,6 +199,35 @@ export function componentClassForDtxr(dtxr) {
   return 'UNKNOWN';
 }
 
+function richGeometryEvidence(diameter) {
+  return { diameterField: diameter.diameterField, startDiameterField: diameter.startDiameterField, endDiameterField: diameter.endDiameterField, bendRadiusField: '', bendAngleField: '', bendAngleDerivedFromElementLength: false };
+}
+
+function richComponentEvidence(attrs, offsets) {
+  const flangeOutside = firstMm(attrs, FLANGE_OUTSIDE_DIAMETER_FIELDS);
+  const flangeHub = firstMm(attrs, FLANGE_HUB_DIAMETER_FIELDS);
+  const flangeFace = firstMm(attrs, FLANGE_FACE_DIAMETER_FIELDS);
+  const valveBody = firstMm(attrs, VALVE_BODY_DIAMETER_FIELDS);
+  const valveSeat = firstMm(attrs, VALVE_SEAT_DIAMETER_FIELDS);
+  const valveEndFlange = firstMm(attrs, VALVE_END_FLANGE_DIAMETER_FIELDS);
+  return {
+    flangeOutsideDiameterField: flangeOutside.field,
+    flangeOutsideDiameterMm: flangeOutside.value,
+    flangeHubDiameterField: flangeHub.field,
+    flangeHubDiameterMm: flangeHub.value,
+    flangeFaceDiameterField: flangeFace.field,
+    flangeFaceDiameterMm: flangeFace.value,
+    valveBodyDiameterField: valveBody.field,
+    valveBodyDiameterMm: valveBody.value,
+    valveSeatDiameterField: valveSeat.field,
+    valveSeatDiameterMm: valveSeat.value,
+    valveEndFlangeDiameterField: valveEndFlange.field,
+    valveEndFlangeDiameterMm: valveEndFlange.value,
+    reducerOffsetXField: offsets.x.field,
+    reducerOffsetYField: offsets.y.field
+  };
+}
+
 function resolveDiameterEvidence(attrs) {
   const diameter = firstMm(attrs, DIAMETER_FIELDS);
   const start = firstMm(attrs, START_DIAMETER_FIELDS);
@@ -209,6 +241,10 @@ function resolveDiameterEvidence(attrs) {
     startDiameterField: start.field || diameter.field || end.field || '',
     endDiameterField: end.field || diameter.field || start.field || ''
   };
+}
+
+function resolveReducerOffsetEvidence(attrs) {
+  return { x: firstNumber(attrs, REDUCER_OFFSET_X_FIELDS), y: firstNumber(attrs, REDUCER_OFFSET_Y_FIELDS) };
 }
 
 function applyBendArcEvidence(contract, attrs, options, warnings) {
