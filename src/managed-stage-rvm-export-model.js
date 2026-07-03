@@ -36,7 +36,10 @@ import {
   SUPPORT_MARKER_PRIMITIVE_POLICY_SCHEMA,
   buildSupportMarkerRvmNode
 } from './support-marker-primitive-policy.js?v=bust-cache-4';
-import { richComponentAttAttributes } from './managed-stage-rich-att-attributes.js?v=bust-cache-4';
+import {
+  richComponentAttAttributes,
+  richSupportAttAttributes
+} from './managed-stage-rich-att-attributes.js?v=bust-cache-4';
 
 export function buildManagedStageRvmExportModel(profile, options = {}) {
   const processingConfig = resolveManagedStageJsonProcessingConfig(profile, options);
@@ -57,15 +60,7 @@ export function buildManagedStageRvmExportModel(profile, options = {}) {
   const supportTopologyAudit = options.supportTopologyAudit || buildManagedStageTopologyAudit(managedStageProfileToTopologySource(profile), {
     sourceName: profile.source || 'managed-stage-profile-for-rvm-export'
   });
-  const supportExport = options.sourceContract?.supports
-    ? buildCanonicalSupportMarkerRvmExport(options.sourceContract, {
-      materialId: MANAGED_STAGE_RVM_MATERIALS.SUPPORT,
-      topologyAudit: supportTopologyAudit
-    })
-    : buildTopologyGatedManagedStageSupportRvmExportNodes(profile, {
-      materialId: MANAGED_STAGE_RVM_MATERIALS.SUPPORT,
-      topologyAudit: supportTopologyAudit
-    });
+  const supportExport = enrichSupportExport(buildSupportExport(profile, options, supportTopologyAudit), profile, options);
   const componentPrimitiveSymbolExportAudit = auditComponentPrimitiveSymbolExport(elements, supportExport);
   const disciplineChildren = [
     groupNode('/BM_CII-CU-PI-P', 'GROUP', 'PIPING_GROUP', elements)
@@ -109,6 +104,79 @@ export function buildManagedStageRvmExportModel(profile, options = {}) {
       supportTopologyAudit,
       supportRvmExportAudit: supportExport
     }
+  };
+}
+
+function buildSupportExport(profile, options, supportTopologyAudit) {
+  if (options.sourceContract?.supports) {
+    return buildCanonicalSupportMarkerRvmExport(options.sourceContract, {
+      materialId: MANAGED_STAGE_RVM_MATERIALS.SUPPORT,
+      topologyAudit: supportTopologyAudit
+    });
+  }
+  return buildTopologyGatedManagedStageSupportRvmExportNodes(profile, {
+    materialId: MANAGED_STAGE_RVM_MATERIALS.SUPPORT,
+    topologyAudit: supportTopologyAudit
+  });
+}
+
+function enrichSupportExport(supportExport, profile, options) {
+  const supports = options.sourceContract?.supports || profile.supportRecords || [];
+  const nodes = (supportExport.nodes || []).map((node, index) => enrichSupportNode(node, supports[index]));
+  return { ...supportExport, nodes };
+}
+
+function enrichSupportNode(node, source) {
+  const support = supportFromNode(node, source);
+  const userData = userDataFromNode(node, support);
+  return {
+    ...node,
+    attributes: {
+      ...(node.attributes || {}),
+      ...richSupportAttAttributes(support, support.supportMarkerId || node.name, userData)
+    }
+  };
+}
+
+function supportFromNode(node, source = {}) {
+  const attrs = node.attributes || {};
+  return {
+    ...source,
+    supportId: source.supportId || attrs.SUPPORT_MARKER_ID || attrs.ID || '',
+    supportName: source.supportName || node.name || '',
+    supportFamily: source.supportFamily || attrs.FAMILY || '',
+    nodeNumber: source.nodeNumber || attrs.NODE || '',
+    axisRaw: source.axisRaw || attrs.AXIS_RAW || '',
+    axisCanvas: source.axisCanvas || attrs.AXIS_CANVAS || '',
+    pipeAxis: source.pipeAxis || attrs.SUPPORT_PIPE_AXIS || '',
+    pipeOdMm: source.pipeOdMm ?? attrs.SUPPORT_PIPE_OD_MM,
+    pipeRadiusMm: source.pipeRadiusMm ?? attrs.SUPPORT_PIPE_RADIUS_MM,
+    positionMm: source.positionMm || node.position,
+    matchedPipeRef: source.matchedPipeRef || attrs.MATCHED_PIPE_REF || '',
+    matchMethod: source.matchMethod || attrs.ISONOTE_MATCH_METHOD || '',
+    confidence: source.confidence ?? attrs.ISONOTE_MATCH_CONFIDENCE,
+    warningCode: source.warningCode || attrs.WARNING_CODE || '',
+    warningMessage: source.warningMessage || attrs.WARNING_MESSAGE || '',
+    sourcePath: source.sourcePath || attrs.SOURCE_PATH || '',
+    sourceAttributes: source.sourceAttributes || source.attributes || {}
+  };
+}
+
+function userDataFromNode(node, support) {
+  const attrs = node.attributes || {};
+  return {
+    node: support.nodeNumber || attrs.NODE || '',
+    family: support.supportFamily || attrs.FAMILY || '',
+    axisRaw: support.axisRaw || attrs.AXIS_RAW || '',
+    axisCanvas: support.axisCanvas || attrs.AXIS_CANVAS || '',
+    matchedPipeRef: support.matchedPipeRef || attrs.MATCHED_PIPE_REF || '',
+    matchMethod: support.matchMethod || attrs.ISONOTE_MATCH_METHOD || '',
+    confidence: support.confidence ?? attrs.ISONOTE_MATCH_CONFIDENCE,
+    warningCode: support.warningCode || attrs.WARNING_CODE || '',
+    warningMessage: support.warningMessage || attrs.WARNING_MESSAGE || '',
+    sourcePath: support.sourcePath || attrs.SOURCE_PATH || '',
+    sourceAttributes: support.sourceAttributes || {},
+    diagnostics: support.diagnostics || []
   };
 }
 
