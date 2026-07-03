@@ -86,7 +86,7 @@ function copyExportNode(exportNode, previewParent) {
 
 function previewGroup(exportNode) {
   const attrs = exportNode.attributes || {};
-  return { name: exportNode.name || attrs.NAME || 'GROUP', userData: { TYPE: attrs.TYPE || '', family: attrs.COMPONENT_CLASS || attrs.FAMILY || '', sourceElementId: attrs.SOURCE_ELEMENT_ID || attrs.SUPPORT_MARKER_ID || attrs.ID || '' }, children: [] };
+  return { name: exportNode.name || attrs.NAME || 'GROUP', userData: { TYPE: attrs.TYPE || '', family: attrs.COMPONENT_CLASS || attrs.FAMILY || '' }, children: [] };
 }
 
 function previewPrimitive(primitive, exportNode) {
@@ -126,7 +126,7 @@ function compareCounts(counts, expected, errors) {
 function failureResult(fixture, error) {
   const message = error?.message || String(error);
   const gate = gateFromMessage(message);
-  return compactResult({ schema: MANAGED_STAGE_RICH_REGRESSION_GATE_SCHEMA, ok: false, fixture, gates: { intakeOk: gate !== 'intake' && false, inventoryOk: false, geometryContractOk: false, supportMappingOk: false, conversionOk: false, previewExportParityOk: false, artifactPackageOk: false }, counts: emptyCounts(), artifacts: { rvmBytes: 0, attBytes: 0, auditBytes: 0 }, errors: [`${gate}: ${message}`], warnings: [] });
+  return compactResult({ schema: MANAGED_STAGE_RICH_REGRESSION_GATE_SCHEMA, ok: false, fixture, gates: { intakeOk: false, inventoryOk: false, geometryContractOk: false, supportMappingOk: false, conversionOk: false, previewExportParityOk: false, artifactPackageOk: false }, counts: emptyCounts(), artifacts: { rvmBytes: 0, attBytes: 0, auditBytes: 0 }, errors: [`${gate}: ${message}`], warnings: [] });
 }
 
 function gateFromMessage(message) {
