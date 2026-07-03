@@ -11,12 +11,12 @@ export const RICH_TOPOLOGY_SUPPORT_RECORD_SCHEMA = 'ManagedStageRichTopologySupp
 export const RICH_TOPOLOGY_SUPPORT_MAPPING_VALIDATION_SCHEMA = 'ManagedStageRichTopologySupportMappingValidation.v1';
 
 export function buildRichTopologySupportMapping(sourceTextOrObject, sourceName = 'managed-stage.json') {
-  const sourceText = toSourceText(sourceTextOrObject);
+  const sourceRoot = parseRoot(sourceTextOrObject);
   const sourceContract = parseStagedJsonSourceContract(sourceTextOrObject, { sourceFile: sourceName });
   assertStagedJsonSourceContract(sourceContract);
   const supports = buildRichTopologySupportRecords(sourceContract);
   const counts = countSupports(supports);
-  const draft = buildMappingShell(sourceContract, sourceName, supports, counts);
+  const draft = buildMappingShell(sourceContract, sourceRoot, sourceName, supports, counts);
   const validation = validateRichTopologySupportMapping(draft);
   return { ...draft, ok: validation.ok, readiness: readinessFor(counts, validation), errors: validation.errors, warnings: validation.warnings };
 }
@@ -39,7 +39,8 @@ export function validateRichTopologySupportMapping(mapping) {
 }
 
 export function assertRichTopologySupportMapping(sourceTextOrObject, sourceName = 'managed-stage.json') {
-  assertRichTopologyManagedStageJson(sourceTextOrObject, sourceName);
+  const sourceText = toSourceText(sourceTextOrObject);
+  assertRichTopologyManagedStageJson(sourceText, sourceName);
   assertRichTopologySourceInventory(sourceTextOrObject, sourceName);
   assertRichTopologyGeometryContract(sourceTextOrObject, sourceName);
   const mapping = buildRichTopologySupportMapping(sourceTextOrObject, sourceName);
@@ -79,14 +80,14 @@ function toRichSupportRecord(support) {
   };
 }
 
-function buildMappingShell(sourceContract, sourceName, supports, counts) {
+function buildMappingShell(sourceContract, sourceRoot, sourceName, supports, counts) {
   return {
     schema: RICH_TOPOLOGY_SUPPORT_MAPPING_SCHEMA,
     ok: false,
     sourceName: String(sourceName || 'managed-stage.json'),
-    source: sourceContract?.managedStageProfile?.source || sourceContract?.sourceFile || '',
-    converter: sourceContract?.managedStageProfile?.converter || '',
-    converterSchema: sourceContract?.managedStageProfile?.converterSchema || '',
+    source: sourceRoot?.source || sourceContract?.managedStageProfile?.source || sourceContract?.sourceFile || '',
+    converter: sourceRoot?.converter || sourceContract?.managedStageProfile?.converter || '',
+    converterSchema: sourceRoot?.converterSchema || '',
     counts,
     readiness: readinessFor(counts, { errors: [], warnings: [] }),
     supports,
@@ -182,6 +183,11 @@ function normalizeFamily(value) {
   if (key === 'HOLDDOWN' || key === 'HOLD_DOWN') return 'HOLDDOWN';
   if (key === 'SPRING_CAN' || key === 'CAN') return 'SPRING_CAN';
   return 'UNKNOWN';
+}
+
+function parseRoot(sourceTextOrObject) {
+  if (typeof sourceTextOrObject !== 'string') return sourceTextOrObject;
+  try { return JSON.parse(sourceTextOrObject); } catch (_) { return null; }
 }
 
 function toSourceText(sourceTextOrObject) {
