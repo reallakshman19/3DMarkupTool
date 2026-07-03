@@ -36,6 +36,7 @@ import {
   SUPPORT_MARKER_PRIMITIVE_POLICY_SCHEMA,
   buildSupportMarkerRvmNode
 } from './support-marker-primitive-policy.js?v=bust-cache-4';
+import { richComponentAttAttributes } from './managed-stage-rich-att-attributes.js?v=bust-cache-4';
 
 export function buildManagedStageRvmExportModel(profile, options = {}) {
   const processingConfig = resolveManagedStageJsonProcessingConfig(profile, options);
@@ -154,6 +155,7 @@ function elementNodeFromContract(contract, index) {
       ELEMENT_INDEX: String(index + 1),
       SOURCE_ELEMENT_ID: contract.sourceElementId || contract.elementId || contract.name,
       SOURCE_FORMAT: contract.sourceFormat || 'inputxml-managed-stage/v1',
+      ...richComponentAttAttributes(contract, primitives, componentClass),
       RVM_COMPONENT_PRIMITIVE_RECIPE: primitiveRecipeSummary(primitives),
       RVM_COMPONENT_PRIMITIVE_COUNT: String(primitives.length),
       RVM_COMPONENT_SYMBOL_EXPORTED: primitives.some((primitive) => primitive.exportedManagedStageComponentSymbol) ? 'YES' : 'NO',
