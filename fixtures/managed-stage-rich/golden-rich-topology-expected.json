@@ -1,0 +1,24 @@
+{
+  "schema": "ManagedStageRichGoldenExpected.v1",
+  "fixture": "golden-rich-topology-managed-stage.json",
+  "expected": {
+    "intakeOk": true,
+    "inventoryOk": true,
+    "geometryContractOk": true,
+    "supportMappingOk": true,
+    "conversionOk": true,
+    "previewExportParityOk": true,
+    "artifactPackageOk": true,
+    "sourceChildRecords": 7,
+    "geometryRecords": 5,
+    "supportRecords": 2,
+    "bendRecords": 1,
+    "geometryContracts": 5,
+    "supportContracts": 2,
+    "supportMappedRecords": 2,
+    "rvmBytesMin": 1,
+    "attBytesMin": 1,
+    "packageFileCount": 3,
+    "packagePresentFileCount": 3
+  }
+}
