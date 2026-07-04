@@ -1,7 +1,7 @@
 import { auditCatalogueBinding } from '../catalogue/catalogue-binder.js';
 import { buildExportModelCompilationAudit, compileResolvedPrimitiveModelToExportModels } from '../export-models/export-model-compilers.js';
 import { buildGeometryResolutionAudit, resolvePlantGraphGeometry } from '../geometry/geometry-solver.js';
-import { convertManagedStageJsonToPlantGraph } from '../importers/managed-stage-to-plant-graph.js';
+import { convertManagedStageJsonToPlantGraph } from '../importers/managed-stage-to-plant-graph.js?v=bust-cache-5-object-points';
 import { buildPrimitiveCompilationAudit, compileResolvedGeometryToPrimitives } from '../primitives/primitive-compiler.js';
 import { buildNewCoreCylinderRuntimePilotAudit } from './new-core-cylinder-code8-runtime-audit.js';
 import { buildNewCoreCylinderRuntimePilotPlan } from './new-core-cylinder-code8-runtime-pilot.js';
@@ -44,7 +44,8 @@ export function assertBrowserCylinderCode8PilotBoundary(result) {
 }
 
 async function resolveRvmExportModel(state, options) {
-  const direct = state?.rvmExportModel || state?.exportModels?.rvmExportModel || (state?.exportModel?.schema === 'RvmExportModel.v1' ? state.exportModel : null);
+  const candidates = [state?.rvmExportModel, state?.exportModels?.rvmExportModel, state?.artifact?.exportModel, state?.exportModel];
+  const direct = candidates.find((c) => c?.schema === 'RvmExportModel.v1') || null;
   if (direct) return direct;
   if (!state?.sourceText) throw new Error('no managed-stage/new-core input loaded');
   const graph = convertManagedStageJsonToPlantGraph(state.sourceText, { sourceName: state.sourceName || 'managed-stage.json', phase: 'Phase 13 browser CYLINDER pilot' });

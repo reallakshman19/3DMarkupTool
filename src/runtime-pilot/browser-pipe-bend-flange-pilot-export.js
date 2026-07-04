@@ -1,7 +1,7 @@
 import { auditCatalogueBinding } from '../catalogue/catalogue-binder.js';
 import { compileResolvedPrimitiveModelToExportModels } from '../export-models/export-model-compilers.js';
 import { buildGeometryResolutionAudit, resolvePlantGraphGeometry } from '../geometry/geometry-solver.js';
-import { convertManagedStageJsonToPlantGraph } from '../importers/managed-stage-to-plant-graph.js';
+import { convertManagedStageJsonToPlantGraph } from '../importers/managed-stage-to-plant-graph.js?v=bust-cache-5-object-points';
 import { buildPrimitiveCompilationAudit, compileResolvedGeometryToPrimitives } from '../primitives/primitive-compiler.js';
 import { writePipeBendFlangePilotAttText } from './new-core-pipe-bend-flange-att-writer.js';
 import { buildNewCorePipeBendFlangeRuntimePilotAudit } from './new-core-pipe-bend-flange-runtime-audit.js';
@@ -20,6 +20,7 @@ export async function generateBrowserPipeBendFlangePilotExport(state, options = 
     const artifact = await generateArtifact(plan);
     const runtimeAudit = buildNewCorePipeBendFlangeRuntimePilotAudit(plan, artifact);
     const audit = browserAudit(plan, artifact, runtimeAudit, []);
+    if (!audit.ok) return blockedResult(audit.errors);
     return buildPipeBendFlangePilotDownloadBundle(artifact, audit, options);
   } catch (error) {
     return blockedResult([error instanceof Error ? error.message : String(error)]);
@@ -43,7 +44,8 @@ export function assertBrowserPipeBendFlangePilotBoundary(result) {
 }
 
 async function resolveExportModels(state, options) {
-  const rvmExportModel = state?.rvmExportModel || state?.exportModels?.rvmExportModel || state?.artifact?.exportModel || (state?.exportModel?.schema === 'RvmExportModel.v1' ? state.exportModel : null);
+  const candidates = [state?.rvmExportModel, state?.exportModels?.rvmExportModel, state?.artifact?.exportModel, state?.exportModel];
+  const rvmExportModel = candidates.find((c) => c?.schema === 'RvmExportModel.v1') || null;
   const attExportModel = state?.attExportModel || state?.exportModels?.attExportModel || state?.artifact?.attExportModel || null;
   if (rvmExportModel) return { rvmExportModel, attExportModel };
   if (!state?.sourceText) throw new Error('no managed-stage/new-core input loaded');
@@ -81,7 +83,12 @@ function headBody() { return concat([uint32Body(2), rvmString('phase-15-browser-
 function modelBody() { return concat([uint32Body(1), rvmString('INPUTXML'), rvmString('PIPE_BEND_FLANGE_BROWSER_PILOT')]); }
 function groupBody(name) { return concat([uint32Body(2), rvmString(name), float32Body(0), float32Body(0), float32Body(0), uint32Body(0)]); }
 function matrixFromDirection(center, axis) { const z = normalize(axis); const ref = Math.abs(z[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0]; const x = normalize(cross(ref, z)); const y = normalize(cross(z, x)); return [...scaled(x), ...scaled(y), ...scaled(z), ...scaled(center)]; }
-function matrixFromTorus(item) { const x = normalize(item.startTangent); const z = normalize(item.normal); const y = normalize(cross(z, x)); return [...scaled(x), ...scaled(y), ...scaled(z), ...scaled(item.center)]; }
+function matrixFromTorus(item) {
+  const y = normalize(item.startTangent);
+  const z = normalize(item.normal);
+  const x = normalize(cross(y, z));
+  return [...scaled(x), ...scaled(y), ...scaled(z), ...scaled(item.center)];
+}
 function scaled(vector) { return vector.map((value) => Math.abs(Number(value) * 0.001) < 1e-12 ? 0 : Number(value) * 0.001); }
 function normalize(value) { const vector = value.map(Number); const length = Math.hypot(...vector); return vector.map((entry) => entry / length); }
 function cross(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }

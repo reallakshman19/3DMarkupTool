@@ -6,18 +6,26 @@ const options = { enabled: true, mode: 'explicit-runtime-pilot', scope: 'pipe-be
 const plan = buildNewCoreSupportMarkerRuntimePilotPlan(inputWithSupport({ itemId: 'SUPPORT-1', position: [10, 20, 30], axis: '+Y', supportFamily: 'REST', sourceRef: 'SUPPORT-1' }), options);
 assert.equal(plan.schema, 'NewCoreSupportMarkerRuntimePilotPlan.v1');
 assert.equal(plan.subsetReady, true);
+assert.equal(plan.fullModelReady, true);
 assert.equal(plan.supportMarkerCount, 1);
 assert.equal(plan.blockedSupportMarkerCount, 0);
-assert.equal(plan.supportGeometryGenerated, false);
+assert.equal(plan.supportGeometryGenerated, true);
+assert.equal(plan.supportPrimitiveCount, 6);
+assert.equal(plan.supportCylinderPrimitiveCount, 5);
+assert.equal(plan.supportSpherePrimitiveCount, 1);
 assert.equal(plan.supportFallbackCount, 0);
+assert.equal(plan.plannedRvmPrimitiveCount, 9);
+assert.equal(plan.plannedAttRowCount, 9);
+assert.equal(plan.attRowsMatchRvmPrimitives, true);
 assert.equal(plan.supportMarkers[0].markerKind, 'SUPPORT_PLACEMENT_MARKER');
 assert.equal(plan.supportMarkers[0].deterministicPlacement, true);
+assert.equal(plan.supportMarkers[0].rvmGeometryGenerated, true);
 assert.equal(validateNewCoreSupportMarkerRuntimePilotPlan(plan).ok, true);
 
 const blocked = buildNewCoreSupportMarkerRuntimePilotPlan(inputWithSupport({ itemId: 'SUPPORT-2', axis: '+Y' }), options);
 assert.equal(blocked.supportMarkerCount, 0);
 assert.equal(blocked.blockedSupportMarkerCount, 1);
-assert.equal(blocked.subsetReady, true);
+assert.equal(blocked.subsetReady, false);
 assert.equal(blocked.supportGeometryGenerated, false);
 
 const invalid = buildNewCoreSupportMarkerRuntimePilotPlan(inputWithSupport({ itemId: 'SUPPORT-3', position: [1, 2, 3] }), { ...options, includeSupportMarkers: false });

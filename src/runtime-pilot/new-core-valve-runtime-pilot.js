@@ -43,7 +43,10 @@ export function validateNewCoreValveRuntimePilotPlan(plan) {
 function populatedPlan(base, rows, attRows, errors) {
   const plannedRvmPrimitiveCount = rows.cylinders.length + rows.toruses.length + rows.flanges.length + rows.valves.length;
   const attRowsMatchRvmPrimitives = attRows.length === plannedRvmPrimitiveCount;
-  const subsetReady = errors.length === 0 && rows.cylinders.length > 0 && rows.toruses.length > 0 && rows.flanges.length > 0 && attRowsMatchRvmPrimitives;
+  
+  if (!attRowsMatchRvmPrimitives && !errors.includes('att row count mismatch')) errors.push('att row count mismatch');
+
+  const subsetReady = errors.length === 0 && attRowsMatchRvmPrimitives;
   return { ...base, subsetReady, plannedCylinderCount: rows.cylinders.length, plannedTorusCount: rows.toruses.length, plannedFlangeCylinderCount: rows.flanges.length, plannedValveBodyCount: rows.valves.length, generatedValveCount: rows.valves.length, blockedValveCount: rows.blockedValves.length, plannedRvmPrimitiveCount, plannedAttRowCount: attRows.length, attRowsMatchRvmPrimitives, deferredSupportCount: rows.deferredSupports.length, cylinderPrimitives: rows.cylinders.map(copy), torusPrimitives: rows.toruses.map(copy), flangeCylinderPrimitives: rows.flanges.map(copy), valveBodyPrimitives: rows.valves.map(copy), attRows, excludedItems: excludedItems(rows), sourceTrace: sourceTrace(rows), warnings: [...base.warnings, ...rows.warnings], errors };
 }
 
@@ -143,7 +146,7 @@ function graphValveCandidate(item, routes, nodes) {
   const route = routes.get(String(item.route));
   const start = route ? pointOrNull(nodes.get(String(route.from))) : null;
   const end = route ? pointOrNull(nodes.get(String(route.to))) : null;
-  return copyDefined({ itemId: item.id, sourceItemId: item.id, family: 'valve', type: item.type, center: item.placement?.position || (start && end ? midpoint(start, end) : undefined), axis: start && end ? unitVector(subtract(end, start)) : undefined, lengthMm: item.dimensions?.bodyLengthMm, bodyRadiusMm: item.dimensions?.bodyRadiusMm, outerDiameterMm: item.dimensions?.bodyOuterDiameterMm || item.dimensions?.outerDiameterMm, boreDiameterMm: item.dimensions?.boreDiameterMm, sourceRef: item.sourceRef, dimensionSource: 'plant-model-graph-explicit-valve-dimensions' });
+  return copyDefined({ itemId: item.id, sourceItemId: item.id, sourcePrimitiveId: `SOURCE-VALVE-${item.id}`, family: 'valve', type: item.type, center: item.placement?.position || (start && end ? midpoint(start, end) : undefined), axis: start && end ? unitVector(subtract(end, start)) : undefined, lengthMm: item.dimensions?.bodyLengthMm ?? item.dimensions?.lengthMm, bodyRadiusMm: item.dimensions?.bodyRadiusMm, outerDiameterMm: item.dimensions?.bodyOuterDiameterMm || item.dimensions?.outerDiameterMm || item.dimensions?.diameterMm, boreDiameterMm: item.dimensions?.boreDiameterMm || (item.dimensions?.diameterMm && item.dimensions?.wallMm ? Number(item.dimensions.diameterMm) - Number(item.dimensions.wallMm) * 2 : undefined), catalogueItemId: item.catalogueItemId || 'SOURCE_DIMENSIONED_VALVE', sourceRef: item.sourceRef, dimensionSource: 'plant-model-graph-explicit-valve-dimensions' });
 }
 
 function validateGeneratedFamilies(rows) {

@@ -3,6 +3,23 @@ const CODE4_PAYLOAD_RADIUS_CLEARANCE_MM = 0.001;
 
 export function recoverManagedStageCode4Bends(contracts = [], config = {}) {
   const explicitBends = contracts.filter((contract) => contract?.dtxr === 'BEND');
+  if (config.excludeBendsWhileProcessingInputXmlBasedJson) {
+    return {
+      contracts,
+      audit: {
+        schema: 'ManagedStageRvmBendRecoveryAudit.v4',
+        mode: 'disabled-inputxml-bend-exclusion',
+        explicitBendCount: 0,
+        inputXmlExcludedBendCount: explicitBends.length,
+        plannedCode4BendCount: 0,
+        missingCode4BendPlanCount: 0,
+        trimApplicationCount: 0,
+        plans: [],
+        issues: [],
+        ok: true
+      }
+    };
+  }
   const byNode = buildNodeIndex(contracts);
   const plans = [];
   const issues = [];
@@ -64,22 +81,23 @@ function buildExplicitBendCode4Plan(bend, byNode, config) {
     const adjacent = nodeConnections.filter((entry) => entry.contract.name !== bend.name && isCenterline(entry.contract));
     for (const entry of adjacent) {
       const dot = clamp(dotProduct(bendOut, entry.directionOut), -1, 1);
-      const turnAngleRad = Math.acos(dot);
-      const turnAngleDeg = turnAngleRad * 180 / Math.PI;
-      if (turnAngleDeg < 5 || turnAngleDeg > 175) continue;
-      const candidate = makePlan(bend, side, String(node), nodeConnections.length, corner, bendOut, entry.contract, entry.side, entry.directionOut, turnAngleRad, turnAngleDeg, config);
+      const cornerAngleRad = Math.acos(dot);
+      const sweepAngleRad = Math.PI - cornerAngleRad;
+      const sweepAngleDeg = sweepAngleRad * 180 / Math.PI;
+      if (sweepAngleDeg < 5 || sweepAngleDeg > 175) continue;
+      const candidate = makePlan(bend, side, String(node), nodeConnections.length, corner, bendOut, entry.contract, entry.side, entry.directionOut, sweepAngleRad, sweepAngleDeg, config);
       if (candidate) candidates.push(candidate);
     }
   }
   return candidates.sort((a, b) => scorePlan(b) - scorePlan(a))[0] || null;
 }
 
-function makePlan(bend, bendSide, node, nodeConnectionCount, corner, bendOut, adjacent, adjacentSide, adjacentOut, turnAngleRad, turnAngleDeg, config) {
+function makePlan(bend, bendSide, node, nodeConnectionCount, corner, bendOut, adjacent, adjacentSide, adjacentOut, sweepAngleRad, sweepAngleDeg, config) {
   const pipeRadiusMm = Math.min(Number(bend.radiusMm || 0), Number(adjacent.radiusMm || bend.radiusMm || 0));
   if (!(pipeRadiusMm > EPS)) return null;
   const requestedRadiusMm = Number(bend.arc?.bendRadiusMm || bend.diameterMm * Number(config.genericInputXmlBendRadiusMultiplier || 1.5));
   const maxFraction = Number(config.inputXmlBendTrimMaxContractFraction || 0.35);
-  const tangentFactor = Math.tan(turnAngleRad / 2);
+  const tangentFactor = Math.tan(sweepAngleRad / 2);
   if (!(tangentFactor > EPS)) return null;
   const requestedTrimMm = requestedRadiusMm * tangentFactor;
   const maxFractionTrimMm = Math.min(Number(bend.lengthMm || 0) * maxFraction, Number(adjacent.lengthMm || 0) * maxFraction);
@@ -112,8 +130,8 @@ function makePlan(bend, bendSide, node, nodeConnectionCount, corner, bendOut, ad
     adjacentName: adjacent.name,
     adjacentSide,
     adjacentDtxr: adjacent.dtxr,
-    turnAngleDeg: round(turnAngleDeg),
-    sweepAngleRad: round(turnAngleRad),
+    turnAngleDeg: round(sweepAngleDeg),
+    sweepAngleRad: round(sweepAngleRad),
     requestedRadiusMm: round(requestedRadiusMm),
     bendRadiusMm: round(bendRadiusMm),
     pipeRadiusMm: round(pipeRadiusMm),

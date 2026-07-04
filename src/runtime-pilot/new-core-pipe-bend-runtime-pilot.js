@@ -35,7 +35,7 @@ export function validateNewCorePipeBendRuntimePilotPlan(plan) {
 }
 
 function populatedPlan(base, rows, errors) {
-  const subsetReady = errors.length === 0 && rows.cylinders.length > 0 && rows.toruses.length > 0;
+  const subsetReady = errors.length === 0;
   return { ...base, subsetReady, plannedCylinderCount: rows.cylinders.length, plannedTorusCount: rows.toruses.length, excludedFlangeCount: rows.flanges.length, blockedValveCount: rows.blockedValves.length, deferredSupportCount: rows.deferredSupports.length, cylinderPrimitives: rows.cylinders.map(copy), torusPrimitives: rows.toruses.map(copy), excludedItems: excludedItems(rows), sourceTrace: sourceTrace(rows), warnings: rows.flanges.length ? ['FLANGE_CYLINDER remains excluded from Phase 14 pipe+bend runtime artifact generation.'] : [], errors };
 }
 

@@ -9,6 +9,7 @@ export function writeRvmPilotPackageBytes(plan, options) {
     for (const item of array(plan.torusPrimitives)) writer.writeChunk('PRIM', torusBody(item), null);
     for (const item of array(plan.flangeCylinderPrimitives)) writer.writeChunk('PRIM', flangeBody(item), null);
     for (const item of array(plan.valveBodyPrimitives)) writer.writeChunk('PRIM', valveBody(item), null);
+    for (const item of array(plan.supportMarkerPrimitives)) writer.writeChunk('PRIM', supportMarkerBody(item), null);
     writer.writeChunk('CNTE', uint32Body(2), null);
   });
   writer.writeChunk('END:', uint32Body(1), null);
@@ -16,14 +17,16 @@ export function writeRvmPilotPackageBytes(plan, options) {
 }
 
 export function summarizeRvmPilotDecodedCounts(plan) {
+  const supportCylinderCount = Number(plan.supportCylinderPrimitiveCount || 0);
+  const supportSphereCount = Number(plan.supportSpherePrimitiveCount || 0);
   return {
     decodedPrimitiveCount: Number(plan.plannedRvmPrimitiveCount || 0),
-    decodedCylinderCount: Number(plan.plannedCylinderCount || 0),
+    decodedCylinderCount: Number(plan.plannedCylinderCount || 0) + supportCylinderCount,
     decodedTorusCount: Number(plan.plannedTorusCount || 0),
     decodedFlangeCylinderCount: Number(plan.plannedFlangeCylinderCount || 0),
     decodedValveBodyCount: Number(plan.plannedValveBodyCount || 0),
     decodedBoxCount: 0,
-    decodedSphereCount: 0,
+    decodedSphereCount: supportSphereCount,
     decodedPyramidCount: 0
   };
 }
@@ -40,8 +43,19 @@ function valveBody(item) {
   return code8CylinderBody(item.center, item.axis, item.bodyRadiusMm, item.lengthMm);
 }
 
+function supportMarkerBody(item) {
+  if (Number(item.primitiveCode) === 9) return sphereBody(item);
+  return code8CylinderBody(item.center, item.axis, item.radiusMm, item.lengthMm);
+}
+
 function code8CylinderBody(center, axis, radiusMm, lengthMm) {
   return primitiveBody(8, matrixFromDirection(center, axis), [-radiusMm, -radiusMm, -lengthMm / 2, radiusMm, radiusMm, lengthMm / 2], [radiusMm, lengthMm]);
+}
+
+function sphereBody(item) {
+  const diameter = Number(item.diameterMm || item.radiusMm * 2);
+  const radius = diameter / 2;
+  return primitiveBody(9, matrixFromDirection(item.center, [0, 0, 1]), [-radius, -radius, -radius, radius, radius, radius], [diameter]);
 }
 
 function torusBody(item) {
@@ -94,9 +108,9 @@ function matrixFromDirection(center, axis) {
 }
 
 function matrixFromTorus(item) {
-  const x = normalize(item.startTangent);
+  const y = normalize(item.startTangent);
   const z = normalize(item.normal);
-  const y = normalize(cross(z, x));
+  const x = normalize(cross(y, z));
   return [...scaled(x), ...scaled(y), ...scaled(z), ...scaled(item.center)];
 }
 

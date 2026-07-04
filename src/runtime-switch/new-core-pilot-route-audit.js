@@ -2,7 +2,7 @@ const SCHEMA = 'NewCorePilotRouteAudit.v1';
 
 export function buildNewCorePilotRouteAudit(routeOptions, result, errors) {
   const auditErrors = array(errors);
-  const audit = { schema: SCHEMA, ok: false, routeName: routeOptions?.routeName || 'new-core-pilot-package', enabled: routeOptions?.enabled === true, explicitUserAction: routeOptions?.userGestureConfirmed === true, oldProductionPathTouched: false, defaultProductionPathChanged: false, productionWriterModified: false, defaultRuntimeSwitchEnabled: false, pilotAdapterCalled: result?.pilotAdapterCalled === true, artifactPrepared: result?.artifactPrepared === true, fullModelReady: false, hardErrorCount: auditErrors.length, errors: auditErrors };
+  const audit = { schema: SCHEMA, ok: false, routeName: routeOptions?.routeName || 'new-core-pilot-package', enabled: routeOptions?.enabled === true, explicitUserAction: routeOptions?.userGestureConfirmed === true, oldProductionPathTouched: false, defaultProductionPathChanged: false, productionWriterModified: false, defaultRuntimeSwitchEnabled: false, pilotAdapterCalled: result?.pilotAdapterCalled === true, artifactPrepared: result?.artifactPrepared === true, fullModelReady: result?.packageResult?.audit?.fullModelReady === true, hardErrorCount: auditErrors.length, errors: auditErrors };
   audit.ok = audit.enabled && audit.explicitUserAction && audit.pilotAdapterCalled && audit.artifactPrepared && audit.hardErrorCount === 0 && audit.oldProductionPathTouched === false && audit.defaultProductionPathChanged === false && audit.defaultRuntimeSwitchEnabled === false;
   return audit;
 }

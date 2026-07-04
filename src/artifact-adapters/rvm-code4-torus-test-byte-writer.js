@@ -101,7 +101,12 @@ function getCylinders(rvmExportModel) { return Array.isArray(rvmExportModel?.pri
 function getToruses(rvmExportModel) { return Array.isArray(rvmExportModel?.testByteEligiblePrimitives) ? rvmExportModel.testByteEligiblePrimitives : []; }
 function primitiveBody(code, matrix, bbox, payload) { return concat([uint32Body(1), uint32Body(code), float32ArrayBody(matrix), float32ArrayBody(bbox), float32ArrayBody(payload)]); }
 function matrixFromDirection(center, axis) { const z = normalize(axis); const ref = Math.abs(z[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0]; const x = normalize(cross(ref, z)); const y = normalize(cross(z, x)); return [...scaled(x), ...scaled(y), ...scaled(z), ...scaled(center)]; }
-function matrixFromTorus(primitive) { const x = normalize(primitive.startTangent); const z = normalize(primitive.normal); const y = normalize(cross(z, x)); return [...scaled(x), ...scaled(y), ...scaled(z), ...scaled(primitive.center)]; }
+function matrixFromTorus(primitive) {
+  const y = normalize(primitive.startTangent);
+  const z = normalize(primitive.normal);
+  const x = normalize(cross(y, z));
+  return [...scaled(x), ...scaled(y), ...scaled(z), ...scaled(primitive.center)];
+}
 function groupBody(name) { return concat([uint32Body(2), rvmString(name), float32Body(0), float32Body(0), float32Body(0), uint32Body(0)]); }
 function headBody(options) { return concat([uint32Body(2), rvmString('phase-11b-rvm-torus-test'), uint32Body(0), rvmString(options.createdAt || '2026-06-30T00:00:00.000Z'), rvmString('Phase11B'), rvmString('UTF-8')]); }
 function modelBody() { return concat([uint32Body(1), rvmString('INPUTXML'), rvmString('PIPE_BEND_TEST_ONLY')]); }

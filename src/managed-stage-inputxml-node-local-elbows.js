@@ -45,10 +45,10 @@ export function applyManagedStageInputXmlNodeLocalElbows(contracts = [], config 
       trimA: trimSummary(planned.entryA, planned.trimA),
       trimB: trimSummary(planned.entryB, planned.trimB),
       segmentCount: planned.elbow.segments.length,
-      code4Planned: true,
-      code4StartMm: planned.elbow.code4.startMm,
-      code4EndMm: planned.elbow.code4.endMm,
-      code4BendRadiusMm: planned.elbow.code4.bendRadiusMm,
+      code4Planned: false,
+      code4StartMm: null,
+      code4EndMm: null,
+      code4BendRadiusMm: null,
       startMm: planned.elbow.segments[0].startMm,
       endMm: planned.elbow.segments[planned.elbow.segments.length - 1].endMm
     });
@@ -156,9 +156,6 @@ function planNodeElbow(node, entryA, entryB, config) {
 
   const start = vadd(corner, scale(entryA.directionOut, effectiveTrimMm));
   const end = vadd(corner, scale(entryB.directionOut, effectiveTrimMm));
-  const startTangent = scale(entryA.directionOut, -1);
-  const endTangent = entryB.directionOut;
-  const planeNormal = unitVector(cross(startTangent, endTangent));
   const points = quadraticCornerCurve(start, corner, end, DEFAULT_SEGMENT_COUNT);
   const segments = [];
   for (let index = 0; index < DEFAULT_SEGMENT_COUNT; index += 1) {
@@ -193,27 +190,12 @@ function planNodeElbow(node, entryA, entryB, config) {
       schema: 'ManagedStageInputXmlNodeLocalElbow.v2',
       node: String(node),
       name: `INPUTXML_NODE_LOCAL_ELBOW_NODE_${node}`,
-      fittingClass: 'ELBOW_CODE4',
+      fittingClass: 'ELBOW_SEGMENTS',
       centerlineRadiusMm: round(effectiveRadiusMm),
       turnAngleDeg: round(turnAngleDeg),
       parentSourceContractNames: [entryA.contract.name, entryB.contract.name],
       parentSourceDtxrs: [entryA.contract.dtxr, entryB.contract.dtxr],
       trimApplications: [trimSummary(entryA, effectiveTrimMm), trimSummary(entryB, effectiveTrimMm)],
-      code4: {
-        schema: 'ManagedStageInputXmlNodeLocalCode4Elbow.v1',
-        startMm: start.map(round),
-        endMm: end.map(round),
-        bendRadiusMm: round(effectiveRadiusMm),
-        declaredBendRadiusMm: declaredRadiusMm > EPS_MM ? round(declaredRadiusMm) : null,
-        radiusCappedByTrim,
-        tubeRadiusMm: round(radius),
-        sweepAngleRad: round(turnAngleRad),
-        bendAngleDeg: round(turnAngleDeg),
-        startTangent: startTangent.map(round),
-        endTangent: endTangent.map(round),
-        planeNormal: planeNormal.map(round),
-        sourceNode: String(node)
-      },
       segments
     }
   };
@@ -329,7 +311,6 @@ function distance(a, b) { return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2
 function scale(v, factor) { return [v[0] * factor, v[1] * factor, v[2] * factor]; }
 function vadd(a, b) { return [a[0] + b[0], a[1] + b[1], a[2] + b[2]]; }
 function dotProduct(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
-function cross(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
 function unitVector(v) { const len = Math.hypot(v[0], v[1], v[2]); return len > EPS_MM ? v.map((entry) => entry / len) : [0, 0, 1]; }
 function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
 function round(value) { return Number(Number(value).toFixed(6)); }

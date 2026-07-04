@@ -14,12 +14,12 @@ export async function writeNewCoreSupportMarkerRuntimePilotArtifact(plan, option
   const outdir = resolve(bag.outdir || 'artifacts/new-core-support-marker-runtime-pilot');
   const basename = bag.basename || 'BM_CII_pipe_bend_flange_valve_support_marker_runtime_pilot';
   const paths = artifactPaths(outdir, basename);
-  const rvmBytes = writeRvmPilotPackageBytes(plan.basePlan, writerLabels());
-  const attText = writeValvePilotAttText(plan.basePlan);
+  const rvmBytes = writeRvmPilotPackageBytes(plan, writerLabels());
+  const attText = writeValvePilotAttText(plan);
   await mkdir(outdir, { recursive: true });
   await writeFile(paths.rvmArtifactPath, Buffer.from(rvmBytes));
   await writeFile(paths.attArtifactPath, attText, 'utf8');
-  return { schema: ARTIFACT_SCHEMA, artifactKind: 'rvm-att-package', artifactGenerated: true, mode: plan.mode, scope: plan.scope, ...paths, rvmByteLength: rvmBytes.byteLength, attByteLength: new TextEncoder().encode(attText).byteLength, checksumSha256: createHash('sha256').update(Buffer.from(rvmBytes)).digest('hex'), ...summarizeRvmPilotDecodedCounts(plan.basePlan), attRowCount: plan.basePlan.plannedAttRowCount, attRowsMatchRvmPrimitives: plan.basePlan.attRowsMatchRvmPrimitives, supportMarkerCount: plan.supportMarkerCount, blockedSupportMarkerCount: plan.blockedSupportMarkerCount, sourceTrace: plan.basePlan.sourceTrace };
+  return { schema: ARTIFACT_SCHEMA, artifactKind: 'rvm-att-package', artifactGenerated: true, mode: plan.mode, scope: plan.scope, ...paths, rvmByteLength: rvmBytes.byteLength, attByteLength: new TextEncoder().encode(attText).byteLength, checksumSha256: createHash('sha256').update(Buffer.from(rvmBytes)).digest('hex'), ...summarizeRvmPilotDecodedCounts(plan), attRowCount: plan.plannedAttRowCount, attRowsMatchRvmPrimitives: plan.attRowsMatchRvmPrimitives, supportMarkerCount: plan.supportMarkerCount, blockedSupportMarkerCount: plan.blockedSupportMarkerCount, supportPrimitiveCount: plan.supportPrimitiveCount, supportCylinderPrimitiveCount: plan.supportCylinderPrimitiveCount, supportSpherePrimitiveCount: plan.supportSpherePrimitiveCount, sourceTrace: plan.sourceTrace };
 }
 
 function blockedArtifact(plan, validation, options) {

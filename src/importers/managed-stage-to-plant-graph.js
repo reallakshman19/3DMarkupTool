@@ -37,7 +37,7 @@ export function convertManagedStageJsonToPlantGraph(sourceText, options = {}) {
     }
     if (isSupport(record)) {
       const supportNode = nodeId(value(a, 'NODE', 'AT_NODE', 'FROM_NODE', 'TO_NODE'));
-      const supportPosition = point(value(a, 'POS', 'POSITION', 'APOS', 'LPOS'));
+      const supportPosition = point(value(a, 'POS', 'POSITION', 'SUPPORTCOORD', 'SUPPORT_COORD', 'APOS', 'LPOS'));
       addNode(nodes, nodeById, supportNode, supportPosition, `${id}.NODE`);
     } else if (isComponent(record) && !hasEndpointTopology(record)) {
       const node = nodeId(value(a, 'NODE', 'AT_NODE', 'FROM_NODE', 'TO_NODE'));
@@ -54,7 +54,7 @@ export function convertManagedStageJsonToPlantGraph(sourceText, options = {}) {
       const route = routeByRecordId.get(id);
       if (route) items.push({ id, kind: 'generated', generator: 'straightPipe.v1', route, sourceRef: id });
     } else if (isSupport(record)) {
-      items.push(compact({ id, kind: 'support', tagged: false, node: nodeId(value(a, 'NODE', 'AT_NODE', 'FROM_NODE', 'TO_NODE')), supportFamily: value(a, 'SUPPORT_KIND', 'SUPPORT_FAMILY', 'RESTRAINT', 'TYPE'), axis: value(a, 'SUPPORT_AXIS', 'AXIS', 'DIRECTION'), source: value(a, 'SOURCE', 'SOURCE_FORMAT'), placement: placement(value(a, 'POS', 'POSITION', 'APOS', 'LPOS')), sourceRef: id }));
+      items.push(compact({ id, kind: 'support', tagged: false, node: nodeId(value(a, 'NODE', 'AT_NODE', 'FROM_NODE', 'TO_NODE')), supportFamily: value(a, 'SUPPORT_KIND', 'SUPPORT_FAMILY', 'RESTRAINT', 'TYPE'), axis: value(a, 'SUPPORT_AXIS', 'AXIS', 'DIRECTION'), source: value(a, 'SOURCE', 'SOURCE_FORMAT'), placement: placement(value(a, 'POS', 'POSITION', 'SUPPORTCOORD', 'SUPPORT_COORD', 'APOS', 'LPOS')), sourceRef: id }));
     } else if (isComponent(record)) {
       items.push(componentItem(record, a, id, routes, routeByRecordId));
     }
@@ -90,7 +90,15 @@ function value(source, ...keys) { for (const key of keys) if (source && source[k
 function parseJson(text) { try { return { ok: true, value: typeof text === 'string' ? JSON.parse(text) : text }; } catch (error) { return { ok: false, error: error.message || String(error) }; } }
 function stripJsonSuffix(value) { return String(value || '').replace(/\.json$/i, ''); }
 function nodeId(value) { return value === undefined || value === null || value === '' ? undefined : String(value); }
-function point(value) { return Array.isArray(value) && value.length === 3 && value.every((entry) => Number.isFinite(Number(entry))) ? value.map(Number) : undefined; }
+function point(value) { return Array.isArray(value) && value.length === 3 ? finitePoint(value[0], value[1], value[2]) : objectPoint(value); }
+function objectPoint(value) {
+  if (!value || typeof value !== 'object') return undefined;
+  return finitePoint(value.x ?? value.X, value.y ?? value.Y, value.z ?? value.Z);
+}
+function finitePoint(x, y, z) {
+  const parsed = [Number(x), Number(y), Number(z)];
+  return parsed.every((entry) => Number.isFinite(entry)) ? parsed : undefined;
+}
 function unitPoint(value) { const p = point(value); if (!p) return undefined; const m = Math.hypot(...p); return m > 0 ? p.map((entry) => entry / m) : undefined; }
 function placement(value) { const p = point(value); return p ? { position: p } : undefined; }
 function addNode(nodes, nodeById, id, coord, sourceRef) { if (!id || !coord) return; if (!nodeById.has(id)) { const node = { id, coord, sourceRef }; nodes.push(node); nodeById.set(id, node); } }

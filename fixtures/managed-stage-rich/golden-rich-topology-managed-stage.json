@@ -1,0 +1,147 @@
+{
+  "schema": "inputxml-managed-stage/v1",
+  "profile": "AVEVA_JSON_FOR_3D_RVM_VIEWER",
+  "source": "GOLDEN_RICH_INPUT.XML",
+  "converter": "INPUTXML->STAGEDJSON",
+  "converterSchema": "inputxml-direct-managed-stage/v2-rich-topology",
+  "units": { "length": "mm" },
+  "stats": {
+    "components": 5,
+    "children": 7,
+    "emittedSupports": 2,
+    "bends": 1,
+    "validRestraints": 2,
+    "restraintRows": 2
+  },
+  "hierarchy": [
+    {
+      "name": "/INPUTXML/GOLDEN_RICH/BRANCH-001",
+      "type": "BRANCH",
+      "attributes": { "TYPE": "BRAN", "NAME": "/INPUTXML/GOLDEN_RICH/BRANCH-001" },
+      "children": [
+        {
+          "name": "PIPE-GOLDEN-001",
+          "type": "PIPE",
+          "attributes": {
+            "SOURCE_ELEMENT_ID": "PIPE-GOLDEN-001",
+            "REF": "PIPE-GOLDEN-001",
+            "NAME": "PIPE-GOLDEN-001",
+            "TYPE": "PIPE",
+            "DTXR": "PIPE",
+            "FROM_NODE": "10",
+            "TO_NODE": "20",
+            "APOS": { "x": 0, "y": 0, "z": 0 },
+            "LPOS": { "x": 1000, "y": 0, "z": 0 },
+            "OUTSIDE_DIAMETER_MM": 100
+          }
+        },
+        {
+          "name": "BEND-GOLDEN-001",
+          "type": "BEND",
+          "attributes": {
+            "SOURCE_ELEMENT_ID": "BEND-GOLDEN-001",
+            "REF": "BEND-GOLDEN-001",
+            "NAME": "BEND-GOLDEN-001",
+            "TYPE": "BEND",
+            "DTXR": "BEND",
+            "FROM_NODE": "20",
+            "TO_NODE": "30",
+            "APOS": { "x": 1000, "y": 0, "z": 0 },
+            "LPOS": { "x": 1000, "y": 500, "z": 0 },
+            "DIAMETER_MM": 100,
+            "BEND_RADIUS_MM": 150,
+            "BEND_ANGLE_DEG": 90
+          }
+        },
+        {
+          "name": "FLANGE-GOLDEN-001",
+          "type": "FLANGE",
+          "attributes": {
+            "SOURCE_ELEMENT_ID": "FLANGE-GOLDEN-001",
+            "REF": "FLANGE-GOLDEN-001",
+            "NAME": "FLANGE-GOLDEN-001",
+            "TYPE": "FLANGE",
+            "DTXR": "FLANGE",
+            "FROM_NODE": "30",
+            "TO_NODE": "40",
+            "APOS": { "x": 1000, "y": 500, "z": 0 },
+            "LPOS": { "x": 1300, "y": 500, "z": 0 },
+            "DIAMETER": "100mm",
+            "OUTSIDE_DIAMETER_MM": 100,
+            "FLANGE_FACE_OD_MM": 220,
+            "HUB_OD_MM": 130
+          }
+        },
+        {
+          "name": "VALVE-GOLDEN-001",
+          "type": "VALVE",
+          "attributes": {
+            "SOURCE_ELEMENT_ID": "VALVE-GOLDEN-001",
+            "REF": "VALVE-GOLDEN-001",
+            "NAME": "VALVE-GOLDEN-001",
+            "TYPE": "VALVE",
+            "DTXR": "VALVE",
+            "FROM_NODE": "40",
+            "TO_NODE": "50",
+            "APOS": { "x": 1300, "y": 500, "z": 0 },
+            "LPOS": { "x": 1700, "y": 500, "z": 0 },
+            "DIAMETER": "100mm",
+            "OUTSIDE_DIAMETER_MM": 100,
+            "VALVE_BODY_OD_MM": 180,
+            "VALVE_SEAT_OD_MM": 120,
+            "VALVE_END_FLANGE_OD_MM": 220
+          }
+        },
+        {
+          "name": "REDUCER-GOLDEN-001",
+          "type": "REDUCER",
+          "attributes": {
+            "SOURCE_ELEMENT_ID": "REDUCER-GOLDEN-001",
+            "REF": "REDUCER-GOLDEN-001",
+            "NAME": "REDUCER-GOLDEN-001",
+            "TYPE": "REDUCER",
+            "DTXR": "REDUCER",
+            "FROM_NODE": "50",
+            "TO_NODE": "60",
+            "APOS": { "x": 1700, "y": 500, "z": 0 },
+            "LPOS": { "x": 2100, "y": 500, "z": 0 },
+            "ABORE": "100mm",
+            "ABORE_MM": 100,
+            "LBORE": "50mm",
+            "LBORE_MM": 50,
+            "ECC_OFFSET_X": 12,
+            "ECC_OFFSET_Y": -6
+          }
+        },
+        {
+          "name": "SUPPORT-GOLDEN-REST-001",
+          "type": "ATTA",
+          "attributes": {
+            "TYPE": "ATTA",
+            "DTXR": "REST",
+            "SUPPORT_KIND": "REST",
+            "SUPPORT_TAG": "PS-GOLDEN-REST-001",
+            "SOURCE_RESTRAINT_ID": "PS-GOLDEN-REST-001",
+            "NODE": "20",
+            "SUPPORT_AXIS": "+Y",
+            "SUPPORTCOORD": { "x": 1000, "y": 0, "z": 0 }
+          }
+        },
+        {
+          "name": "SUPPORT-GOLDEN-GUIDE-001",
+          "type": "ATTA",
+          "attributes": {
+            "TYPE": "ATTA",
+            "DTXR": "GUIDE",
+            "SUPPORT_KIND": "GUIDE",
+            "SUPPORT_TAG": "PS-GOLDEN-GUIDE-001",
+            "SOURCE_RESTRAINT_ID": "PS-GOLDEN-GUIDE-001",
+            "NODE": "40",
+            "SUPPORT_AXIS": "+Z",
+            "SUPPORTCOORD": { "x": 1300, "y": 500, "z": 0 }
+          }
+        }
+      ]
+    }
+  ]
+}

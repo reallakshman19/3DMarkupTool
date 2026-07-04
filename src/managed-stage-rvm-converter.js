@@ -13,7 +13,7 @@ import { writeRvm } from './rvm-writer.js?v=bust-cache-4';
 import { evaluateRvmCode4ElbowEmissionCandidate } from './rvm-code4-elbow-emission-candidate-policy.js?v=bust-cache-4';
 import { assertManagedStageRvmAuditGate } from './managed-stage-rvm-audit-gate.js?v=bust-cache-4';
 import { assertManagedStageTopologyProofGate } from './managed-stage-topology-audit-gate.js?v=bust-cache-4';
-import { buildManagedStageRvmExportModel } from './managed-stage-rvm-export-model.js?v=bust-cache-4';
+import { buildManagedStageRvmExportModel } from './managed-stage-rvm-export-model.js?v=bust-cache-6-source-root';
 import { parseManagedStageProfile } from './managed-stage-profile-parser.js?v=bust-cache-4';
 import { parseStagedJsonSourceContract } from './stagedjson-source-contract.js?v=bust-cache-4';
 import { auditManagedStageTopology } from './managed-stage-topology-audit.js?v=bust-cache-4';
@@ -94,6 +94,7 @@ export function convertManagedStageJsonToRvmAtt(sourceText, options = {}) {
       rvmBinaryTransformed: Boolean(postAxisTransform.audit?.transformed)
     },
     supportSourceBasis: sourceContract.supportSourceBasis || null,
+    reviewHierarchy: previewExportModel.audit?.reviewHierarchy || null,
     postRvmAxisTransform: postAxisTransform.audit,
     inputCounts: {
       geometryComponents: profile.geometryRecords.length,

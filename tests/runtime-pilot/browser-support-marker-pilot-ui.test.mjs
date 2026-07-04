@@ -19,12 +19,13 @@ assert.equal(result.downloadCount, 3);
 assert.equal(host.createdUrls.length, 3);
 assert.equal(host.revokedUrls.length, 3);
 assert.ok(result.statusMessage.includes('12 deterministic support markers'));
-assert.ok(result.statusMessage.includes('No support geometry generated'));
+assert.ok(result.statusMessage.includes('104 support primitives'));
+assert.ok(result.statusMessage.includes('Full RVM ready: true'));
 
 console.log('browser support marker pilot UI test passed');
 
 function auditFixture() {
-  return { schema: 'NewCoreSupportMarkerRuntimePilotAudit.v1', ok: true, scope: 'pipe-bend-flange-valve-support-marker-subset', artifactGenerated: true, supportMarkerCount: 12, blockedSupportMarkerCount: 0, supportGeometryGenerated: false, supportFallbackCount: 0, fullModelReady: false, subsetReady: true, errors: [], warnings: [] };
+  return { schema: 'NewCoreSupportMarkerRuntimePilotAudit.v1', ok: true, scope: 'pipe-bend-flange-valve-support-marker-subset', artifactGenerated: true, supportMarkerCount: 12, blockedSupportMarkerCount: 0, supportPrimitiveCount: 104, supportGeometryGenerated: true, supportFallbackCount: 0, fullModelReady: true, subsetReady: true, errors: [], warnings: [] };
 }
 
 function fakeDownloadHost() {

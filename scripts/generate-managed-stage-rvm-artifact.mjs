@@ -9,16 +9,21 @@ const fixtureName = valueAfterPrefix(args, '--fixture=');
 const outDir = resolveOutDir(args);
 const baseNameOverride = valueAfterPrefix(args, '--base=');
 const expectBmCii = args.includes('--expect-bm-cii');
+const exportV2 = args.includes('--export-v2');
+const allowWarningGates = args.includes('--allow-warning-gates');
 
 if (!inputPath && fixtureName !== 'bm-cii') {
-  throw new Error('Usage: node scripts/generate-managed-stage-rvm-artifact.mjs input.json [--expect-bm-cii] [--base=name] --outdir=artifacts/managed-stage-rvm OR --fixture=bm-cii');
+  throw new Error('Usage: node scripts/generate-managed-stage-rvm-artifact.mjs input.json [--export-v2] [--allow-warning-gates] [--expect-bm-cii] [--base=name] --outdir=artifacts/managed-stage-rvm OR --fixture=bm-cii');
 }
 
 const { convertManagedStageJsonToRvmAtt } = await import('../src/managed-stage-rvm-converter.js');
 const { sourceText, baseName, strictAuditExpectations } = await resolveSource(inputPath, fixtureName, { baseNameOverride, expectBmCii });
-const result = convertManagedStageJsonToRvmAtt(sourceText, { strictAuditExpectations });
+const result = convertManagedStageJsonToRvmAtt(sourceText, {
+  strictAuditExpectations,
+  ...(exportV2 ? exportV2ManagedStageOptions() : {})
+});
 const artifactSummary = buildArtifactSummary(result.audit);
-assertArtifactAuditGates(result.audit);
+if (!allowWarningGates) assertArtifactAuditGates(result.audit);
 mkdirSync(outDir, { recursive: true });
 
 const files = [
@@ -62,6 +67,8 @@ console.log(`Support association-only count: ${result.audit.managedStageTopology
 console.log(`Support continuity edge count: ${result.audit.managedStageTopologyProofGate?.supportContinuityEdgeCount || 0}`);
 console.log(`Support inline face count: ${result.audit.managedStageTopologyProofGate?.supportInlineFaceCount || 0}`);
 console.log(`Max centerline gap mm: ${result.audit.topology.maxCenterlineGapMm}`);
+console.log(`Export V2 safe InputXML bends: ${exportV2 ? 'YES' : 'NO'}`);
+console.log(`Warning gates allowed: ${allowWarningGates ? 'YES' : 'NO'}`);
 console.log(`Topology proof gate: ${result.audit.managedStageTopologyProofGate.ok ? 'PASS' : 'FAIL'}`);
 console.log(`Strict audit gate: ${result.audit.managedStageStrictGate.ok ? 'PASS' : 'FAIL'}`);
 
@@ -91,6 +98,7 @@ function buildArtifactSummary(audit = {}) {
     ready: Boolean(ready),
     counts: { geometryComponents: audit.inputCounts?.geometryComponents || 0, supportRecords: audit.inputCounts?.supportRecordsEmittedToRvm || 0, cntb: audit.chunkHierarchy?.cntbCount || sourceSummary.counts?.cntb || 0, prim: audit.chunkHierarchy?.primCount || sourceSummary.counts?.prim || 0 },
     primitiveHistogram: audit.primitiveHistogram || sourceSummary.primitiveHistogram || {},
+    reviewHierarchy: audit.reviewHierarchy || null,
     payloadIssues,
     visualWarnings: { warningOnly: true, warningCount: Number(visual.warningCount || 0), warningCodeHistogram: visual.warningCodeHistogram || {} },
     geometry: { primitiveCount: geometry.geometry?.primitiveCount || stitch.geometryPrimitiveCount || sourceSummary.geometry?.primitiveCount || 0, primitiveCodeHistogram: geometry.geometry?.primitiveCodeHistogram || sourceSummary.geometry?.primitiveCodeHistogram || {}, primitiveRoleTagCounts: geometry.geometry?.primitiveRoleTagCounts || sourceSummary.geometry?.primitiveRoleTagCounts || {}, code4Count: geometry.geometry?.code4Elbows?.count || sourceSummary.geometry?.code4Count || 0, code7Count: geometry.geometry?.code7Snouts?.count || sourceSummary.geometry?.code7Count || 0, code8Count: geometry.geometry?.code8Cylinders?.count || sourceSummary.geometry?.code8Count || 0, code9Count: geometry.geometry?.code9Spheres?.count || sourceSummary.geometry?.code9Count || 0 },
@@ -107,6 +115,13 @@ function assertArtifactAuditGates(audit) {
 
 function bmCiiExpectations() {
   return { geometryComponents: 40, supportRecordsSkippedFromGeometry: 12, supportRecordsEmittedToRvm: 12, supportRvmPrimitiveCount: 42, topologyComponentCount: 52, topologyGeometryComponentCount: 40, topologySupportCount: 12, explicitBendRecordCount: 7, explicitBendDetailCount: 7, missingExplicitBendDetailCount: 0, synthetic1p5DTrimBlockedCount: 7, supportAssociationOnlyCount: 12, supportTopologyBlockedCount: 0, supportContinuityEdgeCount: 0, supportInlineFaceCount: 0, code1: 0, code4: 7, code7: 6, code8: 110, code9: 6, cntbCount: 56, primCount: 129, supportMaxGlyphExtentMm: 100, supportMaxClusterOffsetMm: 30, supportMaxPrimitiveSpanMm: 60, supportMaxBarRadiusMm: 3 };
+}
+
+function exportV2ManagedStageOptions() {
+  return {
+    excludeBendsWhileProcessingInputXmlBasedJson: true,
+    allowManagedStageCode4Elbows: false
+  };
 }
 
 function resolveOutDir(values) { const arg = valueAfterPrefix(values, '--outdir='); return arg ? join(repoRoot, arg) : join(repoRoot, 'artifacts', 'managed-stage-rvm'); }

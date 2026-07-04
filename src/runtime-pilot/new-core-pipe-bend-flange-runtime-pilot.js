@@ -36,7 +36,10 @@ export function validateNewCorePipeBendFlangeRuntimePilotPlan(plan) {
 function populatedPlan(base, rows, attRows, errors) {
   const plannedRvmPrimitiveCount = rows.cylinders.length + rows.toruses.length + rows.flanges.length;
   const attRowsMatchRvmPrimitives = attRows.length === plannedRvmPrimitiveCount;
-  const subsetReady = errors.length === 0 && rows.cylinders.length > 0 && rows.toruses.length > 0 && rows.flanges.length > 0 && attRowsMatchRvmPrimitives;
+
+  if (!attRowsMatchRvmPrimitives && !errors.includes('att row count mismatch')) errors.push('att row count mismatch');
+
+  const subsetReady = errors.length === 0 && attRowsMatchRvmPrimitives;
   return { ...base, subsetReady, plannedCylinderCount: rows.cylinders.length, plannedTorusCount: rows.toruses.length, plannedFlangeCylinderCount: rows.flanges.length, plannedRvmPrimitiveCount, plannedAttRowCount: attRows.length, attRowsMatchRvmPrimitives, blockedValveCount: rows.blockedValves.length, deferredSupportCount: rows.deferredSupports.length, cylinderPrimitives: rows.cylinders.map(copy), torusPrimitives: rows.toruses.map(copy), flangeCylinderPrimitives: rows.flanges.map(copy), attRows, excludedItems: excludedItems(rows), sourceTrace: sourceTrace(rows), errors };
 }
 

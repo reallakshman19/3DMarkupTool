@@ -16,15 +16,20 @@ const audit = buildNewCoreSupportMarkerRuntimePilotAudit(plan, artifact, {});
 
 assert.equal(plan.supportMarkerCount, 12);
 assert.equal(plan.blockedSupportMarkerCount, 0);
-assert.equal(plan.supportGeometryGenerated, false);
+assert.equal(plan.supportGeometryGenerated, true);
+assert.equal(plan.supportPrimitiveCount, 104);
+assert.equal(plan.supportCylinderPrimitiveCount, 92);
+assert.equal(plan.supportSpherePrimitiveCount, 12);
 assert.equal(plan.supportFallbackCount, 0);
-assert.equal(plan.fullModelReady, false);
+assert.equal(plan.fullModelReady, true);
 assert.equal(plan.basePlan.plannedCylinderCount, 19);
 assert.equal(plan.basePlan.plannedTorusCount, 7);
 assert.equal(plan.basePlan.plannedFlangeCylinderCount, 8);
-assert.equal(plan.plannedRvmPrimitiveCount, plan.basePlan.plannedRvmPrimitiveCount);
+assert.equal(plan.plannedRvmPrimitiveCount, plan.basePlan.plannedRvmPrimitiveCount + plan.supportPrimitiveCount);
+assert.equal(plan.plannedAttRowCount, plan.plannedRvmPrimitiveCount);
 assert.equal(artifact.supportMarkerCount, 12);
-assert.equal(assertNewCoreSupportMarkerRuntimePilotAudit(audit, { ok: true, supportMarkerCount: 12, blockedSupportMarkerCount: 0, supportGeometryGenerated: false, supportFallbackCount: 0, fullModelReady: false }).ok, true);
+assert.equal(artifact.supportPrimitiveCount, 104);
+assert.equal(assertNewCoreSupportMarkerRuntimePilotAudit(audit, { ok: true, supportMarkerCount: 12, blockedSupportMarkerCount: 0, supportPrimitiveCount: 104, supportGeometryGenerated: true, supportFallbackCount: 0, fullModelReady: true }).ok, true);
 
 await rm(outdir, { recursive: true, force: true });
 console.log('BM_CII new-core support marker runtime pilot test passed');

@@ -1,0 +1,85 @@
+{
+  "ok": true,
+  "schema": "RvmStageModel.v1",
+  "sourceKind": "rvm-binary",
+  "attAvailable": false,
+  "parserComplete": false,
+  "visualParityClaimed": false,
+  "counts": {
+    "nodes": 1211,
+    "primitives": 4231,
+    "decoded": 4231,
+    "unsupported": 0,
+    "failed": 0
+  },
+  "decodedByCode": {
+    "4": 143,
+    "7": 4,
+    "8": 3633,
+    "9": 451
+  },
+  "unsupportedByCode": {},
+  "failedByCode": {},
+  "messages": [
+    {
+      "type": "STAGE_WORKER_READY",
+      "phase": "idle",
+      "code": "",
+      "message": ""
+    },
+    {
+      "type": "STAGE_WORKER_START",
+      "phase": "",
+      "code": "",
+      "message": ""
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "reading-file",
+      "code": "",
+      "message": "Reading RVM binary job envelope"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "hashing-source",
+      "code": "",
+      "message": "Validating RVM binary source identity"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "parsing-records",
+      "code": "",
+      "message": "Reading wide-tag RVM native records"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "building-hierarchy",
+      "code": "",
+      "message": "Building native RVM record ledger"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "decoding-primitives",
+      "code": "",
+      "message": "Decoding native primitive evidence"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "building-diagnostics",
+      "code": "",
+      "message": "Building RVM evidence StageModel diagnostics"
+    },
+    {
+      "type": "STAGE_WORKER_STAGE_READY",
+      "phase": "",
+      "code": "",
+      "message": ""
+    },
+    {
+      "type": "STAGE_WORKER_PACKAGE_READY",
+      "phase": "",
+      "code": "",
+      "message": ""
+    }
+  ]
+}

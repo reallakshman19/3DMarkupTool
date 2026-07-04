@@ -1,16 +1,19 @@
 import { auditCatalogueBinding } from '../catalogue/catalogue-binder.js';
 import { compileResolvedPrimitiveModelToExportModels } from '../export-models/export-model-compilers.js';
 import { buildGeometryResolutionAudit, resolvePlantGraphGeometry } from '../geometry/geometry-solver.js';
-import { convertManagedStageJsonToPlantGraph } from '../importers/managed-stage-to-plant-graph.js';
+import { convertManagedStageJsonToPlantGraph } from '../importers/managed-stage-to-plant-graph.js?v=bust-cache-5-object-points';
 import { buildPrimitiveCompilationAudit, compileResolvedGeometryToPrimitives } from '../primitives/primitive-compiler.js';
 import { writeValvePilotAttText } from './new-core-valve-att-writer.js';
+import { buildNewCoreSupportMarkerRuntimePilotPlan } from './new-core-support-marker-runtime-pilot.js';
 import { buildNewCoreValveRuntimePilotAudit } from './new-core-valve-runtime-audit.js';
 import { buildNewCoreValveRuntimePilotPlan } from './new-core-valve-runtime-pilot.js';
 import { summarizeRvmPilotDecodedCounts, writeRvmPilotPackageBytes } from './rvm-pilot-byte-writer.js';
 
 const SCHEMA = 'BrowserPipeBendFlangeValvePilotExportAudit.v1';
 const SCOPE = 'pipe-bend-flange-valve-subset';
+const SUPPORT_SCOPE = 'pipe-bend-flange-valve-support-marker-subset';
 const OPTIONS = { enabled: true, mode: 'explicit-runtime-pilot', scope: SCOPE, allowPartialModel: true, writeArtifact: true, writeAtt: true, deterministicValveOnly: true };
+const SUPPORT_OPTIONS = { ...OPTIONS, scope: SUPPORT_SCOPE, includeSupportMarkers: true };
 const CATALOGUE_PATHS = Object.freeze(['catalogues/base-piping/items/pipe-straight-4in-std.json', 'catalogues/base-piping/items/support-rest-generic.json', 'catalogues/base-piping/items/elbow-bend-45-114mm-6mm.json', 'catalogues/base-piping/items/elbow-bend-45-88mm-55mm.json', 'catalogues/base-piping/items/elbow-bend-45-60mm-39mm.json', 'catalogues/base-piping/items/flange-weld-neck-114mm-6mm-class150-rf.json', 'catalogues/base-piping/items/flange-weld-neck-88mm-55mm-class150-rf.json', 'catalogues/base-piping/items/flange-weld-neck-60mm-39mm-class150-rf.json']);
 
 export async function generateBrowserValvePilotExport(state, options) {
@@ -18,10 +21,12 @@ export async function generateBrowserValvePilotExport(state, options) {
   if (optionErrors.length) return blockedResult(optionErrors);
   try {
     const pipeline = await resolvePipelineState(state, object(options));
-    const plan = buildNewCoreValveRuntimePilotPlan(pipeline, OPTIONS);
+    const includeSupportMarkers = object(options).includeSupportMarkers === true;
+    const plan = includeSupportMarkers ? buildNewCoreSupportMarkerRuntimePilotPlan(pipeline, SUPPORT_OPTIONS) : buildNewCoreValveRuntimePilotPlan(pipeline, OPTIONS);
     const artifact = await generateArtifact(plan);
-    const runtimeAudit = buildNewCoreValveRuntimePilotAudit(plan, artifact, {});
-    const audit = browserAudit(plan, artifact, runtimeAudit, []);
+    const runtimeAudit = buildNewCoreValveRuntimePilotAudit(plan.basePlan || plan, artifact, {});
+    const audit = browserAudit(plan, artifact, runtimeAudit, [], { includeSupportMarkers });
+    if (!audit.ok) return blockedResult(audit.errors);
     return buildValvePilotDownloadBundle(artifact, audit, object(options));
   } catch (error) {
     return blockedResult([error instanceof Error ? error.message : String(error)]);
@@ -45,7 +50,8 @@ export function assertBrowserValvePilotBoundary(result) {
 }
 
 async function resolvePipelineState(state, options) {
-  const existing = state?.rvmExportModel || state?.exportModels?.rvmExportModel || state?.artifact?.exportModel || (state?.exportModel?.schema === 'RvmExportModel.v1' ? state.exportModel : null);
+  const candidates = [state?.rvmExportModel, state?.exportModels?.rvmExportModel, state?.artifact?.exportModel, state?.exportModel];
+  const existing = candidates.find((c) => c?.schema === 'RvmExportModel.v1') || null;
   const attExportModel = state?.attExportModel || state?.exportModels?.attExportModel || state?.artifact?.attExportModel || null;
   if (existing) return { rvmExportModel: existing, attExportModel, graph: state?.graph || graphFromState(state) };
   if (!state?.sourceText) throw new Error('no managed-stage/new-core input loaded');
@@ -76,11 +82,12 @@ async function generateArtifact(plan) {
   return { schema: 'BrowserPipeBendFlangeValvePilotArtifact.v1', artifactGenerated: true, artifactKind: 'rvm-att-package', bytes, attText, byteLength: bytes.byteLength, rvmByteLength: bytes.byteLength, attByteLength: new TextEncoder().encode(attText).byteLength, checksumSha256, ...summarizeRvmPilotDecodedCounts(plan), attRowCount: plan.plannedAttRowCount, attRowsMatchRvmPrimitives: plan.attRowsMatchRvmPrimitives, sourceTrace: plan.sourceTrace };
 }
 
-function browserAudit(plan, artifact, runtimeAudit, extraErrors) {
+function browserAudit(plan, artifact, runtimeAudit, extraErrors, auditOptions = {}) {
   const errors = [...(runtimeAudit.errors || []), ...extraErrors];
   const warnings = runtimeAudit.warnings || [];
-  const audit = { schema: SCHEMA, ok: false, mode: 'explicit-runtime-pilot', scope: SCOPE, userGestureConfirmed: true, browserDownloadRequested: true, oldProductionExportPathTouched: false, defaultRuntimeSwitchEnabled: false, appStartupBehaviorChanged: false, canvasTouched: false, threeGeometryCreated: false, cacheKeyMutated: false, artifactGenerated: artifact.artifactGenerated === true, rvmDownloadPrepared: artifact.artifactGenerated === true, attDownloadPrepared: artifact.artifactGenerated === true, auditDownloadPrepared: artifact.artifactGenerated === true, plannedCylinderCount: runtimeAudit.plannedCylinderCount, plannedTorusCount: runtimeAudit.plannedTorusCount, plannedFlangeCylinderCount: runtimeAudit.plannedFlangeCylinderCount, plannedValveBodyCount: runtimeAudit.plannedValveBodyCount, generatedValveCount: runtimeAudit.generatedValveCount, blockedValveCount: runtimeAudit.blockedValveCount, plannedRvmPrimitiveCount: runtimeAudit.plannedRvmPrimitiveCount, decodedCylinderCount: runtimeAudit.decodedCylinderCount, decodedTorusCount: runtimeAudit.decodedTorusCount, decodedFlangeCylinderCount: runtimeAudit.decodedFlangeCylinderCount, decodedValveBodyCount: runtimeAudit.decodedValveBodyCount, decodedPrimitiveCount: runtimeAudit.decodedPrimitiveCount, attRowCount: runtimeAudit.attRowCount, attRowsMatchRvmPrimitives: runtimeAudit.attRowsMatchRvmPrimitives, deferredSupportCount: runtimeAudit.deferredSupportCount, fullModelReady: false, subsetReady: plan.subsetReady === true, valveFallbackCount: runtimeAudit.valveFallbackCount, guessedValveDimensionCount: runtimeAudit.guessedValveDimensionCount, warningCount: warnings.length, hardErrorCount: errors.length, warnings, errors };
-  audit.ok = audit.artifactGenerated && audit.rvmDownloadPrepared && audit.attDownloadPrepared && audit.auditDownloadPrepared && audit.hardErrorCount === 0 && audit.decodedPrimitiveCount === audit.plannedRvmPrimitiveCount && audit.attRowCount === audit.plannedRvmPrimitiveCount && audit.fullModelReady === false && audit.valveFallbackCount === 0 && audit.guessedValveDimensionCount === 0;
+  const fullModelReady = auditOptions.includeSupportMarkers === true ? plan.fullModelReady === true : false;
+  const audit = { schema: SCHEMA, ok: false, mode: 'explicit-runtime-pilot', scope: auditOptions.includeSupportMarkers === true ? SUPPORT_SCOPE : SCOPE, userGestureConfirmed: true, browserDownloadRequested: true, oldProductionExportPathTouched: false, defaultRuntimeSwitchEnabled: false, appStartupBehaviorChanged: false, canvasTouched: false, threeGeometryCreated: false, cacheKeyMutated: false, artifactGenerated: artifact.artifactGenerated === true, rvmDownloadPrepared: artifact.artifactGenerated === true, attDownloadPrepared: artifact.artifactGenerated === true, auditDownloadPrepared: artifact.artifactGenerated === true, plannedCylinderCount: Number(plan.plannedCylinderCount || runtimeAudit.plannedCylinderCount || 0), plannedTorusCount: Number(plan.plannedTorusCount || runtimeAudit.plannedTorusCount || 0), plannedFlangeCylinderCount: Number(plan.plannedFlangeCylinderCount || runtimeAudit.plannedFlangeCylinderCount || 0), plannedValveBodyCount: Number(plan.plannedValveBodyCount || runtimeAudit.plannedValveBodyCount || 0), generatedValveCount: Number(plan.generatedValveCount || runtimeAudit.generatedValveCount || 0), blockedValveCount: Number(plan.blockedValveCount || runtimeAudit.blockedValveCount || 0), supportMarkerCount: Number(plan.supportMarkerCount || 0), blockedSupportMarkerCount: Number(plan.blockedSupportMarkerCount || 0), supportPrimitiveCount: Number(plan.supportPrimitiveCount || 0), supportCylinderPrimitiveCount: Number(plan.supportCylinderPrimitiveCount || 0), supportSpherePrimitiveCount: Number(plan.supportSpherePrimitiveCount || 0), supportGeometryGenerated: plan.supportGeometryGenerated === true, plannedRvmPrimitiveCount: Number(plan.plannedRvmPrimitiveCount || runtimeAudit.plannedRvmPrimitiveCount || 0), decodedCylinderCount: Number(artifact.decodedCylinderCount || runtimeAudit.decodedCylinderCount || 0), decodedTorusCount: Number(artifact.decodedTorusCount || runtimeAudit.decodedTorusCount || 0), decodedFlangeCylinderCount: Number(artifact.decodedFlangeCylinderCount || runtimeAudit.decodedFlangeCylinderCount || 0), decodedValveBodyCount: Number(artifact.decodedValveBodyCount || runtimeAudit.decodedValveBodyCount || 0), decodedPrimitiveCount: Number(artifact.decodedPrimitiveCount || runtimeAudit.decodedPrimitiveCount || 0), decodedSphereCount: Number(artifact.decodedSphereCount || 0), attRowCount: Number(artifact.attRowCount || runtimeAudit.attRowCount || 0), attRowsMatchRvmPrimitives: artifact.attRowsMatchRvmPrimitives === true, deferredSupportCount: Number(plan.deferredSupportCount || 0), fullModelReady, subsetReady: plan.subsetReady === true, valveFallbackCount: Number(plan.valveFallbackCount || runtimeAudit.valveFallbackCount || 0), guessedValveDimensionCount: Number(plan.guessedValveDimensionCount || runtimeAudit.guessedValveDimensionCount || 0), warningCount: warnings.length, hardErrorCount: errors.length, warnings, errors };
+  audit.ok = audit.artifactGenerated && audit.rvmDownloadPrepared && audit.attDownloadPrepared && audit.auditDownloadPrepared && audit.hardErrorCount === 0 && audit.decodedPrimitiveCount === audit.plannedRvmPrimitiveCount && audit.attRowCount === audit.plannedRvmPrimitiveCount && audit.attRowsMatchRvmPrimitives === true && audit.valveFallbackCount === 0 && audit.guessedValveDimensionCount === 0 && (auditOptions.includeSupportMarkers === true ? audit.fullModelReady === true && audit.supportGeometryGenerated === true && audit.blockedSupportMarkerCount === 0 : audit.fullModelReady === false);
   return audit;
 }
 

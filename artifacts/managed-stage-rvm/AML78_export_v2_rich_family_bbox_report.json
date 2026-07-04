@@ -1,0 +1,183 @@
+{
+  "schema": "ExportV2RichFamilyBboxVerification.v1",
+  "sourceStageModel": "F:/CODE-4/3DMarkupTool/artifacts/managed-stage-rvm/AML78_export_v2_rich_full_hierarchy_supports.stage-model.json",
+  "rows": [
+    {
+      "family": "elbow",
+      "primitiveCount": 286,
+      "nodeCount": 143,
+      "bboxMinM": [
+        -139.86,
+        -295.65,
+        -0.237
+      ],
+      "bboxMaxM": [
+        508.849,
+        28.935,
+        7.806
+      ],
+      "extentM": [
+        648.708,
+        324.585,
+        8.043
+      ],
+      "maxPrimitiveSpanM": 6.048,
+      "renderKinds": {
+        "ELBOW": 143,
+        "CYLINDER": 143
+      },
+      "nativeCodes": {
+        "4": 143,
+        "8": 143
+      }
+    },
+    {
+      "family": "flange",
+      "primitiveCount": 234,
+      "nodeCount": 117,
+      "bboxMinM": [
+        -0.394,
+        -285.469,
+        -0.394
+      ],
+      "bboxMaxM": [
+        508.212,
+        50.221,
+        6.225
+      ],
+      "extentM": [
+        508.606,
+        335.69,
+        6.619
+      ],
+      "maxPrimitiveSpanM": 1.124,
+      "renderKinds": {
+        "CYLINDER": 230,
+        "FLANGE": 4
+      },
+      "nativeCodes": {
+        "7": 4,
+        "8": 230
+      }
+    },
+    {
+      "family": "other",
+      "primitiveCount": 27,
+      "nodeCount": 27,
+      "bboxMinM": [
+        -76.447,
+        -281.048,
+        0.497
+      ],
+      "bboxMaxM": [
+        505.056,
+        1.922,
+        2.497
+      ],
+      "extentM": [
+        581.503,
+        282.97,
+        2
+      ],
+      "maxPrimitiveSpanM": 0.556,
+      "renderKinds": {
+        "CYLINDER": 27
+      },
+      "nativeCodes": {
+        "8": 27
+      }
+    },
+    {
+      "family": "pipe",
+      "primitiveCount": 508,
+      "nodeCount": 469,
+      "bboxMinM": [
+        -139.86,
+        -295.65,
+        -0.266
+      ],
+      "bboxMaxM": [
+        508.849,
+        49.922,
+        7.806
+      ],
+      "extentM": [
+        648.708,
+        345.572,
+        8.073
+      ],
+      "maxPrimitiveSpanM": 334.297,
+      "renderKinds": {
+        "CYLINDER": 508
+      },
+      "nativeCodes": {
+        "8": 508
+      }
+    },
+    {
+      "family": "support",
+      "primitiveCount": 3026,
+      "nodeCount": 421,
+      "bboxMinM": [
+        -140.187,
+        -295.977,
+        -0.494
+      ],
+      "bboxMaxM": [
+        509.067,
+        48.043,
+        7.724
+      ],
+      "extentM": [
+        649.254,
+        344.02,
+        8.218
+      ],
+      "maxPrimitiveSpanM": 0.352,
+      "renderKinds": {
+        "SPHERE": 421,
+        "CYLINDER": 2605
+      },
+      "nativeCodes": {
+        "8": 2605,
+        "9": 421
+      }
+    },
+    {
+      "family": "valve",
+      "primitiveCount": 150,
+      "nodeCount": 30,
+      "bboxMinM": [
+        -0.394,
+        -281.123,
+        -0.394
+      ],
+      "bboxMaxM": [
+        504.339,
+        10.29,
+        3.842
+      ],
+      "extentM": [
+        504.733,
+        291.413,
+        4.235
+      ],
+      "maxPrimitiveSpanM": 1.188,
+      "renderKinds": {
+        "CYLINDER": 120,
+        "SPHERE": 30
+      },
+      "nativeCodes": {
+        "8": 120,
+        "9": 30
+      }
+    }
+  ],
+  "checks": {
+    "code4ElbowRenderKindCount": 143,
+    "elbowNativeCode4Count": 143,
+    "elbowWithinPipeEnvelopePlus10m": true,
+    "supportPrimitiveCount": 3026,
+    "supportWithinPlantEnvelopePlus10m": true
+  }
+}

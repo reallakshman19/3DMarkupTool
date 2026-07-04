@@ -1,0 +1,3329 @@
+{
+  "status": "Fit All active",
+  "diagnostics": {
+    "schemaVersion": "browser-rvm-parser/v3",
+    "mode": "browser-safe-rvm-scan",
+    "parseFidelity": "PARTIAL_BINARY_PRIM_RECORDS_CPP_MAT3X4_WORLD_TRANSFORMED",
+    "fileName": "BM_CII_AML78_export_v2_safe_inputxml.rvm",
+    "byteLength": 673032,
+    "printableStringCount": 4400,
+    "rvmRecordCount": 7208,
+    "rvmContainerCount": 1211,
+    "binaryPrimitiveRecordCount": 4784,
+    "structuredRecordCount": 0,
+    "primitiveCandidateCount": 4784,
+    "genericMarkerCount": 0,
+    "rvmRecordTags": {
+      "CNTB": 1211,
+      "CNTE": 1211,
+      "HEAD": 1,
+      "MODL": 1,
+      "PRIM": 4784
+    },
+    "selectedEndianProbe": "be-f32",
+    "numericSampleCount": 27988,
+    "unsupportedBinaryDecoding": false,
+    "warning": "Browser fallback decoded AVEVA wide-tag RVM records and PRIM local bounding boxes from the binary stream. Primitive meshes are still approximate until full primitive parameter decoding is added.",
+    "sampleStrings": [
+      {
+        "offset": 32,
+        "text": "inputxml-rvm-standalone"
+      },
+      {
+        "offset": 64,
+        "text": "2026-07-03T20:37:56.715Z"
+      },
+      {
+        "offset": 96,
+        "text": "Codex"
+      },
+      {
+        "offset": 108,
+        "text": "UTF-8"
+      },
+      {
+        "offset": 148,
+        "text": "INPUTXML"
+      },
+      {
+        "offset": 164,
+        "text": "INPUTXML_RVM_MODEL"
+      },
+      {
+        "offset": 216,
+        "text": "/BM_CII"
+      },
+      {
+        "offset": 272,
+        "text": "/BM_CII-CU-PI"
+      },
+      {
+        "offset": 336,
+        "text": "/BM_CII-CU-PI-P"
+      },
+      {
+        "offset": 400,
+        "text": "PE_001_FLANGE_PAIR_10_TO_20"
+      },
+      {
+        "offset": 728,
+        "text": "PE_002_PIPE_20_TO_30"
+      },
+      {
+        "offset": 940,
+        "text": "PE_003_PIPE_30_TO_40"
+      },
+      {
+        "offset": 1152,
+        "text": "PE_004_PIPE_40_TO_50"
+      },
+      {
+        "offset": 1364,
+        "text": "PE_005_PIPE_50_TO_55"
+      },
+      {
+        "offset": 1496,
+        "text": "CK33CK33C"
+      },
+      {
+        "offset": 1508,
+        "text": "CK33C"
+      },
+      {
+        "offset": 1605,
+        "text": "K33C[t"
+      },
+      {
+        "offset": 1616,
+        "text": "CK33C[t"
+      },
+      {
+        "offset": 1717,
+        "text": "K33C[t"
+      },
+      {
+        "offset": 1728,
+        "text": "CK33C[t"
+      },
+      {
+        "offset": 1829,
+        "text": "K33C[t"
+      },
+      {
+        "offset": 1840,
+        "text": "CK33C[t"
+      },
+      {
+        "offset": 1912,
+        "text": "PE_006_PIPE_55_TO_63"
+      },
+      {
+        "offset": 2044,
+        "text": "CK33CK33D2@"
+      },
+      {
+        "offset": 2056,
+        "text": "CK33D"
+      },
+      {
+        "offset": 2124,
+        "text": "PE_007_PIPE_63_TO_65"
+      },
+      {
+        "offset": 2256,
+        "text": "CK33CK33C"
+      },
+      {
+        "offset": 2268,
+        "text": "CK33Da"
+      },
+      {
+        "offset": 2365,
+        "text": "K33C[t"
+      },
+      {
+        "offset": 2376,
+        "text": "CK33C[t"
+      },
+      {
+        "offset": 2477,
+        "text": "K33C[t"
+      },
+      {
+        "offset": 2488,
+        "text": "CK33C[t"
+      },
+      {
+        "offset": 2589,
+        "text": "K33C[t"
+      },
+      {
+        "offset": 2600,
+        "text": "CK33C[t"
+      },
+      {
+        "offset": 2672,
+        "text": "PE_008_PIPE_65_TO_80"
+      },
+      {
+        "offset": 2804,
+        "text": "CK33CK33B"
+      },
+      {
+        "offset": 2816,
+        "text": "CK33CF@"
+      },
+      {
+        "offset": 2916,
+        "text": "CK33CK33A"
+      },
+      {
+        "offset": 2928,
+        "text": "CK33BU"
+      },
+      {
+        "offset": 3027,
+        "text": "yCK33CK33A"
+      },
+      {
+        "offset": 3039,
+        "text": "yCK33BT"
+      },
+      {
+        "offset": 3139,
+        "text": "yCK33CK33A"
+      },
+      {
+        "offset": 3151,
+        "text": "yCK33BT"
+      },
+      {
+        "offset": 3252,
+        "text": "CK33CK33A"
+      },
+      {
+        "offset": 3264,
+        "text": "CK33BU"
+      },
+      {
+        "offset": 3332,
+        "text": "PE_009_PIPE_80_TO_90"
+      },
+      {
+        "offset": 3463,
+        "text": ",CK33CK33B"
+      },
+      {
+        "offset": 3475,
+        "text": ",CK33C"
+      },
+      {
+        "offset": 3992,
+        "text": "PE_010_PIPE_90_TO_96"
+      },
+      {
+        "offset": 4139,
+        "text": "fD}N"
+      },
+      {
+        "offset": 4204,
+        "text": "PE_011_BEND_96_TO_100"
+      },
+      {
+        "offset": 4864,
+        "text": "PE_012_PIPE_100_TO_106"
+      },
+      {
+        "offset": 5076,
+        "text": "PE_013_PIPE_106_TO_110"
+      },
+      {
+        "offset": 5288,
+        "text": "PE_014_PIPE_110_TO_120"
+      },
+      {
+        "offset": 5500,
+        "text": "PE_015_BEND_120_TO_130"
+      },
+      {
+        "offset": 5716,
+        "text": "8. /@"
+      },
+      {
+        "offset": 5811,
+        "text": "`:d?*"
+      },
+      {
+        "offset": 6041,
+        "text": ". /9"
+      },
+      {
+        "offset": 6160,
+        "text": "PE_016_PIPE_130_TO_140"
+      },
+      {
+        "offset": 6372,
+        "text": "PE_017_BEND_140_TO_150"
+      },
+      {
+        "offset": 6519,
+        "text": "fDp&"
+      },
+      {
+        "offset": 6577,
+        "text": ". /9"
+      },
+      {
+        "offset": 6795,
+        "text": "`:d?*"
+      },
+      {
+        "offset": 6823,
+        "text": "j?(\""
+      },
+      {
+        "offset": 6924,
+        "text": "8. /@"
+      },
+      {
+        "offset": 7032,
+        "text": "PE_018_PIPE_150_TO_160"
+      },
+      {
+        "offset": 7244,
+        "text": "PE_019_PIPE_160_TO_165"
+      },
+      {
+        "offset": 7456,
+        "text": "PE_020_PIPE_165_TO_170"
+      },
+      {
+        "offset": 7668,
+        "text": "PE_021_FLANGE_PAIR_170_TO_190"
+      },
+      {
+        "offset": 8000,
+        "text": "PE_022_VALVE_190_TO_195"
+      },
+      {
+        "offset": 8656,
+        "text": "PE_023_FLANGE_PAIR_195_TO_200"
+      },
+      {
+        "offset": 8770,
+        "text": ",JA&"
+      },
+      {
+        "offset": 8882,
+        "text": ",JA'"
+      },
+      {
+        "offset": 8988,
+        "text": "PE_024_PIPE_200_TO_210"
+      },
+      {
+        "offset": 9200,
+        "text": "PE_025_PIPE_210_TO_215"
+      },
+      {
+        "offset": 9412,
+        "text": "PE_026_PIPE_215_TO_220"
+      },
+      {
+        "offset": 9624,
+        "text": "PE_027_FLANGE_PAIR_220_TO_223"
+      },
+      {
+        "offset": 9956,
+        "text": "PE_028_FLANGE_PAIR_223_TO_225"
+      },
+      {
+        "offset": 10288,
+        "text": "PE_029_FLANGE_PAIR_225_TO_230"
+      },
+      {
+        "offset": 10404,
+        "text": "A633"
+      },
+      {
+        "offset": 10620,
+        "text": "PE_030_PIPE_230_TO_240"
+      },
+      {
+        "offset": 10832,
+        "text": "PE_031_PIPE_240_TO_250"
+      },
+      {
+        "offset": 10940,
+        "text": "A;;d"
+      },
+      {
+        "offset": 11044,
+        "text": "PE_032_FLANGE_PAIR_250_TO_255"
+      },
+      {
+        "offset": 11376,
+        "text": "PE_033_FLANGE_PAIR_255_TO_260"
+      },
+      {
+        "offset": 11708,
+        "text": "PE_034_PIPE_260_TO_263"
+      },
+      {
+        "offset": 11847,
+        "text": "fC:@"
+      },
+      {
+        "offset": 11928,
+        "text": "AD=V"
+      },
+      {
+        "offset": 12030,
+        "text": "PZ:1aI"
+      },
+      {
+        "offset": 12040,
+        "text": "AGUf"
+      },
+      {
+        "offset": 12256,
+        "text": "PE_035_PIPE_263_TO_264"
+      },
+      {
+        "offset": 12354,
+        "text": "PZ:1aI"
+      },
+      {
+        "offset": 12468,
+        "text": "PE_036_FLANGE_PAIR_264_TO_266"
+      },
+      {
+        "offset": 12574,
+        "text": "PZ:1aJ"
+      },
+      {
+        "offset": 12686,
+        "text": "PZ:1aJ"
+      },
+      {
+        "offset": 12800,
+        "text": "PE_037_FLANGE_PAIR_266_TO_267"
+      },
+      {
+        "offset": 12838,
+        "text": "dXCRif"
+      },
+      {
+        "offset": 12906,
+        "text": "PZ:1aJ"
+      },
+      {
+        "offset": 13018,
+        "text": "PZ:1aJ"
+      },
+      {
+        "offset": 13132,
+        "text": "PE_038_PIPE_263_TO_265"
+      },
+      {
+        "offset": 13240,
+        "text": "AIgm"
+      },
+      {
+        "offset": 13271,
+        "text": "fC:@"
+      },
+      {
+        "offset": 13344,
+        "text": "PE_039_FLANGE_PAIR_265_TO_270"
+      },
+      {
+        "offset": 13676,
+        "text": "PE_040_FLANGE_PAIR_270_TO_340"
+      },
+      {
+        "offset": 14008,
+        "text": "PE_041_PIPE_340_TO_350"
+      },
+      {
+        "offset": 14220,
+        "text": "PE_042_PIPE_350_TO_360"
+      },
+      {
+        "offset": 14432,
+        "text": "PE_043_PIPE_360_TO_365"
+      },
+      {
+        "offset": 14644,
+        "text": "PE_044_PIPE_365_TO_370"
+      },
+      {
+        "offset": 14752,
+        "text": "A_=k"
+      },
+      {
+        "offset": 14975,
+        "text": "aAb{p"
+      },
+      {
+        "offset": 15007,
+        "text": "fA{_"
+      },
+      {
+        "offset": 15119,
+        "text": "fA{_"
+      },
+      {
+        "offset": 15208,
+        "text": "?-|P"
+      },
+      {
+        "offset": 15304,
+        "text": "PE_045_PIPE_370_TO_380"
+      },
+      {
+        "offset": 15411,
+        "text": "^AdX"
+      },
+      {
+        "offset": 15868,
+        "text": "?2sb"
+      },
+      {
+        "offset": 15964,
+        "text": "PE_046_FLANGE_PAIR_380_TO_385"
+      },
+      {
+        "offset": 16296,
+        "text": "PE_047_FLANGE_PAIR_385_TO_390"
+      },
+      {
+        "offset": 16628,
+        "text": "PE_048_PIPE_390_TO_400"
+      },
+      {
+        "offset": 16840,
+        "text": "PE_049_FLANGE_PAIR_400_TO_1"
+      },
+      {
+        "offset": 17168,
+        "text": "PE_050_FLANGE_PAIR_410_TO_415"
+      },
+      {
+        "offset": 17500,
+        "text": "PE_051_UNSPECIFIED_415_TO_420"
+      },
+      {
+        "offset": 17951,
+        "text": "`A{,"
+      },
+      {
+        "offset": 18063,
+        "text": "1A{E"
+      },
+      {
+        "offset": 18072,
+        "text": "?<:r"
+      },
+      {
+        "offset": 18168,
+        "text": "PE_052_PIPE_65_TO_70"
+      },
+      {
+        "offset": 18300,
+        "text": "CK33CK33C"
+      },
+      {
+        "offset": 18312,
+        "text": "CK33C"
+      },
+      {
+        "offset": 18380,
+        "text": "PE_053_PIPE_70_TO_73"
+      },
+      {
+        "offset": 18512,
+        "text": "CK33CK33C2"
+      },
+      {
+        "offset": 18524,
+        "text": "CK33C"
+      },
+      {
+        "offset": 18592,
+        "text": "PE_054_PIPE_73_TO_71"
+      },
+      {
+        "offset": 18804,
+        "text": "PE_055_BEND_71_TO_450"
+      },
+      {
+        "offset": 19029,
+        "text": "}kE;a"
+      },
+      {
+        "offset": 19114,
+        "text": "?%:c"
+      },
+      {
+        "offset": 19141,
+        "text": "zCZ<"
+      },
+      {
+        "offset": 19331,
+        "text": "5:|}c:"
+      },
+      {
+        "offset": 19464,
+        "text": "PE_056_PIPE_450_TO_460"
+      },
+      {
+        "offset": 19543,
+        "text": "5:|}c:"
+      },
+      {
+        "offset": 19564,
+        "text": ":|}c9"
+      },
+      {
+        "offset": 19577,
+        "text": "K/->c"
+      },
+      {
+        "offset": 19676,
+        "text": "PE_057_BEND_460_TO_470"
+      },
+      {
+        "offset": 19755,
+        "text": "5:|}c:"
+      },
+      {
+        "offset": 19776,
+        "text": ":|}c9"
+      },
+      {
+        "offset": 19867,
+        "text": "5:|}c:"
+      },
+      {
+        "offset": 20016,
+        "text": "?#Gk"
+      },
+      {
+        "offset": 20098,
+        "text": "?%:c"
+      },
+      {
+        "offset": 20336,
+        "text": "PE_058_PIPE_470_TO_480"
+      },
+      {
+        "offset": 20450,
+        "text": "7L?+"
+      },
+      {
+        "offset": 20548,
+        "text": "PE_059_PIPE_480_TO_485"
+      },
+      {
+        "offset": 20662,
+        "text": "7L?+"
+      },
+      {
+        "offset": 20760,
+        "text": "PE_060_PIPE_485_TO_490"
+      },
+      {
+        "offset": 20874,
+        "text": "7L?+"
+      },
+      {
+        "offset": 20972,
+        "text": "PE_061_FLANGE_PAIR_490_TO_510"
+      },
+      {
+        "offset": 21094,
+        "text": "7L?+"
+      },
+      {
+        "offset": 21206,
+        "text": "7L?+"
+      },
+      {
+        "offset": 21304,
+        "text": "PE_062_VALVE_510_TO_515"
+      },
+      {
+        "offset": 21418,
+        "text": "7L?+"
+      },
+      {
+        "offset": 21530,
+        "text": "7L?+"
+      },
+      {
+        "offset": 21642,
+        "text": "7L?+"
+      },
+      {
+        "offset": 21750,
+        "text": "7L?+"
+      },
+      {
+        "offset": 21862,
+        "text": "7L?+"
+      },
+      {
+        "offset": 21960,
+        "text": "PE_063_FLANGE_PAIR_515_TO_520"
+      },
+      {
+        "offset": 22082,
+        "text": "7L?+"
+      },
+      {
+        "offset": 22194,
+        "text": "7L?+"
+      },
+      {
+        "offset": 22292,
+        "text": "PE_064_PIPE_520_TO_530"
+      },
+      {
+        "offset": 22406,
+        "text": "7L?+"
+      },
+      {
+        "offset": 22504,
+        "text": "PE_065_PIPE_530_TO_535"
+      },
+      {
+        "offset": 22618,
+        "text": "7L?+"
+      },
+      {
+        "offset": 22716,
+        "text": "PE_066_PIPE_535_TO_540"
+      },
+      {
+        "offset": 22830,
+        "text": "7L?+"
+      },
+      {
+        "offset": 22928,
+        "text": "PE_067_FLANGE_PAIR_540_TO_543"
+      },
+      {
+        "offset": 23050,
+        "text": "7L?+"
+      },
+      {
+        "offset": 23162,
+        "text": "7L?+"
+      },
+      {
+        "offset": 23260,
+        "text": "PE_068_FLANGE_PAIR_543_TO_545"
+      },
+      {
+        "offset": 23292,
+        "text": "F1?M"
+      },
+      {
+        "offset": 23376,
+        "text": "A5X_"
+      },
+      {
+        "offset": 23382,
+        "text": "7L?+"
+      },
+      {
+        "offset": 23494,
+        "text": "7L?+"
+      },
+      {
+        "offset": 23592,
+        "text": "PE_069_FLANGE_PAIR_545_TO_550"
+      },
+      {
+        "offset": 23624,
+        "text": "F2yM"
+      },
+      {
+        "offset": 23714,
+        "text": "7L?+"
+      },
+      {
+        "offset": 23826,
+        "text": "7L?+"
+      },
+      {
+        "offset": 23924,
+        "text": "PE_070_PIPE_550_TO_560"
+      },
+      {
+        "offset": 23948,
+        "text": "F4sM"
+      },
+      {
+        "offset": 24038,
+        "text": "7L?+"
+      },
+      {
+        "offset": 24136,
+        "text": "PE_071_PIPE_560_TO_570"
+      },
+      {
+        "offset": 24244,
+        "text": "A;Q4"
+      },
+      {
+        "offset": 24250,
+        "text": "7L?+"
+      },
+      {
+        "offset": 24348,
+        "text": "PE_072_FLANGE_PAIR_570_TO_575"
+      },
+      {
+        "offset": 24380,
+        "text": "F9EM"
+      },
+      {
+        "offset": 24470,
+        "text": "7L?+"
+      },
+      {
+        "offset": 24576,
+        "text": "A>0o"
+      },
+      {
+        "offset": 24582,
+        "text": "7L?+"
+      },
+      {
+        "offset": 24680,
+        "text": "PE_073_FLANGE_PAIR_575_TO_580"
+      },
+      {
+        "offset": 24802,
+        "text": "7L?+"
+      },
+      {
+        "offset": 24914,
+        "text": "7L?+"
+      },
+      {
+        "offset": 25012,
+        "text": "PE_074_PIPE_580_TO_581"
+      },
+      {
+        "offset": 25126,
+        "text": "7L?+"
+      },
+      {
+        "offset": 25151,
+        "text": "fC:@"
+      },
+      {
+        "offset": 25232,
+        "text": "ADS&"
+      },
+      {
+        "offset": 25238,
+        "text": "7L?+"
+      },
+      {
+        "offset": 25334,
+        "text": "PZ:1aI"
+      },
+      {
+        "offset": 25344,
+        "text": "AGk6"
+      },
+      {
+        "offset": 25462,
+        "text": "7L?+"
+      },
+      {
+        "offset": 25560,
+        "text": "PE_075_PIPE_581_TO_582"
+      },
+      {
+        "offset": 25658,
+        "text": "PZ:1aI"
+      },
+      {
+        "offset": 25772,
+        "text": "PE_076_FLANGE_PAIR_582_TO_583"
+      },
+      {
+        "offset": 25878,
+        "text": "PZ:1aJ"
+      },
+      {
+        "offset": 25990,
+        "text": "PZ:1aJ"
+      },
+      {
+        "offset": 26104,
+        "text": "PE_077_FLANGE_PAIR_583_TO_584"
+      },
+      {
+        "offset": 26142,
+        "text": "qaCR"
+      },
+      {
+        "offset": 26210,
+        "text": "PZ:1aJ"
+      },
+      {
+        "offset": 26322,
+        "text": "PZ:1aJ"
+      },
+      {
+        "offset": 26339,
+        "text": "T>Dc"
+      },
+      {
+        "offset": 26436,
+        "text": "PE_078_PIPE_581_TO_585"
+      },
+      {
+        "offset": 26544,
+        "text": "AI}<"
+      },
+      {
+        "offset": 26550,
+        "text": "7L?+"
+      },
+      {
+        "offset": 26575,
+        "text": "fC:@"
+      },
+      {
+        "offset": 26648,
+        "text": "PE_079_FLANGE_PAIR_585_TO_590"
+      },
+      {
+        "offset": 26770,
+        "text": "7L?+"
+      },
+      {
+        "offset": 26882,
+        "text": "7L?+"
+      },
+      {
+        "offset": 26980,
+        "text": "PE_080_FLANGE_PAIR_590_TO_660"
+      },
+      {
+        "offset": 27012,
+        "text": "FJqM"
+      },
+      {
+        "offset": 27102,
+        "text": "7L?+"
+      },
+      {
+        "offset": 27214,
+        "text": "7L?+"
+      },
+      {
+        "offset": 27312,
+        "text": "PE_081_PIPE_660_TO_670"
+      },
+      {
+        "offset": 27426,
+        "text": "7L?+"
+      },
+      {
+        "offset": 27524,
+        "text": "PE_082_PIPE_670_TO_680"
+      },
+      {
+        "offset": 27638,
+        "text": "7L?+"
+      },
+      {
+        "offset": 27736,
+        "text": "PE_083_PIPE_680_TO_685"
+      },
+      {
+        "offset": 27760,
+        "text": "FUQM"
+      },
+      {
+        "offset": 27850,
+        "text": "7L?+"
+      },
+      {
+        "offset": 27948,
+        "text": "PE_084_PIPE_685_TO_690"
+      },
+      {
+        "offset": 28056,
+        "text": "A_Y`"
+      },
+      {
+        "offset": 28062,
+        "text": "7L?+"
+      },
+      {
+        "offset": 28174,
+        "text": "7L?+"
+      },
+      {
+        "offset": 28286,
+        "text": "7L?+"
+      },
+      {
+        "offset": 28398,
+        "text": "7L?,"
+      },
+      {
+        "offset": 28510,
+        "text": "7L?-h"
+      },
+      {
+        "offset": 28608,
+        "text": "PE_085_PIPE_690_TO_700"
+      },
+      {
+        "offset": 28715,
+        "text": "^Adz6"
+      },
+      {
+        "offset": 28722,
+        "text": "7L?/jp"
+      },
+      {
+        "offset": 28834,
+        "text": "7L?1:"
+      },
+      {
+        "offset": 28946,
+        "text": "7L?1"
+      },
+      {
+        "offset": 29058,
+        "text": "7L?2.l"
+      },
+      {
+        "offset": 29170,
+        "text": "7L?2_#"
+      },
+      {
+        "offset": 29268,
+        "text": "PE_086_FLANGE_PAIR_700_TO_705"
+      },
+      {
+        "offset": 29300,
+        "text": "Fa8M"
+      },
+      {
+        "offset": 29390,
+        "text": "7L?2kQ"
+      },
+      {
+        "offset": 29502,
+        "text": "7L?2kQ"
+      },
+      {
+        "offset": 29600,
+        "text": "PE_087_FLANGE_PAIR_705_TO_710"
+      },
+      {
+        "offset": 29722,
+        "text": "7L?2kQ"
+      },
+      {
+        "offset": 29834,
+        "text": "7L?2kQ"
+      },
+      {
+        "offset": 29932,
+        "text": "PE_088_PIPE_710_TO_720"
+      },
+      {
+        "offset": 29956,
+        "text": "FjUM"
+      },
+      {
+        "offset": 30046,
+        "text": "7L?2q7"
+      },
+      {
+        "offset": 30144,
+        "text": "PE_089_FLANGE_PAIR_720_TO_2"
+      },
+      {
+        "offset": 30180,
+        "text": "D.HR"
+      },
+      {
+        "offset": 30262,
+        "text": "7L?2w"
+      },
+      {
+        "offset": 30374,
+        "text": "7L?2w"
+      },
+      {
+        "offset": 30472,
+        "text": "PE_090_FLANGE_PAIR_730_TO_735"
+      },
+      {
+        "offset": 30512,
+        "text": "D.HR"
+      },
+      {
+        "offset": 30594,
+        "text": "7L?2w"
+      },
+      {
+        "offset": 30706,
+        "text": "7L?2w"
+      },
+      {
+        "offset": 30804,
+        "text": "PE_091_UNSPECIFIED_735_TO_740"
+      },
+      {
+        "offset": 30836,
+        "text": "FtmM"
+      },
+      {
+        "offset": 30844,
+        "text": "D.HR"
+      },
+      {
+        "offset": 30926,
+        "text": "7L?2w"
+      },
+      {
+        "offset": 31038,
+        "text": "7L?2"
+      },
+      {
+        "offset": 31150,
+        "text": "7L?4^"
+      },
+      {
+        "offset": 31255,
+        "text": "`A{C"
+      },
+      {
+        "offset": 31262,
+        "text": "7L?7jj"
+      },
+      {
+        "offset": 31367,
+        "text": "1A{["
+      },
+      {
+        "offset": 31374,
+        "text": "7L?;"
+      },
+      {
+        "offset": 31472,
+        "text": "PE_092_PIPE_55_TO_60"
+      },
+      {
+        "offset": 31604,
+        "text": "CK33CK33C"
+      },
+      {
+        "offset": 31616,
+        "text": "CK33C"
+      },
+      {
+        "offset": 31684,
+        "text": "PE_093_PIPE_60_TO_62"
+      },
+      {
+        "offset": 31816,
+        "text": "CK33CK33C2"
+      }
+    ],
+    "sampleBinaryRecords": [
+      {
+        "offset": 0,
+        "tag": "HEAD",
+        "nextOffset": 116,
+        "byteLength": 116,
+        "code": 6,
+        "sampleText": "inputxml-rvm-standalone"
+      },
+      {
+        "offset": 116,
+        "tag": "MODL",
+        "nextOffset": 184,
+        "byteLength": 68,
+        "code": 3,
+        "sampleText": "INPUTXML"
+      },
+      {
+        "offset": 184,
+        "tag": "CNTB",
+        "nextOffset": 240,
+        "byteLength": 56,
+        "code": 2,
+        "sampleText": "/BM_CII"
+      },
+      {
+        "offset": 240,
+        "tag": "CNTB",
+        "nextOffset": 304,
+        "byteLength": 64,
+        "code": 4,
+        "sampleText": "/BM_CII-CU-PI"
+      },
+      {
+        "offset": 304,
+        "tag": "CNTB",
+        "nextOffset": 368,
+        "byteLength": 64,
+        "code": 4,
+        "sampleText": "/BM_CII-CU-PI-P"
+      },
+      {
+        "offset": 368,
+        "tag": "CNTB",
+        "nextOffset": 444,
+        "byteLength": 76,
+        "code": 7,
+        "sampleText": "PE_001_FLANGE_PAIR_10_TO_20"
+      },
+      {
+        "offset": 444,
+        "tag": "PRIM",
+        "nextOffset": 556,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": ""
+      },
+      {
+        "offset": 556,
+        "tag": "PRIM",
+        "nextOffset": 668,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": ""
+      },
+      {
+        "offset": 668,
+        "tag": "CNTE",
+        "nextOffset": 696,
+        "byteLength": 28,
+        "code": 67,
+        "sampleText": ""
+      },
+      {
+        "offset": 696,
+        "tag": "CNTB",
+        "nextOffset": 768,
+        "byteLength": 72,
+        "code": 6,
+        "sampleText": "PE_002_PIPE_20_TO_30"
+      },
+      {
+        "offset": 768,
+        "tag": "PRIM",
+        "nextOffset": 880,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": ""
+      },
+      {
+        "offset": 880,
+        "tag": "CNTE",
+        "nextOffset": 908,
+        "byteLength": 28,
+        "code": 67,
+        "sampleText": ""
+      },
+      {
+        "offset": 908,
+        "tag": "CNTB",
+        "nextOffset": 980,
+        "byteLength": 72,
+        "code": 6,
+        "sampleText": "PE_003_PIPE_30_TO_40"
+      },
+      {
+        "offset": 980,
+        "tag": "PRIM",
+        "nextOffset": 1092,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": ""
+      },
+      {
+        "offset": 1092,
+        "tag": "CNTE",
+        "nextOffset": 1120,
+        "byteLength": 28,
+        "code": 67,
+        "sampleText": ""
+      },
+      {
+        "offset": 1120,
+        "tag": "CNTB",
+        "nextOffset": 1192,
+        "byteLength": 72,
+        "code": 6,
+        "sampleText": "PE_004_PIPE_40_TO_50"
+      },
+      {
+        "offset": 1192,
+        "tag": "PRIM",
+        "nextOffset": 1304,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": ""
+      },
+      {
+        "offset": 1304,
+        "tag": "CNTE",
+        "nextOffset": 1332,
+        "byteLength": 28,
+        "code": 67,
+        "sampleText": ""
+      },
+      {
+        "offset": 1332,
+        "tag": "CNTB",
+        "nextOffset": 1404,
+        "byteLength": 72,
+        "code": 6,
+        "sampleText": "PE_005_PIPE_50_TO_55"
+      },
+      {
+        "offset": 1404,
+        "tag": "PRIM",
+        "nextOffset": 1516,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "CK33CK33C"
+      },
+      {
+        "offset": 1516,
+        "tag": "PRIM",
+        "nextOffset": 1628,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "K33C[t"
+      },
+      {
+        "offset": 1628,
+        "tag": "PRIM",
+        "nextOffset": 1740,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "K33C[t"
+      },
+      {
+        "offset": 1740,
+        "tag": "PRIM",
+        "nextOffset": 1852,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "K33C[t"
+      },
+      {
+        "offset": 1852,
+        "tag": "CNTE",
+        "nextOffset": 1880,
+        "byteLength": 28,
+        "code": 67,
+        "sampleText": ""
+      },
+      {
+        "offset": 1880,
+        "tag": "CNTB",
+        "nextOffset": 1952,
+        "byteLength": 72,
+        "code": 6,
+        "sampleText": "PE_006_PIPE_55_TO_63"
+      },
+      {
+        "offset": 1952,
+        "tag": "PRIM",
+        "nextOffset": 2064,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "CK33CK33D2@"
+      },
+      {
+        "offset": 2064,
+        "tag": "CNTE",
+        "nextOffset": 2092,
+        "byteLength": 28,
+        "code": 67,
+        "sampleText": ""
+      },
+      {
+        "offset": 2092,
+        "tag": "CNTB",
+        "nextOffset": 2164,
+        "byteLength": 72,
+        "code": 6,
+        "sampleText": "PE_007_PIPE_63_TO_65"
+      },
+      {
+        "offset": 2164,
+        "tag": "PRIM",
+        "nextOffset": 2276,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "CK33CK33C"
+      },
+      {
+        "offset": 2276,
+        "tag": "PRIM",
+        "nextOffset": 2388,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "K33C[t"
+      },
+      {
+        "offset": 2388,
+        "tag": "PRIM",
+        "nextOffset": 2500,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "K33C[t"
+      },
+      {
+        "offset": 2500,
+        "tag": "PRIM",
+        "nextOffset": 2612,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "K33C[t"
+      },
+      {
+        "offset": 2612,
+        "tag": "CNTE",
+        "nextOffset": 2640,
+        "byteLength": 28,
+        "code": 67,
+        "sampleText": ""
+      },
+      {
+        "offset": 2640,
+        "tag": "CNTB",
+        "nextOffset": 2712,
+        "byteLength": 72,
+        "code": 6,
+        "sampleText": "PE_008_PIPE_65_TO_80"
+      },
+      {
+        "offset": 2712,
+        "tag": "PRIM",
+        "nextOffset": 2824,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "CK33CK33B"
+      },
+      {
+        "offset": 2824,
+        "tag": "PRIM",
+        "nextOffset": 2936,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "CK33CK33A"
+      },
+      {
+        "offset": 2936,
+        "tag": "PRIM",
+        "nextOffset": 3048,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "yCK33CK33A"
+      },
+      {
+        "offset": 3048,
+        "tag": "PRIM",
+        "nextOffset": 3160,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "yCK33CK33A"
+      },
+      {
+        "offset": 3160,
+        "tag": "PRIM",
+        "nextOffset": 3272,
+        "byteLength": 112,
+        "code": 8,
+        "sampleText": "CK33CK33A"
+      },
+      {
+        "offset": 3272,
+        "tag": "CNTE",
+        "nextOffset": 3300,
+        "byteLength": 28,
+        "code": 67,
+        "sampleText": ""
+      }
+    ],
+    "transformParserSchemaVersion": "browser-rvm-transform-parser/v5-primitive-capability",
+    "rvmPrimitiveCapabilityRegistryVersion": "20260628-rvm-primitive-capability-registry-1",
+    "rvmPrimitiveCapabilityCounts": {
+      "8:CYLINDER": 4329,
+      "9:SPHERE": 451,
+      "7:SNOUT": 4
+    },
+    "rvmPrimitiveCapabilityStatusCounts": {
+      "stable-writer-ready": 4780,
+      "explicit-legacy-unlock-required": 4
+    },
+    "rvmPrimitiveBlockedCodeCount": 0,
+    "rvmPrimitiveLegacyUnlockCodeCount": 4,
+    "rvmPrimitiveStableWriterCodeCount": 4780,
+    "rvmPrimTransformAppliedCount": 4784,
+    "rvmPrimTransformSkippedCount": 0,
+    "rvmPrimWorldBounds": [
+      -140.187107,
+      -295.977177,
+      -0.494,
+      509.067256,
+      50.220513,
+      7.806109
+    ],
+    "rvmPrimLegacyBounds": [
+      -393.700012,
+      -508.495346,
+      -167077.819683,
+      823.135864,
+      443.845913,
+      167082.180317
+    ],
+    "rvmPrimitiveKindCounts": {
+      "Cylinder": 4329,
+      "Sphere": 451,
+      "Snout": 4
+    },
+    "rvmNativeParamDecodedCount": 4784,
+    "rvmFacetGroupDecodedCount": 0,
+    "rvmFacetGroupPolygonCount": 0,
+    "rvmFacetGroupContourCount": 0,
+    "rvmFacetGroupVertexCount": 0,
+    "rvmFacetGroupDecodeSkippedCount": 0,
+    "rvmCppMat3x4LayoutApplied": true,
+    "rvmCppMat3x4ScaledRadiusApplied": 4784,
+    "hierarchyTransformSchemaVersion": "browser-rvm-hierarchy-transform-wrapper/v5-facetgroup-contract",
+    "hierarchySchemaVersion": "browser-rvm-hierarchy-wrapper/v6",
+    "hierarchyGrouped": true,
+    "hierarchyGroupCount": 1211,
+    "primitiveSemantics": "native-cntb-cnte-container-tree-cpp-mat3x4-facetgroup",
+    "primitiveSemanticsVersion": "rhbg-prim-code-map/v2",
+    "geometryQualityVersion": "rvm-geometry-quality/v2",
+    "geometryContractVersion": "rvm-browser-geometry-contract/v1",
+    "browserRvmTransformAwareHierarchy": true,
+    "browserRvmCppMat3x4Hierarchy": true,
+    "browserRvmNativeContainerHierarchy": true,
+    "browserRvmNativeContainerHierarchyDiagnostics": {
+      "schemaVersion": "browser-rvm-native-container-hierarchy/v1",
+      "applied": true,
+      "reason": "native-cntb-cnte-hierarchy",
+      "recordCount": 7208,
+      "containerCount": 1211,
+      "primitiveCount": 4784,
+      "recoveredNameCount": 4,
+      "unmatchedPrimitiveCount": 0,
+      "tagCounts": {
+        "HEAD": 1,
+        "MODL": 1,
+        "CNTB": 1211,
+        "PRIM": 4784,
+        "CNTE": 1211
+      }
+    },
+    "browserRvmScaleSafeContract": {
+      "schemaVersion": "browser-rvm-scale-safe-contract/v4-facetgroup-contract",
+      "appliedCount": 4784,
+      "cylinderContractCount": 4329,
+      "boxContractCount": 0,
+      "coneContractCount": 4,
+      "elbowContractCount": 0,
+      "flangeContractCount": 0,
+      "dishContractCount": 0,
+      "sphereContractCount": 451,
+      "facetGroupContractCount": 0,
+      "skippedCount": 0
+    },
+    "browserRvmWorkerEnabled": true,
+    "browserRvmWorkerFirstPipeline": true,
+    "browserRvmCompactInstructionTransfer": true,
+    "browserRvmNativeFacetGroupPrimaryTransformPreserved": true,
+    "browserRvmHierarchyReturnedToMainThread": false,
+    "browserRvmInstructionCount": 4784,
+    "browserRvmOriginalInstructionCount": 4784,
+    "browserRvmOversizedNonPipingSkippedCount": 0,
+    "browserRvmOversizedNonPipingFilter": {
+      "schemaVersion": "browser-rvm-instruction-filter/v6-code11-facet-x-diagnostic",
+      "enabled": true,
+      "originalCount": 4784,
+      "keptCount": 4784,
+      "skippedCount": 0,
+      "threshold": 5000,
+      "maxPrimitiveBoxSide": 50000,
+      "maxPrimitiveBoxSideUnit": "model-units-mm-safe",
+      "hideOversizedPrimitiveBoxes": false,
+      "skippedReasons": {},
+      "oversizedNonPipingHidden": 0,
+      "code11FacetGuardedCount": 0,
+      "code11FacetDecodedCount": 0,
+      "code11FacetWireframeFallbackCount": 0,
+      "code11FacetXMarkerCount": 0,
+      "policy": "keep-valid-plant-primitives-visible-hide-only-absurd-unprotected-non-piping-boxes-code11-facet-x-diagnostic"
+    },
+    "browserRvmCode11FacetGuardedCount": 0,
+    "browserRvmCode11FacetDecodedCount": 0,
+    "browserRvmCode11FacetWireframeFallbackCount": 0,
+    "browserRvmCode11FacetXMarkerCount": 0,
+    "browserRvmCppMat3x4LayoutApplied": true,
+    "browserRvmCppMat3x4ScaledRadiusApplied": 4784,
+    "browserRvmNativeParamDecodedCount": 4784,
+    "browserRvmFacetGroupDecodedCount": 0,
+    "browserRvmFacetGroupPolygonCount": 0,
+    "browserRvmFacetGroupContourCount": 0,
+    "browserRvmFacetGroupVertexCount": 0,
+    "browserRvmFacetGroupDecodeSkippedCount": 0,
+    "browserRvmPrimitiveKindCounts": {
+      "Cylinder": 4329,
+      "Sphere": 451,
+      "Snout": 4
+    },
+    "browserRvmManifestNodeLimit": 900,
+    "browserRvmManifestNodeTruncated": true,
+    "browserRvmManifestOriginalNodeCount": 1413,
+    "browserRvmWorkerTimingsMs": {
+      "parse": 473.11,
+      "attEnrichment": 164.2,
+      "renderInstructionGeneration": 559.09,
+      "manifest": 1.21
+    },
+    "browserRvmAtt": {
+      "schemaVersion": "browser-rvm-att-enricher/v1",
+      "attParserSchemaVersion": "browser-rvm-att-parser/v1",
+      "attAvailable": true,
+      "globalAttributeCount": 36,
+      "ownerCount": 0,
+      "ownerAttributeCount": 0,
+      "enrichedNodeCount": 5996,
+      "matchedOwnerCount": 0
+    },
+    "browserRvmRenderInstructions": {
+      "schemaVersion": "rvm-browser-render-instructions/v6-rvm-support-runtime-retired",
+      "instructionCount": 4784,
+      "contractCounts": {
+        "CYLINDER_BBOX": 4329,
+        "GENERIC_BBOX_PLACEHOLDER": 451,
+        "CONE_BBOX_PLACEHOLDER": 4
+      },
+      "kindCounts": {
+        "CYLINDER": 3429,
+        "RVM_PRIM_CODE_9": 351,
+        "FLANGE": 4,
+        "SUPPORT": 1000
+      },
+      "sourceCounts": {
+        "cpp-mat3x4-transform-axis-contract": 4784
+      },
+      "attCounts": {
+        "enriched": 4784,
+        "plain": 0
+      },
+      "embeddedInputXmlSupportMarkerSkippedCount": 0,
+      "embeddedInputXmlSupportMarkerDebugEnabled": false,
+      "embeddedInputXmlSupportMarkerDebugKey": "rvm.debug.showEmbeddedInputXmlSupportMarkers",
+      "supportRuntimeRetired": true,
+      "oversizedNonPipingFilter": {
+        "schemaVersion": "browser-rvm-instruction-filter/v6-code11-facet-x-diagnostic",
+        "enabled": true,
+        "originalCount": 4784,
+        "keptCount": 4784,
+        "skippedCount": 0,
+        "threshold": 5000,
+        "maxPrimitiveBoxSide": 50000,
+        "maxPrimitiveBoxSideUnit": "model-units-mm-safe",
+        "hideOversizedPrimitiveBoxes": false,
+        "skippedReasons": {},
+        "oversizedNonPipingHidden": 0,
+        "code11FacetGuardedCount": 0,
+        "code11FacetDecodedCount": 0,
+        "code11FacetWireframeFallbackCount": 0,
+        "code11FacetXMarkerCount": 0,
+        "policy": "keep-valid-plant-primitives-visible-hide-only-absurd-unprotected-non-piping-boxes-code11-facet-x-diagnostic"
+      },
+      "originalInstructionCount": 4784,
+      "filteredInstructionCount": 4784,
+      "oversizedNonPipingSkippedCount": 0,
+      "code11FacetGuardedCount": 0,
+      "code11FacetDecodedCount": 0,
+      "code11FacetWireframeFallbackCount": 0,
+      "code11FacetXMarkerCount": 0
+    },
+    "browserRvmWorkerFallback": false,
+    "browserRvmNativeFacetGroupPrimaryRenderer": true,
+    "browserRvmNativeFacetGroupPrimaryCount": 0,
+    "browserRvmNativeFacetGroupPrimaryPolygonCount": 0,
+    "browserRvmNativeFacetGroupPrimaryTriangleCount": 0,
+    "browserRvmProgressiveRenderEnabled": true,
+    "browserRvmRenderSceneEnabled": true,
+    "browserRvmRenderSchemaVersion": "rvm-browser-render-scene/v6-native-facetgroup-primary",
+    "browserRvmZoneSelection": {
+      "schemaVersion": "browser-rvm-zone-selection/v7-visual-quality-tree",
+      "selectorSource": "preload-manifest+instructions+synthetic",
+      "enabled": true,
+      "mode": "all",
+      "selectedZones": [],
+      "zoneDensities": {},
+      "visualQualityByZone": {},
+      "defaultVisualQuality": "full",
+      "maxDisplayedHierarchyLevel": 2,
+      "originalInstructionCount": 4784,
+      "afterZoneInstructionCount": 4784,
+      "renderedInstructionCount": 4784,
+      "skippedByZoneCount": 0,
+      "skippedByDensityCount": 0,
+      "skippedByVisualQualityHiddenCount": 0,
+      "visualQualityCounts": {
+        "full": 4784
+      }
+    },
+    "browserRvmLodSelection": {
+      "schemaVersion": "browser-rvm-visual-quality/v1-per-zone",
+      "perZoneVisualQuality": true,
+      "defaultVisualQuality": "full",
+      "skippedByLodCount": 0,
+      "hiddenByQualityCount": 0
+    },
+    "browserRvmRenderableCount": 4784,
+    "browserRvmSkippedCount": 0,
+    "browserRvmRenderPrimitiveCounts": {
+      "CYLINDER_BBOX": 4329,
+      "GENERIC_BBOX_PLACEHOLDER": 451,
+      "CONE_BBOX_PLACEHOLDER": 4
+    },
+    "browserRvmRenderEffectivePrimitiveCounts": {
+      "PIPE_CYLINDER": 4329,
+      "GENERIC_BBOX_PLACEHOLDER": 351,
+      "CONE_FRUSTUM": 4,
+      "SUPPORT_STAND": 100
+    },
+    "browserRvmRenderSkippedReasons": {},
+    "browserRvmResponsiveLoadPath": "worker-instructions-zone-select-lod-native-facet-primary-progressive-render-scene-first",
+    "browserRvmResponsiveSceneBuilder": true,
+    "browserRvmRenderBudgeted": false,
+    "browserRvmMaxRenderableObjects": 6000,
+    "browserRvmRenderBudgetSkipped": 0,
+    "browserRvmStageTimingsMs": {
+      "file.arrayBuffer": 37.9,
+      "worker.parse.renderInstructions": 1409.38,
+      "scene.progressiveCreate": 12263.16
+    },
+    "browserRvmMaxEventLoopStallMs": 1592.8,
+    "browserRvmEventLoopStallCount": 40,
+    "capturedAt": "2026-07-03T20:46:12.371Z"
+  },
+  "counts": {
+    "meshes": 4784,
+    "lines": 0,
+    "groups": 2,
+    "visibleMeshes": 4784,
+    "totalObjects": 4786
+  },
+  "byKind": {
+    "CYLINDER": 3429,
+    "RVM_PRIM_CODE_9": 351,
+    "FLANGE": 4,
+    "SUPPORT": 1000
+  },
+  "byPrimitiveRole": {},
+  "userDataKeys": [
+    "bboxPlaceholderPolicy",
+    "bboxPromotedSolidBlocked",
+    "browserRvmAtt",
+    "browserRvmAttAttributes",
+    "browserRvmAttEnriched",
+    "browserRvmAttributes",
+    "browserRvmBboxPlaceholderWireframe",
+    "browserRvmNativePrimitiveCode",
+    "browserRvmNativePrimitiveKind",
+    "browserRvmNativeTessellated",
+    "browserRvmNativeTessellationSchema",
+    "browserRvmProperties",
+    "browserRvmRenderPolicyApplied",
+    "browserRvmRenderPolicySchema",
+    "browserRvmSnoutParityCode",
+    "browserRvmSnoutParityKind",
+    "browserRvmSnoutParitySchema",
+    "browserRvmSnoutParityUpgraded",
+    "canonicalId",
+    "contractVersion",
+    "displayName",
+    "effectivePrimitive",
+    "effectiveRenderPrimitive",
+    "fallbackReason",
+    "geometryPolicy",
+    "kind",
+    "materialPolicy",
+    "nonSelectableReason",
+    "originalPrimitive",
+    "pickable",
+    "previousEffectiveRenderPrimitive",
+    "previousRenderQuality",
+    "primitiveCode",
+    "renderKind",
+    "renderPrimitive",
+    "renderQuality",
+    "renderSource",
+    "reviewName",
+    "rvmMaterialModeApplied",
+    "rvmMaterialModeOriginalMaterial",
+    "rvmSource",
+    "schemaVersion",
+    "selectable",
+    "sourceName",
+    "sourcePath",
+    "type"
+  ],
+  "sampleMeshes": [
+    {
+      "name": "RVM CYLINDER 1 PE_001_FLANGE_PAIR_10_TO_20",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@368/RVM CYLINDER 1 PE_001_FLANGE_PAIR_10_TO_20",
+        "sourceName": "RVM CYLINDER 1 PE_001_FLANGE_PAIR_10_TO_20",
+        "displayName": "RVM CYLINDER 1 PE_001_FLANGE_PAIR_10_TO_20",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 2 PE_001_FLANGE_PAIR_10_TO_20",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@368/RVM CYLINDER 2 PE_001_FLANGE_PAIR_10_TO_20",
+        "sourceName": "RVM CYLINDER 2 PE_001_FLANGE_PAIR_10_TO_20",
+        "displayName": "RVM CYLINDER 2 PE_001_FLANGE_PAIR_10_TO_20",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 3 PE_002_PIPE_20_TO_30",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@696/RVM CYLINDER 3 PE_002_PIPE_20_TO_30",
+        "sourceName": "RVM CYLINDER 3 PE_002_PIPE_20_TO_30",
+        "displayName": "RVM CYLINDER 3 PE_002_PIPE_20_TO_30",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 4 PE_003_PIPE_30_TO_40",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@908/RVM CYLINDER 4 PE_003_PIPE_30_TO_40",
+        "sourceName": "RVM CYLINDER 4 PE_003_PIPE_30_TO_40",
+        "displayName": "RVM CYLINDER 4 PE_003_PIPE_30_TO_40",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 5 PE_004_PIPE_40_TO_50",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@1120/RVM CYLINDER 5 PE_004_PIPE_40_TO_50",
+        "sourceName": "RVM CYLINDER 5 PE_004_PIPE_40_TO_50",
+        "displayName": "RVM CYLINDER 5 PE_004_PIPE_40_TO_50",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 6 PE_005_PIPE_50_TO_55",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@1332/RVM CYLINDER 6 PE_005_PIPE_50_TO_55",
+        "sourceName": "RVM CYLINDER 6 PE_005_PIPE_50_TO_55",
+        "displayName": "RVM CYLINDER 6 PE_005_PIPE_50_TO_55",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 7 PE_005_PIPE_50_TO_55",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@1332/RVM CYLINDER 7 PE_005_PIPE_50_TO_55",
+        "sourceName": "RVM CYLINDER 7 PE_005_PIPE_50_TO_55",
+        "displayName": "RVM CYLINDER 7 PE_005_PIPE_50_TO_55",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 8 PE_005_PIPE_50_TO_55",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@1332/RVM CYLINDER 8 PE_005_PIPE_50_TO_55",
+        "sourceName": "RVM CYLINDER 8 PE_005_PIPE_50_TO_55",
+        "displayName": "RVM CYLINDER 8 PE_005_PIPE_50_TO_55",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 9 PE_005_PIPE_50_TO_55",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@1332/RVM CYLINDER 9 PE_005_PIPE_50_TO_55",
+        "sourceName": "RVM CYLINDER 9 PE_005_PIPE_50_TO_55",
+        "displayName": "RVM CYLINDER 9 PE_005_PIPE_50_TO_55",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 10 PE_006_PIPE_55_TO_63",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@1880/RVM CYLINDER 10 PE_006_PIPE_55_TO_63",
+        "sourceName": "RVM CYLINDER 10 PE_006_PIPE_55_TO_63",
+        "displayName": "RVM CYLINDER 10 PE_006_PIPE_55_TO_63",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 11 PE_007_PIPE_63_TO_65",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@2092/RVM CYLINDER 11 PE_007_PIPE_63_TO_65",
+        "sourceName": "RVM CYLINDER 11 PE_007_PIPE_63_TO_65",
+        "displayName": "RVM CYLINDER 11 PE_007_PIPE_63_TO_65",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 12 PE_007_PIPE_63_TO_65",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@2092/RVM CYLINDER 12 PE_007_PIPE_63_TO_65",
+        "sourceName": "RVM CYLINDER 12 PE_007_PIPE_63_TO_65",
+        "displayName": "RVM CYLINDER 12 PE_007_PIPE_63_TO_65",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 13 PE_007_PIPE_63_TO_65",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@2092/RVM CYLINDER 13 PE_007_PIPE_63_TO_65",
+        "sourceName": "RVM CYLINDER 13 PE_007_PIPE_63_TO_65",
+        "displayName": "RVM CYLINDER 13 PE_007_PIPE_63_TO_65",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 14 PE_007_PIPE_63_TO_65",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@2092/RVM CYLINDER 14 PE_007_PIPE_63_TO_65",
+        "sourceName": "RVM CYLINDER 14 PE_007_PIPE_63_TO_65",
+        "displayName": "RVM CYLINDER 14 PE_007_PIPE_63_TO_65",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 15 PE_008_PIPE_65_TO_80",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@2640/RVM CYLINDER 15 PE_008_PIPE_65_TO_80",
+        "sourceName": "RVM CYLINDER 15 PE_008_PIPE_65_TO_80",
+        "displayName": "RVM CYLINDER 15 PE_008_PIPE_65_TO_80",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 16 PE_008_PIPE_65_TO_80",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@2640/RVM CYLINDER 16 PE_008_PIPE_65_TO_80",
+        "sourceName": "RVM CYLINDER 16 PE_008_PIPE_65_TO_80",
+        "displayName": "RVM CYLINDER 16 PE_008_PIPE_65_TO_80",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 17 PE_008_PIPE_65_TO_80",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@2640/RVM CYLINDER 17 PE_008_PIPE_65_TO_80",
+        "sourceName": "RVM CYLINDER 17 PE_008_PIPE_65_TO_80",
+        "displayName": "RVM CYLINDER 17 PE_008_PIPE_65_TO_80",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 18 PE_008_PIPE_65_TO_80",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@2640/RVM CYLINDER 18 PE_008_PIPE_65_TO_80",
+        "sourceName": "RVM CYLINDER 18 PE_008_PIPE_65_TO_80",
+        "displayName": "RVM CYLINDER 18 PE_008_PIPE_65_TO_80",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 19 PE_008_PIPE_65_TO_80",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@2640/RVM CYLINDER 19 PE_008_PIPE_65_TO_80",
+        "sourceName": "RVM CYLINDER 19 PE_008_PIPE_65_TO_80",
+        "displayName": "RVM CYLINDER 19 PE_008_PIPE_65_TO_80",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 20 PE_009_PIPE_80_TO_90",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@3300/RVM CYLINDER 20 PE_009_PIPE_80_TO_90",
+        "sourceName": "RVM CYLINDER 20 PE_009_PIPE_80_TO_90",
+        "displayName": "RVM CYLINDER 20 PE_009_PIPE_80_TO_90",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 21 PE_009_PIPE_80_TO_90",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@3300/RVM CYLINDER 21 PE_009_PIPE_80_TO_90",
+        "sourceName": "RVM CYLINDER 21 PE_009_PIPE_80_TO_90",
+        "displayName": "RVM CYLINDER 21 PE_009_PIPE_80_TO_90",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 22 PE_009_PIPE_80_TO_90",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@3300/RVM CYLINDER 22 PE_009_PIPE_80_TO_90",
+        "sourceName": "RVM CYLINDER 22 PE_009_PIPE_80_TO_90",
+        "displayName": "RVM CYLINDER 22 PE_009_PIPE_80_TO_90",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 23 PE_009_PIPE_80_TO_90",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@3300/RVM CYLINDER 23 PE_009_PIPE_80_TO_90",
+        "sourceName": "RVM CYLINDER 23 PE_009_PIPE_80_TO_90",
+        "displayName": "RVM CYLINDER 23 PE_009_PIPE_80_TO_90",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 24 PE_009_PIPE_80_TO_90",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@3300/RVM CYLINDER 24 PE_009_PIPE_80_TO_90",
+        "sourceName": "RVM CYLINDER 24 PE_009_PIPE_80_TO_90",
+        "displayName": "RVM CYLINDER 24 PE_009_PIPE_80_TO_90",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 25 PE_010_PIPE_90_TO_96",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@3960/RVM CYLINDER 25 PE_010_PIPE_90_TO_96",
+        "sourceName": "RVM CYLINDER 25 PE_010_PIPE_90_TO_96",
+        "displayName": "RVM CYLINDER 25 PE_010_PIPE_90_TO_96",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 26 PE_011_BEND_96_TO_100",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@4172/RVM CYLINDER 26 PE_011_BEND_96_TO_100",
+        "sourceName": "RVM CYLINDER 26 PE_011_BEND_96_TO_100",
+        "displayName": "RVM CYLINDER 26 PE_011_BEND_96_TO_100",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 27 PE_011_BEND_96_TO_100",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@4172/RVM CYLINDER 27 PE_011_BEND_96_TO_100",
+        "sourceName": "RVM CYLINDER 27 PE_011_BEND_96_TO_100",
+        "displayName": "RVM CYLINDER 27 PE_011_BEND_96_TO_100",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 28 PE_011_BEND_96_TO_100",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@4172/RVM CYLINDER 28 PE_011_BEND_96_TO_100",
+        "sourceName": "RVM CYLINDER 28 PE_011_BEND_96_TO_100",
+        "displayName": "RVM CYLINDER 28 PE_011_BEND_96_TO_100",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 29 PE_011_BEND_96_TO_100",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@4172/RVM CYLINDER 29 PE_011_BEND_96_TO_100",
+        "sourceName": "RVM CYLINDER 29 PE_011_BEND_96_TO_100",
+        "displayName": "RVM CYLINDER 29 PE_011_BEND_96_TO_100",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    },
+    {
+      "name": "RVM CYLINDER 30 PE_011_BEND_96_TO_100",
+      "keys": [
+        "schemaVersion",
+        "sourcePath",
+        "sourceName",
+        "displayName",
+        "type",
+        "kind",
+        "renderPrimitive",
+        "effectiveRenderPrimitive",
+        "renderQuality",
+        "bboxPromotedSolidBlocked",
+        "browserRvmBboxPlaceholderWireframe",
+        "renderSource",
+        "contractVersion",
+        "pickable",
+        "browserRvmProperties",
+        "browserRvmAttributes",
+        "browserRvmAtt",
+        "browserRvmAttAttributes",
+        "browserRvmAttEnriched",
+        "rvmMaterialModeOriginalMaterial"
+      ],
+      "data": {
+        "schemaVersion": "browser-rvm-native-tessellation/v2-diagnostics-toggle",
+        "sourcePath": "MODL@116//BM_CII//BM_CII-CU-PI//BM_CII-CU-PI-P/CNTB@4172/RVM CYLINDER 30 PE_011_BEND_96_TO_100",
+        "sourceName": "RVM CYLINDER 30 PE_011_BEND_96_TO_100",
+        "displayName": "RVM CYLINDER 30 PE_011_BEND_96_TO_100",
+        "type": "PIPE",
+        "kind": "CYLINDER",
+        "renderPrimitive": "CYLINDER_BBOX",
+        "effectiveRenderPrimitive": "RVM_NATIVE_CYLINDER",
+        "renderQuality": "native-cpp-tessellated",
+        "bboxPromotedSolidBlocked": false,
+        "browserRvmBboxPlaceholderWireframe": false,
+        "renderSource": "cpp-mat3x4-transform-axis-contract"
+      }
+    }
+  ],
+  "bbox": {
+    "min": [
+      -140.18710327148438,
+      -0.4939999878406526,
+      -50.22051239013672
+    ],
+    "max": [
+      509.0672607421875,
+      7.806108951568594,
+      295.9771728515625
+    ],
+    "size": [
+      649.2543640136719,
+      8.300108939409247,
+      346.1976852416992
+    ],
+    "center": [
+      184.44007873535156,
+      3.6560544818639706,
+      122.87833023071289
+    ]
+  },
+  "camera": {
+    "position": [
+      795.2888551239973,
+      614.5048308705097,
+      733.7271066193587
+    ],
+    "up": [
+      0,
+      1,
+      0
+    ]
+  },
+  "canvas": {
+    "width": 980,
+    "height": 795,
+    "cssWidth": 980,
+    "cssHeight": 795
+  },
+  "logs": [
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1e64001e1000] GL_INVALID_VALUE: glLineWidth: Invalid width."
+    },
+    {
+      "type": "warning",
+      "text": "WebGL: too many errors, no more errors will be reported to the console for this context."
+    }
+  ]
+}

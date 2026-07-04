@@ -54,6 +54,40 @@ assert.deepEqual(adapterResult.graph, expectedGraph, 'current-app adapter should
 assert.equal(adapterResult.validation.ok, true, 'current-app adapter validation');
 assert.deepEqual(adapterResult.audit, audit, 'current-app adapter audit');
 
+const objectCoordinateSource = JSON.stringify({
+  source: 'managed-stage-object-coordinate.input.json',
+  hierarchy: [
+    {
+      id: 'PIPE-OBJ-001',
+      type: 'PIPE',
+      attributes: {
+        FROM_NODE: 'OBJ-N1',
+        TO_NODE: 'OBJ-N2',
+        APOS: { x: 10, y: 20, z: 30 },
+        LPOS: { X: 40, Y: 50, Z: 60 }
+      }
+    },
+    {
+      id: 'SUPPORT-OBJ-001',
+      type: 'ATTA',
+      attributes: {
+        NODE: 'OBJ-N1',
+        SUPPORTCOORD: { x: 11, y: 22, z: 33 },
+        TYPE: 'REST'
+      }
+    }
+  ]
+});
+const objectCoordinateGraph = convertManagedStageJsonToPlantGraph(objectCoordinateSource, {
+  sourceName: 'managed-stage-object-coordinate.input.json'
+});
+assert.deepEqual(objectCoordinateGraph.nodes.find((node) => node.id === 'OBJ-N1')?.coord, [10, 20, 30]);
+assert.deepEqual(objectCoordinateGraph.nodes.find((node) => node.id === 'OBJ-N2')?.coord, [40, 50, 60]);
+assert.deepEqual(
+  objectCoordinateGraph.items.find((item) => item.id === 'SUPPORT-OBJ-001')?.placement?.position,
+  [11, 22, 33]
+);
+
 assert.equal(typeof globalThis.window, 'undefined', 'test must run without browser window dependency');
 
 console.log('managed-stage importer tests passed');

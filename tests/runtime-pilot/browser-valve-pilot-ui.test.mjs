@@ -32,13 +32,16 @@ assert.ok(failure.statusMessage.includes('no managed-stage/new-core input loaded
 
 const controllerSource = await readFile('src/managed-stage-json-ui-controller.js', 'utf8');
 assert.ok(controllerSource.includes('newCorePilotExportPanel'), 'advanced panel exists');
-assert.ok(controllerSource.includes('Generate CYLINDER/code8 Pilot RVM'), 'cylinder-only action still exists');
-assert.ok(controllerSource.includes('Generate Pipe+Bend Pilot RVM'), 'pipe+bend action still exists');
-assert.ok(controllerSource.includes('Generate Pipe+Bend+Flange Pilot Package'), 'pipe+bend+flange action still exists');
-assert.ok(controllerSource.includes('Generate Pipe+Bend+Flange+Valve Pilot Package'), 'valve package action exists');
+assert.ok(controllerSource.includes('Export Cylinders (RVM)'), 'cylinder-only action still exists');
+assert.ok(controllerSource.includes('Export Pipes + Bends (RVM)'), 'pipe+bend action still exists');
+assert.ok(controllerSource.includes('Export Pipes + Bends + Flanges (Package)'), 'pipe+bend+flange action still exists');
+assert.ok(controllerSource.includes('Export Full Pilot Package'), 'Export V2 full package action exists');
+assert.ok(controllerSource.includes('Export Support Markers Only (Package)'), 'support-marker-only action exists');
 assert.ok(controllerSource.includes('downloadRvmBtn'), 'old RVM export button remains');
 assert.ok(controllerSource.includes('downloadAttBtn'), 'old ATT export button remains');
 assert.ok(controllerSource.includes('downloadAuditBtn'), 'old audit export button remains');
+assert.ok(controllerSource.includes('runBrowserExportV2FullPilotPackage'), 'Export V2 full package uses its own route');
+assert.ok(controllerSource.includes('executeNewCorePilotRoute'), 'Export V2 full package uses new-core route controller');
 assert.ok(controllerSource.includes('runBrowserValvePilotExport(true)'), 'valve pilot requires explicit click path');
 assert.equal(controllerSource.includes('runBrowserValvePilotExport(true);\ninstall'), false, 'valve pilot does not run during initialization');
 

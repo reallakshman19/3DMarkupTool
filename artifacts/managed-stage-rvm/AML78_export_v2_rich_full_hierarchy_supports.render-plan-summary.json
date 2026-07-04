@@ -1,0 +1,36 @@
+{
+  "totalEntries": 4231,
+  "byEntryKind": {
+    "primitive": 4231,
+    "component": 0,
+    "assembly": 0,
+    "diagnostic": 0
+  },
+  "byRenderKind": {
+    "CYLINDER": 3633,
+    "ELBOW": 143,
+    "SPHERE": 451,
+    "FLANGE": 4
+  },
+  "byRecipe": {
+    "primitive-cylinder-native": 3633,
+    "primitive-code4-elbow-native": 143,
+    "primitive-sphere-native": 451,
+    "primitive-flange-derived": 4
+  },
+  "byOutput": {
+    "procedural": 4231
+  },
+  "bySupportLevel": {
+    "supported": 4231,
+    "diagnostic-only": 0,
+    "unsupported": 0,
+    "hidden": 0
+  },
+  "unsupportedRenderKinds": [],
+  "diagnosticOnly": 0,
+  "hidden": 0,
+  "componentEntries": 0,
+  "assemblyEntries": 0,
+  "primitiveEntries": 4231
+}

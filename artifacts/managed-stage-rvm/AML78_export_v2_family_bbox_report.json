@@ -1,0 +1,147 @@
+{
+  "schema": "ExportV2FamilyBboxVerification.v1",
+  "sourceRvm": "F:/CODE-4/3DMarkupTool/artifacts/managed-stage-rvm/AML78_export_v2_independent_new_core_full_support.rvm",
+  "joinedRows": 3812,
+  "familyBboxes": [
+    {
+      "family": "elbow",
+      "count": 143,
+      "bboxMinM": [
+        -139.86,
+        -295.65,
+        -0.203
+      ],
+      "bboxMaxM": [
+        508.849,
+        28.935,
+        7.806
+      ],
+      "extentM": [
+        648.708,
+        324.585,
+        8.009
+      ],
+      "maxPrimitiveSpanM": 6.655,
+      "nativeCodes": {
+        "8": 143
+      },
+      "renderKinds": {
+        "CYLINDER": 143
+      }
+    },
+    {
+      "family": "flange",
+      "count": 117,
+      "bboxMinM": [
+        -0.254,
+        -285.469,
+        -0.254
+      ],
+      "bboxMaxM": [
+        508.212,
+        50.221,
+        6.15
+      ],
+      "extentM": [
+        508.466,
+        335.69,
+        6.404
+      ],
+      "maxPrimitiveSpanM": 0.778,
+      "nativeCodes": {
+        "8": 117
+      },
+      "renderKinds": {
+        "CYLINDER": 117
+      }
+    },
+    {
+      "family": "pipe",
+      "count": 496,
+      "bboxMinM": [
+        -139.86,
+        -295.65,
+        -0.266
+      ],
+      "bboxMaxM": [
+        508.849,
+        49.922,
+        7.806
+      ],
+      "extentM": [
+        648.708,
+        345.572,
+        8.073
+      ],
+      "maxPrimitiveSpanM": 334.297,
+      "nativeCodes": {
+        "8": 496
+      },
+      "renderKinds": {
+        "CYLINDER": 496
+      }
+    },
+    {
+      "family": "support",
+      "count": 3026,
+      "bboxMinM": [
+        -140.078,
+        -295.868,
+        -0.103
+      ],
+      "bboxMaxM": [
+        509.067,
+        47.992,
+        8.106
+      ],
+      "extentM": [
+        649.145,
+        343.86,
+        8.209
+      ],
+      "maxPrimitiveSpanM": 0.279,
+      "nativeCodes": {
+        "8": 2605,
+        "9": 421
+      },
+      "renderKinds": {
+        "SPHERE": 421,
+        "CYLINDER": 2605
+      }
+    },
+    {
+      "family": "valve",
+      "count": 30,
+      "bboxMinM": [
+        -0.254,
+        -281.048,
+        -0.254
+      ],
+      "bboxMaxM": [
+        504.264,
+        10.29,
+        3.795
+      ],
+      "extentM": [
+        504.518,
+        291.338,
+        4.049
+      ],
+      "maxPrimitiveSpanM": 1.163,
+      "nativeCodes": {
+        "8": 30
+      },
+      "renderKinds": {
+        "CYLINDER": 30
+      }
+    }
+  ],
+  "checks": {
+    "attRowsMatchStagePrimitives": true,
+    "elbowCount": 143,
+    "elbowWithinPipeEnvelopePlus10m": true,
+    "supportUniqueSourceItemCount": 421,
+    "flangeUniqueSourceItemCount": 117,
+    "valveUniqueSourceItemCount": 30
+  }
+}

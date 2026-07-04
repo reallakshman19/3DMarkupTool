@@ -5,7 +5,7 @@ export function createCylinderCode8PilotActionModel() {
 export async function executeBrowserCylinderCode8PilotAction(state, services = {}, options = {}) {
   const adapter = services.generateBrowserCylinderCode8PilotExport;
   if (typeof adapter !== 'function') return failure('browser pilot adapter unavailable');
-  const result = await adapter(state, { ...defaultOptions(), ...options, userGestureConfirmed: true, browserDownload: true });
+  const result = await adapter(state, { ...defaultOptions(), basename: state.basename, ...options, userGestureConfirmed: true, browserDownload: true });
   if (!result?.audit?.ok) return failure(result?.audit?.errors?.join('; ') || 'pilot export blocked', result);
   const downloads = preparePilotDownloads(result, services.downloadHost || globalThis);
   return { schema: 'BrowserCylinderCode8PilotUiResult.v1', ok: true, downloadCount: downloads.length, downloads, statusMessage: statusMessage(result.audit), audit: result.audit, result };

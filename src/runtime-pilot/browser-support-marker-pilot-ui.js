@@ -10,7 +10,7 @@ export async function executeBrowserSupportMarkerPilotAction(state, services, op
   const result = await adapter(state, { ...defaultOptions(), ...object(options), userGestureConfirmed: true, browserDownload: true });
   if (!result?.audit?.ok) return failure(result?.audit?.errors?.join('; ') || 'support marker pilot package blocked', result);
   const downloads = prepareSupportMarkerPilotDownloads(result, services?.downloadHost || globalThis);
-  return { schema: 'BrowserSupportMarkerPilotUiResult.v1', ok: true, downloadCount: downloads.length, downloads, statusMessage: `Support marker pilot generated ${result.audit.supportMarkerCount} deterministic support markers. Blocked: ${result.audit.blockedSupportMarkerCount}. No support geometry generated. Full RVM not ready.`, audit: result.audit, result };
+  return { schema: 'BrowserSupportMarkerPilotUiResult.v1', ok: true, downloadCount: downloads.length, downloads, statusMessage: `Support marker pilot generated ${result.audit.supportMarkerCount} deterministic support markers and ${result.audit.supportPrimitiveCount || 0} support primitives. Blocked: ${result.audit.blockedSupportMarkerCount}. Full RVM ready: ${result.audit.fullModelReady === true}.`, audit: result.audit, result };
 }
 
 export function prepareSupportMarkerPilotDownloads(bundle, host) {

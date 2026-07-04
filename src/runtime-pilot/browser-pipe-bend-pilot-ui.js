@@ -5,7 +5,7 @@ export function createPipeBendPilotActionModel() {
 export async function executeBrowserPipeBendPilotAction(state, services = {}, options = {}) {
   const adapter = services.generateBrowserPipeBendPilotExport;
   if (typeof adapter !== 'function') return failure('browser pipe+bend pilot adapter unavailable');
-  const result = await adapter(state, { ...defaultOptions(), ...options, userGestureConfirmed: true, browserDownload: true });
+  const result = await adapter(state, { ...defaultOptions(), basename: state.basename, ...options, userGestureConfirmed: true, browserDownload: true });
   if (!result?.audit?.ok) return failure(result?.audit?.errors?.join('; ') || 'pipe+bend pilot export blocked', result);
   const downloads = preparePipeBendPilotDownloads(result, services.downloadHost || globalThis);
   return { schema: 'BrowserPipeBendPilotUiResult.v1', ok: true, downloadCount: downloads.length, downloads, statusMessage: statusMessage(result.audit), audit: result.audit, result };

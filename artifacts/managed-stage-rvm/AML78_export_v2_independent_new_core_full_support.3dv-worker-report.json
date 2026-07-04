@@ -1,0 +1,127 @@
+{
+  "ok": true,
+  "error": null,
+  "stageSummary": {
+    "schema": "RvmStageModel.v1",
+    "sourceKind": "rvm-binary",
+    "attAvailable": false,
+    "parserComplete": false,
+    "visualParityClaimed": false,
+    "stageNodeCount": 1,
+    "stagePrimitiveCount": 3812,
+    "decodedPrimitiveCount": 3812,
+    "unsupportedPrimitiveCount": 0,
+    "failedPrimitiveCount": 0,
+    "decodedByCode": {
+      "8": 3391,
+      "9": 421
+    },
+    "unsupportedByCode": {},
+    "failedByCode": {},
+    "diagnosticCount": 0
+  },
+  "renderPlanSummary": {
+    "totalEntries": 3812,
+    "byEntryKind": {
+      "primitive": 3812,
+      "component": 0,
+      "assembly": 0,
+      "diagnostic": 0
+    },
+    "byRenderKind": {
+      "CYLINDER": 3391,
+      "SPHERE": 421
+    },
+    "byRecipe": {
+      "primitive-cylinder-native": 3391,
+      "primitive-sphere-native": 421
+    },
+    "byOutput": {
+      "procedural": 3812
+    },
+    "bySupportLevel": {
+      "supported": 3812,
+      "diagnostic-only": 0,
+      "unsupported": 0,
+      "hidden": 0
+    },
+    "unsupportedRenderKinds": [],
+    "diagnosticOnly": 0,
+    "hidden": 0,
+    "componentEntries": 0,
+    "assemblyEntries": 0,
+    "primitiveEntries": 3812
+  },
+  "diagnostics": {
+    "schema": "RvmStageDiagnostics.v1",
+    "severityCounts": {
+      "info": 0,
+      "warning": 0,
+      "error": 0
+    },
+    "nativeCodeCounts": {},
+    "renderKindCounts": {},
+    "semanticTypeCounts": {},
+    "fallbackCounts": {},
+    "messages": []
+  },
+  "readerErrors": [],
+  "readerWarnings": [],
+  "decodeCoverage": {
+    "primitiveRecordCount": 3812,
+    "decodedCount": 3812,
+    "unsupportedCount": 0,
+    "failedCount": 0,
+    "decodedByCode": {
+      "8": 3391,
+      "9": 421
+    },
+    "unsupportedByCode": {},
+    "failedByCode": {}
+  },
+  "messages": [
+    {
+      "type": "STAGE_WORKER_READY",
+      "phase": "idle"
+    },
+    {
+      "type": "STAGE_WORKER_START"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "reading-file",
+      "message": "Reading RVM binary job envelope"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "hashing-source",
+      "message": "Validating RVM binary source identity"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "parsing-records",
+      "message": "Reading wide-tag RVM native records"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "building-hierarchy",
+      "message": "Building native RVM record ledger"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "decoding-primitives",
+      "message": "Decoding native primitive evidence"
+    },
+    {
+      "type": "STAGE_WORKER_PROGRESS",
+      "phase": "building-diagnostics",
+      "message": "Building RVM evidence StageModel diagnostics"
+    },
+    {
+      "type": "STAGE_WORKER_STAGE_READY"
+    },
+    {
+      "type": "STAGE_WORKER_PACKAGE_READY"
+    }
+  ]
+}

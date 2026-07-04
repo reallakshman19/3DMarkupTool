@@ -66,15 +66,15 @@ function ensureDialog() {
     </div>
     <div id="smwModeSummary" class="smw-mode-summary"></div>
     <div class="smw-actions">
-      <button type="button" data-smw-apply="stagedJson" class="primary">Apply as per InputXML</button>
-      <button type="button" data-smw-apply="isonote" class="primary alt">Apply as per ISONOTE</button>
+      <button type="button" data-smw-apply="stagedJson" class="primary"><i data-lucide="file-json"></i><span>Apply as per InputXML</span></button>
+      <button type="button" data-smw-apply="isonote" class="primary alt"><i data-lucide="file-text"></i><span>Apply as per ISONOTE</span></button>
       <span id="smwStatus" class="smw-status">Ready</span>
     </div>
     <div class="smw-tabs" role="tablist">
-      <button type="button" data-smw-tab="inputxml" class="active">InputXML basis</button>
-      <button type="button" data-smw-tab="isonote">Load ISONOTE</button>
-      <button type="button" data-smw-tab="restraintType">Restraint Type</button>
-      <button type="button" data-smw-tab="rules">Support Mapping rules</button>
+      <button type="button" data-smw-tab="inputxml" class="active"><i data-lucide="file-json"></i><span>InputXML basis</span></button>
+      <button type="button" data-smw-tab="isonote"><i data-lucide="file-text"></i><span>Load ISONOTE</span></button>
+      <button type="button" data-smw-tab="restraintType"><i data-lucide="anchor"></i><span>Restraint Type</span></button>
+      <button type="button" data-smw-tab="rules"><i data-lucide="settings-2"></i><span>Support Mapping rules</span></button>
     </div>
     <div id="smwBody" class="smw-body"></div>`;
   dialog.addEventListener('click', (event) => {
@@ -95,6 +95,7 @@ function ensureDialog() {
     if (event.target?.id === 'smwIsonoteText') syncIsonoteText(event.target.value);
   });
   document.body.appendChild(dialog);
+  window.lucide?.createIcons?.({ root: dialog });
   return dialog;
 }
 
@@ -127,6 +128,7 @@ function render() {
   else if (state.activeTab === 'rules') body.innerHTML = renderRulesTab();
   else if (state.activeTab === 'restraintType') body.innerHTML = renderRestraintTypeTab();
   else body.innerHTML = renderInputXmlTab(sourceContract, audit);
+  window.lucide?.createIcons?.({ root: body });
 }
 
 function renderModeSummary(sourceContract = {}, audit = {}, sourceBasis = {}) {
@@ -374,6 +376,7 @@ function hideLegacySupportLaunchers() {
       button.hidden = true;
       button.setAttribute('aria-hidden', 'true');
     }
+    window.lucide?.createIcons?.({ root: document.getElementById('smwBody') });
   }
 }
 
@@ -426,8 +429,9 @@ function injectStyles() {
     .smw-head h2{margin:0;font-size:20px}.smw-head p{margin:4px 0 0;color:#94a3b8}.smw-close{font-size:26px;background:transparent;color:#e5e7eb;border:0;cursor:pointer}
     .smw-mode-summary{padding:12px 20px;border-bottom:1px solid rgba(148,163,184,.18);background:#0b1220}.smw-summary-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}.smw-summary-grid div{background:#111827;border:1px solid rgba(148,163,184,.2);border-radius:10px;padding:8px}.smw-summary-grid strong{display:block;font-size:11px;color:#94a3b8}.smw-summary-grid span{font-size:12px;color:#e5e7eb}
     .smw-actions{display:flex;gap:10px;align-items:center;padding:12px 20px;border-bottom:1px solid rgba(148,163,184,.18)}
-    .smw-actions .primary,.smw-body .primary{border:0;border-radius:10px;padding:9px 12px;background:#2563eb;color:white;cursor:pointer}.smw-actions .alt{background:#7c3aed}.smw-body .ghost{border:1px solid rgba(148,163,184,.35);border-radius:10px;padding:9px 12px;background:transparent;color:#e5e7eb;cursor:pointer}.smw-button-row{display:flex;gap:10px;margin-top:12px}.smw-status{margin-left:auto;color:#cbd5e1;font-size:12px}
-    .smw-tabs{display:flex;gap:8px;padding:12px 20px 0}.smw-tabs button{border:1px solid rgba(148,163,184,.28);border-radius:10px 10px 0 0;background:#1f2937;color:#cbd5e1;padding:10px 14px;cursor:pointer}.smw-tabs button.active{background:#0f172a;color:#fff;border-bottom-color:#0f172a}
+    .smw-actions .primary,.smw-body .primary{border:0;border-radius:10px;padding:9px 12px;background:#2563eb;color:white;cursor:pointer;display:flex;align-items:center;gap:6px}.smw-actions .alt{background:#7c3aed}.smw-body .ghost{border:1px solid rgba(148,163,184,.35);border-radius:10px;padding:9px 12px;background:transparent;color:#e5e7eb;cursor:pointer}.smw-button-row{display:flex;gap:10px;margin-top:12px}.smw-status{margin-left:auto;color:#cbd5e1;font-size:12px}
+    .smw-actions i,.smw-tabs i{width:16px;height:16px}
+    .smw-tabs{display:flex;gap:8px;padding:12px 20px 0}.smw-tabs button{display:flex;align-items:center;gap:6px;border:1px solid rgba(148,163,184,.28);border-radius:10px 10px 0 0;background:#1f2937;color:#cbd5e1;padding:10px 14px;cursor:pointer}.smw-tabs button.active{background:#0f172a;color:#fff;border-bottom-color:#0f172a}
     .smw-body{padding:16px 20px 20px;overflow:auto;max-height:58vh;background:#0f172a}.smw-intro{display:flex;justify-content:space-between;gap:16px;margin-bottom:12px;color:#cbd5e1}.smw-intro strong{color:#fff}.smw-intro span{font-size:12px;color:#94a3b8}
     #smwIsonoteText{width:100%;box-sizing:border-box;background:#020617;color:#e5e7eb;border:1px solid rgba(148,163,184,.28);border-radius:10px;padding:10px;margin-bottom:12px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
     .smw-table{width:100%;border-collapse:collapse;font-size:12px}.smw-table th,.smw-table td{border:1px solid rgba(148,163,184,.22);padding:8px;vertical-align:top}.smw-table th{background:#1e293b;color:#e2e8f0;text-align:left}.smw-table input{width:100%;box-sizing:border-box;background:#020617;color:#e5e7eb;border:1px solid rgba(148,163,184,.28);border-radius:8px;padding:7px}

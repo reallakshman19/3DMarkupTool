@@ -15,7 +15,12 @@ export function buildNewCoreCylinderRuntimePilotPlan(input, options = {}) {
   const selectedErrors = rows.cylinders.flatMap((entry, index) => validateCylinder(entry, index));
   const fallbackErrors = rows.cylinders.filter(hasFallback).map((entry) => `${entry.sourceItemId} uses fallback geometry`);
   const allErrors = [...errors, ...selectedErrors, ...fallbackErrors];
-  return { ...base, subsetReady: allErrors.length === 0 && rows.cylinders.length > 0, plannedCylinderCount: rows.cylinders.length, excludedTorusCount: rows.toruses.length, excludedFlangeCount: rows.flanges.length, blockedValveCount: rows.blockedValves.length, deferredSupportCount: rows.deferredSupports.length, cylinderPrimitives: rows.cylinders.map(copy), excludedItems: excludedItems(rows), sourceTrace: sourceTrace(rows), warnings: rows.toruses.length || rows.flanges.length ? ['TORUS and FLANGE_CYLINDER remain excluded from Phase 12 runtime artifact generation.'] : [], errors: allErrors };
+  return populatedPlan(base, rows, allErrors);
+}
+
+function populatedPlan(base, rows, errors) {
+  const subsetReady = errors.length === 0;
+  return { ...base, subsetReady, plannedCylinderCount: rows.cylinders.length, excludedTorusCount: rows.toruses.length, excludedFlangeCount: rows.flanges.length, blockedValveCount: rows.blockedValves.length, deferredSupportCount: rows.deferredSupports.length, cylinderPrimitives: rows.cylinders.map(copy), excludedItems: excludedItems(rows), sourceTrace: sourceTrace(rows), warnings: rows.toruses.length || rows.flanges.length ? ['Bends and flanges remain excluded from Phase 13 cylinder-only runtime artifact generation.'] : [], errors: errors };
 }
 
 export function validateNewCoreCylinderRuntimePilotPlan(plan) {

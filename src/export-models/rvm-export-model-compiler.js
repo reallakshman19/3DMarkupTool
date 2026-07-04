@@ -31,7 +31,7 @@ function collectPrimitiveRow(primitive, transform, primitives, toruses, flanges,
 
 function transformCylinder(primitive, transform) {
   const transformed = applyFinalReviewTransformToRvmPrimitive(primitive);
-  return copyDefined({ exportPrimitiveId: `RVM-${primitive.primitiveId || primitive.sourceItemId}`, sourcePrimitiveId: primitive.primitiveId, sourceItemId: primitive.sourceItemId, primitiveKind: 'CYLINDER', primitiveCode: 8, center: transformed.center, axis: transformed.axis, lengthMm: transformed.lengthMm, radiusMm: transformed.radiusMm, diameterMm: transformed.diameterMm, wallMm: transformed.wallMm, basis: 'navis-review', transformPolicy: transform.transformPolicy, sourceRef: primitive.sourceRef });
+  return copyDefined({ exportPrimitiveId: `RVM-${primitive.primitiveId || primitive.sourceItemId}`, sourcePrimitiveId: primitive.primitiveId, sourceItemId: primitive.sourceItemId, family: primitive.family, type: primitive.type, primitiveKind: 'CYLINDER', primitiveCode: 8, center: transformed.center, axis: transformed.axis, lengthMm: transformed.lengthMm, radiusMm: transformed.radiusMm, diameterMm: transformed.diameterMm, wallMm: transformed.wallMm, basis: 'navis-review', transformPolicy: transform.transformPolicy, resolver: primitive.resolver, geometryStatus: primitive.geometryStatus, sourceRef: primitive.sourceRef, evidence: primitive.evidence });
 }
 
 function transformTorus(primitive, transformPolicy) {

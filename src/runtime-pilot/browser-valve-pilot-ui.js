@@ -14,7 +14,7 @@ export function createValvePilotActionModel() {
 export async function executeBrowserValvePilotAction(state, services, options) {
   const adapter = services?.generateBrowserValvePilotExport;
   if (typeof adapter !== 'function') return failure('browser pipe+bend+flange+valve pilot adapter unavailable');
-  const result = await adapter(state, { ...defaultOptions(), ...object(options), userGestureConfirmed: true, browserDownload: true });
+  const result = await adapter(state, { ...defaultOptions(), basename: state.basename, ...object(options), userGestureConfirmed: true, browserDownload: true });
   if (!result?.audit?.ok) return failure(result?.audit?.errors?.join('; ') || 'pipe+bend+flange+valve pilot package blocked', result);
   const downloads = prepareValvePilotDownloads(result, services?.downloadHost || globalThis);
   return { schema: 'BrowserPipeBendFlangeValvePilotUiResult.v1', ok: true, downloadCount: downloads.length, downloads, statusMessage: statusMessage(result.audit), audit: result.audit, result };

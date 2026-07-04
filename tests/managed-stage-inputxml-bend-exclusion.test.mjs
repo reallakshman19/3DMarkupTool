@@ -65,6 +65,8 @@ assert.deepEqual(firstBend.genericInputXmlBend.segments[0].endMm, firstBend.endM
 
 const model = buildManagedStageRvmExportModel(profile);
 const primitives = model.root.children[0].children[0].children.flatMap((node) => node.primitives);
+assert.equal(model.audit.reviewHierarchy.rootName, '/BM_CII_INPUT');
+assert.equal(model.audit.reviewHierarchy.pipingGroupName, '/BM_CII_INPUT-CU-PI-P');
 assert.equal(model.audit.inputXmlBendExclusionAudit.code4BendsExcluded, 7);
 assert.equal(model.audit.inputXmlBendExclusionAudit.genericCode8BendPrimitiveCount, 7);
 assert.equal(model.audit.inputXmlBendExclusionAudit.nodeBasedReconstructedBendCount, 0);
@@ -85,7 +87,7 @@ assert.equal(model.audit.inputXmlBendEndpointLockAudit.checkedBendCount, 7);
 assert.equal(model.audit.inputXmlBendEndpointLockAudit.lockedBendCount, 0);
 assert.equal(model.audit.inputXmlBendEndpointLockAudit.cappedEndpointCorrectionCount, 0);
 assert.equal(primitives.filter((primitive) => primitive.kind === 'elbow').length, 0);
-assert.equal(primitives.every((primitive) => primitive.kind === 'cylinder'), true, 'InputXML bend-exclusion path must emit only code-8 cylinder primitives');
+assert.equal(primitives.filter((primitive) => primitive.primitiveRole === 'inputxml-node-local-code4-elbow').length, 0);
 assert.ok(primitives.length >= 91, 'InputXML bend-exclusion path must keep at least the original source-route, node-local elbow, branch fitting, and component-symbol primitive coverage');
 assert.equal(primitives.filter((primitive) => primitive.genericInputXmlBend).length, 7);
 assert.equal(primitives.filter((primitive) => primitive.inputXmlSourceRouteBend).length, 7);
@@ -117,5 +119,13 @@ assert.equal(nativeModel.audit.inputXmlNodeLocalElbowAudit.enabled, false);
 assert.equal(nativePrimitives.filter((primitive) => primitive.kind === 'elbow').length, 7);
 assert.ok(nativePrimitives.filter((primitive) => primitive.kind === 'cylinder').length >= 56, 'native path must keep pipe/flange/valve/branch-fitting cylinder coverage');
 assert.equal(nativePrimitives.filter((primitive) => primitive.genericInputXmlBranchFitting).length, 15);
+
+const amlFixture = createBmCiiManagedStageFixture();
+amlFixture.source = 'AML-78-SYS-005-28-FEB-23_LATEST_INPUT.XML';
+amlFixture.hierarchy[0].name = '/INPUTXML/AML-78-SYS-005-28-FEB-23_LATEST_INPUT/BRANCH-001';
+const amlProfile = parseManagedStageProfile(JSON.stringify(amlFixture));
+const amlModel = buildManagedStageRvmExportModel(amlProfile);
+assert.equal(amlModel.audit.reviewHierarchy.rootName, '/AML-78-SYS-005-28-FEB-23_LATEST_INPUT');
+assert.equal(amlModel.audit.reviewHierarchy.supportGroupName, '/AML-78-SYS-005-28-FEB-23_LATEST_INPUT-CU-PI-SUPPORTS');
 
 console.log('Managed-stage InputXML BEND source-route RVM export, node-local elbows, and branch fittings passed');

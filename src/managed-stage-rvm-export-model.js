@@ -10,8 +10,8 @@ import {
 } from './managed-stage-inputxml-bend-exclusion.js?v=bust-cache-4';
 import {
   applyManagedStageInputXmlNodeLocalElbows
-} from './managed-stage-inputxml-node-local-elbows.js?v=bust-cache-4';
-import { recoverManagedStageCode4Bends } from './managed-stage-rvm-bend-recovery.js?v=bust-cache-4';
+} from './managed-stage-inputxml-node-local-elbows.js?v=bust-cache-5-safe-inputxml';
+import { recoverManagedStageCode4Bends } from './managed-stage-rvm-bend-recovery.js?v=bust-cache-5-safe-inputxml';
 import {
   applyManagedStageInputXmlBendEndpointLock
 } from './managed-stage-inputxml-bend-endpoint-lock.js?v=bust-cache-4';
@@ -66,14 +66,15 @@ export function buildManagedStageRvmExportModel(profile, options = {}) {
       topologyAudit: supportTopologyAudit
     });
   const componentPrimitiveSymbolExportAudit = auditComponentPrimitiveSymbolExport(elements, supportExport);
+  const reviewHierarchy = resolveManagedStageReviewHierarchy(profile, options);
   const disciplineChildren = [
-    groupNode('/BM_CII-CU-PI-P', 'GROUP', 'PIPING_GROUP', elements)
+    groupNode(reviewHierarchy.pipingGroupName, 'GROUP', 'PIPING_GROUP', elements)
   ];
   if (supportExport.nodes.length) {
-    disciplineChildren.push(groupNode('/BM_CII-CU-PI-SUPPORTS', 'GROUP', 'SUPPORT_GROUP', supportExport.nodes));
+    disciplineChildren.push(groupNode(reviewHierarchy.supportGroupName, 'GROUP', 'SUPPORT_GROUP', supportExport.nodes));
   }
-  const root = groupNode('/BM_CII', 'ROOT', 'ROOT', [
-    groupNode('/BM_CII-CU-PI', 'DISCIPLINE', 'PIPING', disciplineChildren)
+  const root = groupNode(reviewHierarchy.rootName, 'ROOT', 'ROOT', [
+    groupNode(reviewHierarchy.disciplineName, 'DISCIPLINE', 'PIPING', disciplineChildren)
   ]);
   const geometryPrimitiveCount = elements.reduce((sum, node) => sum + node.primitives.length, 0);
   return {
@@ -96,6 +97,7 @@ export function buildManagedStageRvmExportModel(profile, options = {}) {
       primitiveCount: geometryPrimitiveCount + supportExport.supportPrimitiveCount,
       geometryPrimitiveCount,
       supportRvmPrimitiveCount: supportExport.supportPrimitiveCount,
+      reviewHierarchy,
       componentPrimitiveSymbolExportAudit,
       processingConfig,
       geometryContractAudit: contractSet.audit,
@@ -121,6 +123,34 @@ function groupNode(reviewName, type, componentClass, children) {
     primitives: [],
     children
   };
+}
+
+// Resolves Review hierarchy names from source metadata so AML/BM_CII exports do not share a hardcoded root.
+function resolveManagedStageReviewHierarchy(profile, options) {
+  const optionPrefix = normalizeReviewPrefix(options.rvmRootName);
+  const branchPrefix = reviewPrefixFromBranch(profile);
+  const sourcePrefix = normalizeReviewPrefix(profile.source);
+  const prefix = optionPrefix || branchPrefix || sourcePrefix || 'BM_CII';
+  return {
+    schema: 'ManagedStageRvmReviewHierarchy.v1',
+    source: optionPrefix ? 'option.rvmRootName' : branchPrefix ? 'profile.hierarchy.branch' : sourcePrefix ? 'profile.source' : 'fallback',
+    rootName: `/${prefix}`,
+    disciplineName: `/${prefix}-CU-PI`,
+    pipingGroupName: `/${prefix}-CU-PI-P`,
+    supportGroupName: `/${prefix}-CU-PI-SUPPORTS`
+  };
+}
+
+function reviewPrefixFromBranch(profile) {
+  const branchName = String(profile.branches?.[0]?.attributes?.NAME || profile.branches?.[0]?.name || '');
+  const match = branchName.match(/^\/?INPUTXML\/([^/]+)(?:\/|$)/i);
+  return normalizeReviewPrefix(match?.[1]);
+}
+
+function normalizeReviewPrefix(value) {
+  const withoutExt = String(value || '').replace(/\.[^.\\/]+$/i, '');
+  const leaf = withoutExt.split(/[\\/]/).filter(Boolean).pop() || '';
+  return leaf.replace(/_managed_stage(?:\s*\(\d+\))?$/i, '').replace(/[^A-Za-z0-9_-]+/g, '_').replace(/^_+|_+$/g, '') || '';
 }
 
 function elementNode(recordOrContract, index) {

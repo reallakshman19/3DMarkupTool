@@ -92,7 +92,9 @@ export function installManagedStageJsonUi() {
     generateCylinderCode8PilotExport: () => runBrowserCylinderCode8PilotExport(true),
     generatePipeBendPilotExport: () => runBrowserPipeBendPilotExport(true),
     generatePipeBendFlangePilotPackage: () => runBrowserPipeBendFlangePilotExport(true),
+    generateCompleteRvmPackage: () => runBrowserExportV2FullPilotPackage(true),
     generatePipeBendFlangeValvePilotPackage: () => runBrowserValvePilotExport(true),
+    generateSupportMarkerPilotPackage: () => runBrowserSupportMarkerPilotExport(true),
     clear: clearManagedStagePreview
   };
   window.__3D_MARKUP_MANAGED_STAGE_JSON_UI__ = api;
@@ -123,7 +125,7 @@ async function loadManagedStageText(sourceText, sourceName = 'BM_CII_INPUT_manag
   updateInputStatus(`${sourceName} — managed-stage JSON`);
   log(`Loaded managed-stage JSON ${sourceName} (${sourceText.length.toLocaleString()} chars)`);
   const { convertManagedStageJsonToRvmAtt, createManagedStagePreviewScene, buildSupportMarkerGlbObject, createRvmPreviewScene } = await getManagedStageRuntimeModules();
-  const options = bmCiiLikeSourceName(sourceName) ? { strictAuditExpectations: BM_CII_STAGED_JSON_EXPECTATIONS } : {};
+  const options = managedStageRvmOptions(sourceName);
   const result = convertManagedStageJsonToRvmAtt(sourceText, options);
   let coordinateAuditScene = null;
   let previewAudit = null;
@@ -145,7 +147,7 @@ async function loadManagedStageText(sourceText, sourceName = 'BM_CII_INPUT_manag
   return managedStageUiState.artifact;
 }
 
-function getManagedStageRuntimeModules() { if (!managedStageRuntimeModulesPromise) { managedStageRuntimeModulesPromise = Promise.all([import('./managed-stage-rvm-converter.js?v=bust-cache-4'), import('./managed-stage-preview-scene-explicit-bend.js?v=bust-cache-4'), import('./support-marker-primitive-policy.js?v=bust-cache-4'), import('./rvm-preview.js?v=bust-cache-4')]).then(([converter, preview, markerPolicy, rvmPreview]) => ({ convertManagedStageJsonToRvmAtt: converter.convertManagedStageJsonToRvmAtt, createManagedStagePreviewScene: preview.createManagedStagePreviewScene, buildSupportMarkerGlbObject: markerPolicy.buildSupportMarkerGlbObject, createRvmPreviewScene: rvmPreview.createRvmPreviewScene })); } return managedStageRuntimeModulesPromise; }
+function getManagedStageRuntimeModules() { if (!managedStageRuntimeModulesPromise) { managedStageRuntimeModulesPromise = Promise.all([import('./managed-stage-rvm-converter.js?v=bust-cache-6-source-root'), import('./managed-stage-preview-scene-explicit-bend.js?v=bust-cache-4'), import('./support-marker-primitive-policy.js?v=bust-cache-4'), import('./rvm-preview.js?v=bust-cache-4')]).then(([converter, preview, markerPolicy, rvmPreview]) => ({ convertManagedStageJsonToRvmAtt: converter.convertManagedStageJsonToRvmAtt, createManagedStagePreviewScene: preview.createManagedStagePreviewScene, buildSupportMarkerGlbObject: markerPolicy.buildSupportMarkerGlbObject, createRvmPreviewScene: rvmPreview.createRvmPreviewScene })); } return managedStageRuntimeModulesPromise; }
 
 function replaceManagedStagePreviewSupportMarkers(scene, supports, buildSupportMarkerGlbObject) {
   const removals = [];
@@ -167,27 +169,81 @@ function installManagedStageButtonInterceptors(modelFileInput) { document.getEle
 
 function installBrowserCylinderCode8PilotPanel() {
   if (document.getElementById('newCorePilotExportPanel')) return;
-  const host = document.querySelector('.input-card') || document.querySelector('.input-primary-actions') || document.body;
-  const panel = document.createElement('section');
+  const host = document.querySelector('[data-section="export"]') || document.querySelector('.input-primary-actions') || document.body;
+  const grid = host.querySelector?.('.download-grid') || null;
+  const panel = document.createElement('details');
   panel.id = 'newCorePilotExportPanel';
-  panel.className = 'advanced-pilot-export-panel';
-  panel.innerHTML = `<h3>New-Core Pilot Export</h3><p>Pilot package:<br>- straight pipe CYLINDER/code8 included<br>- bend TORUS/code4 included<br>- flange body FLANGE_CYLINDER/code8 included<br>- deterministic inline valve body included only when dimensions exist<br>- ATT subset included<br>- supports deferred<br>- old production export unchanged</p><button id="generateCylinderCode8PilotRvmBtn" type="button">Generate CYLINDER/code8 Pilot RVM</button><button id="generatePipeBendPilotRvmBtn" type="button">Generate Pipe+Bend Pilot RVM</button><button id="generatePipeBendFlangePilotPackageBtn" type="button">Generate Pipe+Bend+Flange Pilot Package</button><button id="generatePipeBendFlangeValvePilotPackageBtn" type="button">Generate Pipe+Bend+Flange+Valve Pilot Package</button><div id="newCorePilotExportStatus" aria-live="polite">Pilot export idle.</div>`;
-  host.appendChild(panel);
-  panel.querySelector('#generateCylinderCode8PilotRvmBtn')?.addEventListener('click', () => runBrowserCylinderCode8PilotExport(true));
-  panel.querySelector('#generatePipeBendPilotRvmBtn')?.addEventListener('click', () => runBrowserPipeBendPilotExport(true));
-  panel.querySelector('#generatePipeBendFlangePilotPackageBtn')?.addEventListener('click', () => runBrowserPipeBendFlangePilotExport(true));
-  panel.querySelector('#generatePipeBendFlangeValvePilotPackageBtn')?.addEventListener('click', () => runBrowserValvePilotExport(true));
+  panel.className = 'export-v2-menu advanced-pilot-export-panel';
+  // Phase 7: button label reflects fullModelReady feature flag state
+  const valveLabel = window.__3D_MARKUP_EXPORT_V2_FULL_MODEL_ENABLED__ === true
+    ? 'Export Full Production Package'
+    : 'Export Full Pilot Package';
+  panel.innerHTML = `<summary class="export-v2-trigger"><i data-lucide="package-plus"></i><span>Export V2</span></summary><div class="export-v2-menu-list" role="menu" aria-label="Export V2 pilot actions"><button id="generateCylinderCode8PilotRvmBtn" type="button" role="menuitem">Export Cylinders (RVM)</button><button id="generatePipeBendPilotRvmBtn" type="button" role="menuitem">Export Pipes + Bends (RVM)</button><button id="generatePipeBendFlangePilotPackageBtn" type="button" role="menuitem">Export Pipes + Bends + Flanges (Package)</button><button id="generatePipeBendFlangeValvePilotPackageBtn" type="button" role="menuitem">${valveLabel}</button><button id="generateSupportMarkerPilotPackageBtn" type="button" role="menuitem">Export Support Markers Only (Package)</button><div id="newCorePilotExportStatus" aria-live="polite">Pilot export idle.</div></div>`;
+  (grid || host).appendChild(panel);
+  bindExportV2Action(panel, '#generateCylinderCode8PilotRvmBtn', runBrowserCylinderCode8PilotExport);
+  bindExportV2Action(panel, '#generatePipeBendPilotRvmBtn', runBrowserPipeBendPilotExport);
+  bindExportV2Action(panel, '#generatePipeBendFlangePilotPackageBtn', runBrowserPipeBendFlangePilotExport);
+  bindExportV2Action(panel, '#generatePipeBendFlangeValvePilotPackageBtn', runBrowserExportV2FullPilotPackage);
+  bindExportV2Action(panel, '#generateSupportMarkerPilotPackageBtn', runBrowserSupportMarkerPilotExport);
+  window.lucide?.createIcons?.();
+}
+
+function bindExportV2Action(panel, selector, action) {
+  panel.querySelector(selector)?.addEventListener('click', () => {
+    panel.removeAttribute('open');
+    action(true);
+  });
 }
 
 async function runBrowserCylinderCode8PilotExport(userGestureConfirmed = false) { const status = document.getElementById('newCorePilotExportStatus'); if (!userGestureConfirmed) return setPilotStatus(status, 'New-Core Pilot Export blocked: user gesture missing'); if (!managedStageUiState.artifact && !managedStageUiState.sourceText) return setPilotStatus(status, 'New-Core Pilot Export blocked: no managed-stage/new-core input loaded'); try { const [{ generateBrowserCylinderCode8PilotExport }, ui] = await Promise.all([import('./runtime-pilot/browser-cylinder-code8-pilot-export.js?v=bust-cache-4'), import('./runtime-pilot/browser-cylinder-code8-pilot-ui.js?v=bust-cache-4')]); const result = await ui.executeBrowserCylinderCode8PilotAction(activePilotState(), { generateBrowserCylinderCode8PilotExport, downloadHost: window }); setPilotStatus(status, result.statusMessage); log(result.statusMessage); return result; } catch (error) { return setPilotStatus(status, `New-Core Pilot Export blocked: ${error?.message || error}`); } }
 async function runBrowserPipeBendPilotExport(userGestureConfirmed = false) { const status = document.getElementById('newCorePilotExportStatus'); if (!userGestureConfirmed) return setPilotStatus(status, 'New-Core Pipe+Bend Pilot Export blocked: user gesture missing'); if (!managedStageUiState.artifact && !managedStageUiState.sourceText) return setPilotStatus(status, 'New-Core Pipe+Bend Pilot Export blocked: no managed-stage/new-core input loaded'); try { const [{ generateBrowserPipeBendPilotExport }, ui] = await Promise.all([import('./runtime-pilot/browser-pipe-bend-pilot-export.js?v=bust-cache-4'), import('./runtime-pilot/browser-pipe-bend-pilot-ui.js?v=bust-cache-4')]); const result = await ui.executeBrowserPipeBendPilotAction(activePilotState(), { generateBrowserPipeBendPilotExport, downloadHost: window }); setPilotStatus(status, result.statusMessage); log(result.statusMessage); return result; } catch (error) { return setPilotStatus(status, `New-Core Pipe+Bend Pilot Export blocked: ${error?.message || error}`); } }
 async function runBrowserPipeBendFlangePilotExport(userGestureConfirmed = false) { const status = document.getElementById('newCorePilotExportStatus'); if (!userGestureConfirmed) return setPilotStatus(status, 'New-Core Pipe+Bend+Flange Pilot Package blocked: user gesture missing'); if (!managedStageUiState.artifact && !managedStageUiState.sourceText) return setPilotStatus(status, 'New-Core Pipe+Bend+Flange Pilot Package blocked: no managed-stage/new-core input loaded'); try { const [{ generateBrowserPipeBendFlangePilotExport }, ui] = await Promise.all([import('./runtime-pilot/browser-pipe-bend-flange-pilot-export.js?v=bust-cache-4'), import('./runtime-pilot/browser-pipe-bend-flange-pilot-ui.js?v=bust-cache-4')]); const result = await ui.executeBrowserPipeBendFlangePilotAction(activePilotState(), { generateBrowserPipeBendFlangePilotExport, downloadHost: window }); setPilotStatus(status, result.statusMessage); log(result.statusMessage); return result; } catch (error) { return setPilotStatus(status, `New-Core Pipe+Bend+Flange Pilot Package blocked: ${error?.message || error}`); } }
 async function runBrowserValvePilotExport(userGestureConfirmed = false) { const status = document.getElementById('newCorePilotExportStatus'); if (!userGestureConfirmed) return setPilotStatus(status, 'New-Core Pipe+Bend+Flange+Valve Pilot Package blocked: user gesture missing'); if (!managedStageUiState.artifact && !managedStageUiState.sourceText) return setPilotStatus(status, 'New-Core Pipe+Bend+Flange+Valve Pilot Package blocked: no managed-stage/new-core input loaded'); try { const [{ generateBrowserValvePilotExport }, ui] = await Promise.all([import('./runtime-pilot/browser-valve-pilot-export.js?v=bust-cache-4'), import('./runtime-pilot/browser-valve-pilot-ui.js?v=bust-cache-4')]); const result = await ui.executeBrowserValvePilotAction(activePilotState(), { generateBrowserValvePilotExport, downloadHost: window }); setPilotStatus(status, result.statusMessage); log(result.statusMessage); return result; } catch (error) { return setPilotStatus(status, `New-Core Pipe+Bend+Flange+Valve Pilot Package blocked: ${error?.message || error}`); } }
+
+async function runBrowserExportV2FullPilotPackage(userGestureConfirmed = false) {
+  const status = document.getElementById('newCorePilotExportStatus');
+  if (!userGestureConfirmed) return setPilotStatus(status, 'Export V2 full package blocked: user gesture missing');
+  if (!managedStageUiState.sourceText) return setPilotStatus(status, 'Export V2 full package blocked: no managed-stage/new-core input loaded');
+  try {
+    const [{ executeNewCorePilotRoute }, { generateBrowserManagedStageExportV2Package }] = await Promise.all([
+      import('./runtime-switch/new-core-pilot-route-controller.js?v=bust-cache-2-export-v2-rich'),
+      import('./runtime-pilot/browser-managed-stage-export-v2-package.js?v=bust-cache-1-rich')
+    ]);
+    const route = await executeNewCorePilotRoute(activeExportV2State(), { generatePilotPackage: generateBrowserManagedStageExportV2Package }, { enabled: true, userGestureConfirmed: true, basename: `${managedStageUiState.basename || 'managed-stage'}.export-v2` });
+    if (!route?.ok) return setPilotStatus(status, `Export V2 full package blocked: ${(route?.audit?.errors || ['new-core route blocked']).join('; ')}`);
+    const bundle = route.packageResult;
+    const audit = buildExportV2IndependentAudit(route);
+    const downloads = downloadExportV2Package(bundle, audit, managedStageUiState.basename || 'managed-stage');
+    const packageAudit = bundle?.audit || {};
+    const statusMessage = `Export V2 full package generated independently: ${packageAudit.plannedRvmPrimitiveCount || 0} rich RVM primitives, ${packageAudit.hierarchyNodeCount || 0} hierarchy nodes, ${packageAudit.code4BendCount || 0} code-4 bends. Legacy RVM export untouched. Full RVM ready: ${packageAudit.fullModelReady === true}.`;
+    if (status) status.textContent = statusMessage;
+    log(statusMessage);
+    return { schema: 'BrowserExportV2FullPilotPackageUiResult.v1', ok: true, downloadCount: downloads.length, downloads, statusMessage, audit };
+  } catch (error) {
+    return setPilotStatus(status, `Export V2 full package blocked: ${error?.message || error}`);
+  }
+}
+
+async function runBrowserSupportMarkerPilotExport(userGestureConfirmed = false) { 
+  const status = document.getElementById('newCorePilotExportStatus'); 
+  if (!userGestureConfirmed) return setPilotStatus(status, 'New-Core Support Marker Pilot Package blocked: user gesture missing'); 
+  if (!managedStageUiState.artifact && !managedStageUiState.sourceText) return setPilotStatus(status, 'New-Core Support Marker Pilot Package blocked: no managed-stage/new-core input loaded'); 
+  try { 
+    const [{ generateBrowserSupportMarkerPilotExport }, ui] = await Promise.all([import('./runtime-pilot/browser-support-marker-pilot-export.js?v=bust-cache-4'), import('./runtime-pilot/browser-support-marker-pilot-ui.js?v=bust-cache-4')]); 
+    const result = await ui.executeBrowserSupportMarkerPilotAction(activePilotState(), { generateBrowserSupportMarkerPilotExport, downloadHost: window }); 
+    setPilotStatus(status, result.statusMessage); 
+    log(result.statusMessage); 
+    return result; 
+  } catch (error) { 
+    return setPilotStatus(status, `New-Core Support Marker Pilot Package blocked: ${error?.message || error}`); 
+  } 
+}
 async function getBrowserCylinderCode8PilotActionModel() { const ui = await import('./runtime-pilot/browser-cylinder-code8-pilot-ui.js?v=bust-cache-4'); return ui.createCylinderCode8PilotActionModel(); }
 async function getBrowserPipeBendPilotActionModel() { const ui = await import('./runtime-pilot/browser-pipe-bend-pilot-ui.js?v=bust-cache-4'); return ui.createPipeBendPilotActionModel(); }
 async function getBrowserPipeBendFlangePilotActionModel() { const ui = await import('./runtime-pilot/browser-pipe-bend-flange-pilot-ui.js?v=bust-cache-4'); return ui.createPipeBendFlangePilotActionModel(); }
 async function getBrowserValvePilotActionModel() { const ui = await import('./runtime-pilot/browser-valve-pilot-ui.js?v=bust-cache-4'); return ui.createValvePilotActionModel(); }
 function activePilotState() { return { sourceText: managedStageUiState.sourceText, sourceName: managedStageUiState.sourceName, basename: managedStageUiState.basename, artifact: managedStageUiState.artifact }; }
+function activeExportV2State() { return { sourceText: managedStageUiState.sourceText, sourceName: managedStageUiState.sourceName, basename: managedStageUiState.basename }; }
 function setPilotStatus(element, message) { if (element) element.textContent = message; return { schema: 'BrowserPilotUiResult.v1', ok: false, statusMessage: message, downloadCount: 0, downloads: [] }; }
 
 async function loadBundledManagedStageSample() { resetSupportBasisToInputXml('bm-cii-bundled-sample'); const dataModule = await import('./managed-stage-bm-cii-json-sample-data.js?v=bust-cache-4').catch(() => null); if (typeof dataModule?.createBmCiiManagedStageSampleJson === 'function') { const text = dataModule.createBmCiiManagedStageSampleJson(); const name = dataModule.BM_CII_MANAGED_STAGE_SAMPLE_NAME || 'BM_CII_INPUT_managed_stage.json'; log(`Loaded bundled ${name} (${text.length.toLocaleString()} chars) via in-memory sample data`); return loadManagedStageText(text, name); } const text = await fetchManagedStageSampleText(); return loadManagedStageText(text, 'BM_CII_INPUT_managed_stage.json'); }
@@ -198,11 +254,43 @@ function looksLikeManagedStageJson(sourceText, sourceName = '') { if (!isJsonFil
 function isJsonFileName(name = '') { return /\.json$|\.jscon$/i.test(String(name)); }
 function basenameWithoutExtension(name = '') { return String(name || 'managed-stage').replace(/\.[^.]+$/, '') || 'managed-stage'; }
 function bmCiiLikeSourceName(name = '') { return /BM_CII/i.test(String(name)); }
+function managedStageRvmOptions(sourceName = '') {
+  return {
+    ...(bmCiiLikeSourceName(sourceName) ? { strictAuditExpectations: BM_CII_STAGED_JSON_EXPECTATIONS } : {}),
+    excludeBendsWhileProcessingInputXmlBasedJson: true,
+    allowManagedStageCode4Elbows: false
+  };
+}
 function resetManagedStageStateOnly() { managedStageUiState.sourceText = ''; managedStageUiState.sourceName = ''; managedStageUiState.artifact = null; managedStageUiState.modelRoot = null; }
 function log(message) { const el = document.getElementById('log'); if (el) el.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`; else console.log(message); }
 function setStatus(message) { const el = document.getElementById('runtimeStatus'); if (el) el.textContent = message; }
 function updateInputStatus(message) { const el = document.getElementById('inputStatus'); if (el) el.textContent = message; }
 function downloadBlob(content, filename, mime) { if (!content) return; const blob = content instanceof Blob ? content : new Blob([content], { type: mime }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(url), 2500); }
+function downloadExportV2Package(bundle, audit, basename) {
+  const base = `${basename || 'managed-stage'}.export-v2`;
+  const files = [
+    { filename: `${base}.rvm`, mimeType: bundle?.rvmFile?.mimeType || 'application/octet-stream', content: bundle?.rvmFile?.bytes },
+    { filename: `${base}.att`, mimeType: bundle?.attFile?.mimeType || 'text/plain', content: bundle?.attFile?.text },
+    { filename: `${base}.audit.json`, mimeType: 'application/json', content: `${JSON.stringify(audit, null, 2)}\n` }
+  ].filter((file) => file.content);
+  for (const file of files) downloadBlob(file.content, file.filename, file.mimeType);
+  return files.map(({ filename, mimeType }) => ({ filename, mimeType }));
+}
+function buildExportV2IndependentAudit(route) {
+  const routeAudit = route?.audit || {};
+  const packageAudit = route?.packageResult?.audit || {};
+  return {
+    schema: 'BrowserExportV2IndependentPackageAudit.v1',
+    ok: route?.ok === true && routeAudit.oldProductionPathTouched === false && routeAudit.defaultProductionPathChanged === false,
+    newCoreRouteUsed: true,
+    legacyManagedStageArtifactRead: false,
+    oldProductionPathTouched: routeAudit.oldProductionPathTouched === true,
+    defaultProductionPathChanged: routeAudit.defaultProductionPathChanged === true,
+    fullModelReady: packageAudit.fullModelReady === true,
+    routeAudit,
+    packageAudit
+  };
+}
 function buildManagedStageVisibleDiagnostics(audit = {}, previewAudit = null) { return { schema: 'ManagedStageVisibleDiagnostics.v1', source: audit.source || '', primitiveHistogram: audit.primitiveHistogram || {}, supportRvmExportAudit: audit.supportRvmExportAudit || null, previewAudit, warnings: audit.managedStageStrictGate?.nonBlockingAuditIssues || [] }; }
 function updateDrawerSummary(audit = {}, previewAudit = null) { const el = document.getElementById('drawerSummaryHint'); if (!el) return; const counts = audit.inputCounts || {}; el.textContent = `Managed-stage: ${counts.geometryComponents || 0} geometry components, ${counts.supportRecordsEmittedToRvm || 0} support markers, ${audit.rvmBytes || 0} RVM bytes.`; }
 function updateManagedStageDiagnosticsPanel(audit = {}, previewAudit = null) { const el = document.getElementById('conversionStatus'); if (el) el.textContent = `Managed-stage RVM ready — code8=${audit.primitiveHistogram?.[8] || 0}, supports=${audit.inputCounts?.supportRecordsEmittedToRvm || 0}.`; }

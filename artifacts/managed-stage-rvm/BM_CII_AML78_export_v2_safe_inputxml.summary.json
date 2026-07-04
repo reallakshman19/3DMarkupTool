@@ -1,0 +1,76 @@
+{
+  "schema": "ManagedStageRvmArtifactSummary.v1",
+  "ready": false,
+  "counts": {
+    "geometryComponents": 786,
+    "supportRecords": 421,
+    "cntb": 1211,
+    "prim": 4784
+  },
+  "primitiveHistogram": {
+    "7": 4,
+    "8": 4329,
+    "9": 451
+  },
+  "payloadIssues": {
+    "total": 0,
+    "code4": 0,
+    "code7": 0,
+    "code9": 0
+  },
+  "visualWarnings": {
+    "warningOnly": true,
+    "warningCount": 612,
+    "warningCodeHistogram": {
+      "RVM_PRIMITIVE_ENDPOINT_GAP": 582,
+      "RVM_CODE9_SPHERE_VISUAL_CONVENTION": 30
+    }
+  },
+  "geometry": {
+    "primitiveCount": 1758,
+    "primitiveCodeHistogram": {
+      "7": 4,
+      "8": 1724,
+      "9": 30
+    },
+    "primitiveRoleTagCounts": {
+      "flangeA": 113,
+      "flangeB": 113,
+      "body": 496,
+      "inputxml-generic-tee-branch-fitting": 15,
+      "inputxml-node-local-1p5d-elbow": 696,
+      "inputxml-source-route-bend-cylinder": 143,
+      "leftEndFlange": 30,
+      "leftSeat": 30,
+      "valveBodySphere": 30,
+      "rightSeat": 30,
+      "rightEndFlange": 30,
+      "inputxml-generic-olet-branch-fitting": 24,
+      "flangeHubSnout": 4,
+      "raisedFaceDisk": 4
+    },
+    "code4Count": 0,
+    "code7Count": 4,
+    "code8Count": 1724,
+    "code9Count": 30
+  },
+  "supportOverlay": {
+    "primitiveCount": 3026,
+    "primitiveCodeHistogram": {
+      "8": 2605,
+      "9": 421
+    },
+    "isolatedFromPipeFittingCodes": false,
+    "nonCode8PrimitiveCount": 421
+  },
+  "gates": {
+    "topologyProof": false,
+    "strictAudit": false,
+    "stitchManifest": false
+  },
+  "artifacts": {
+    "rvmBytes": 673032,
+    "attBytes": 3717843,
+    "generationMode": "managed-stage-cylinder-torus"
+  }
+}

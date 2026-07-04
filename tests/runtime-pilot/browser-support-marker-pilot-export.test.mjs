@@ -17,9 +17,12 @@ assert.ok(bundle.rvmFile.bytes.byteLength > 0);
 assert.ok(bundle.attFile.text.includes('PipeBendFlangeValveRuntimePilotAtt.v1'));
 assert.equal(audit.supportMarkerCount, 12);
 assert.equal(audit.blockedSupportMarkerCount, 0);
-assert.equal(audit.supportGeometryGenerated, false);
+assert.equal(audit.supportGeometryGenerated, true);
+assert.equal(audit.supportPrimitiveCount, 104);
+assert.equal(audit.supportCylinderPrimitiveCount, 92);
+assert.equal(audit.supportSpherePrimitiveCount, 12);
 assert.equal(audit.supportFallbackCount, 0);
-assert.equal(audit.fullModelReady, false);
+assert.equal(audit.fullModelReady, true);
 assert.equal(audit.ok, true);
 
 console.log('browser support marker pilot export test passed');
